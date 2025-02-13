@@ -1,6 +1,6 @@
 ﻿namespace Keith_admindashboard
 {
-    partial class Form1
+    partial class OverviewForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,24 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OverviewForm));
+            this.lblOverviewText = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.Home = new System.Windows.Forms.ToolStripButton();
             this.Logout = new System.Windows.Forms.ToolStripButton();
             this.ManageRecords = new System.Windows.Forms.ToolStripButton();
             this.Overview = new System.Windows.Forms.ToolStripButton();
-            this.lighting = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.energy = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cmbOverviewSort = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lighting)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.energy)).BeginInit();
             this.SuspendLayout();
+            // 
+            // lblOverviewText
+            // 
+            this.lblOverviewText.AccessibleName = "lblOverviewText";
+            this.lblOverviewText.AutoSize = true;
+            this.lblOverviewText.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOverviewText.Location = new System.Drawing.Point(12, 103);
+            this.lblOverviewText.Name = "lblOverviewText";
+            this.lblOverviewText.Size = new System.Drawing.Size(79, 29);
+            this.lblOverviewText.TabIndex = 0;
+            this.lblOverviewText.Text = "label1";
             // 
             // toolStrip1
             // 
@@ -58,13 +63,13 @@
             this.Overview});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1329, 27);
-            this.toolStrip1.TabIndex = 0;
+            this.toolStrip1.Size = new System.Drawing.Size(1483, 27);
+            this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // Home
             // 
-            this.Home.AccessibleName = "Home";
+            this.Home.AccessibleName = "HomeOverview";
             this.Home.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.Home.Image = ((System.Drawing.Image)(resources.GetObject("Home.Image")));
             this.Home.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -75,7 +80,7 @@
             // 
             // Logout
             // 
-            this.Logout.AccessibleName = "Logout";
+            this.Logout.AccessibleName = "LogoutOverview";
             this.Logout.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.Logout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.Logout.Image = ((System.Drawing.Image)(resources.GetObject("Logout.Image")));
@@ -83,11 +88,10 @@
             this.Logout.Name = "Logout";
             this.Logout.Size = new System.Drawing.Size(60, 24);
             this.Logout.Text = "Logout";
-            this.Logout.Click += new System.EventHandler(this.Logout_Click);
             // 
             // ManageRecords
             // 
-            this.ManageRecords.AccessibleName = "ManageRecords";
+            this.ManageRecords.AccessibleName = "ManageRecordsOverview";
             this.ManageRecords.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.ManageRecords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.ManageRecords.Image = ((System.Drawing.Image)(resources.GetObject("ManageRecords.Image")));
@@ -99,7 +103,7 @@
             // 
             // Overview
             // 
-            this.Overview.AccessibleName = "Overview";
+            this.Overview.AccessibleName = "OverviewOverview";
             this.Overview.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.Overview.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.Overview.Image = ((System.Drawing.Image)(resources.GetObject("Overview.Image")));
@@ -109,58 +113,54 @@
             this.Overview.Text = "Overview";
             this.Overview.Click += new System.EventHandler(this.Overview_Click);
             // 
-            // lighting
+            // label1
             // 
-            this.lighting.AccessibleName = "lighting";
-            chartArea1.Name = "ChartArea1";
-            this.lighting.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.lighting.Legends.Add(legend1);
-            this.lighting.Location = new System.Drawing.Point(28, 60);
-            this.lighting.Name = "lighting";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.lighting.Series.Add(series1);
-            this.lighting.Size = new System.Drawing.Size(649, 369);
-            this.lighting.TabIndex = 1;
-            this.lighting.Text = "lighting";
-            this.lighting.Click += new System.EventHandler(this.lighting_Click);
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(13, 83);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(83, 20);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Overview:";
             // 
-            // energy
+            // cmbOverviewSort
             // 
-            this.energy.AccessibleName = "energy";
-            chartArea2.Name = "ChartArea1";
-            this.energy.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.energy.Legends.Add(legend2);
-            this.energy.Location = new System.Drawing.Point(694, 60);
-            this.energy.Name = "energy";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.energy.Series.Add(series2);
-            this.energy.Size = new System.Drawing.Size(574, 369);
-            this.energy.TabIndex = 2;
-            this.energy.Text = "energy";
-            this.energy.Click += new System.EventHandler(this.energy_Click);
+            this.cmbOverviewSort.AccessibleName = "cmbOverviewSort";
+            this.cmbOverviewSort.FormattingEnabled = true;
+            this.cmbOverviewSort.Items.AddRange(new object[] {
+            "Month",
+            "Week"});
+            this.cmbOverviewSort.Location = new System.Drawing.Point(17, 163);
+            this.cmbOverviewSort.Name = "cmbOverviewSort";
+            this.cmbOverviewSort.Size = new System.Drawing.Size(121, 24);
+            this.cmbOverviewSort.TabIndex = 3;
+            this.cmbOverviewSort.SelectedIndexChanged += new System.EventHandler(this.cmbOverviewSort_SelectedIndexChanged);
             // 
-            // Form1
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(13, 140);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(40, 20);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Sort";
+            // 
+            // OverviewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1329, 534);
-            this.Controls.Add(this.energy);
-            this.Controls.Add(this.lighting);
+            this.ClientSize = new System.Drawing.Size(1483, 491);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.cmbOverviewSort);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.toolStrip1);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Controls.Add(this.lblOverviewText);
+            this.Name = "OverviewForm";
+            this.Text = "OverviewForm";
+            this.Load += new System.EventHandler(this.OverviewForm_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lighting)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.energy)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -168,13 +168,14 @@
 
         #endregion
 
+        private System.Windows.Forms.Label lblOverviewText;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton Home;
-        private System.Windows.Forms.ToolStripButton Overview;
         private System.Windows.Forms.ToolStripButton Logout;
-        private System.Windows.Forms.DataVisualization.Charting.Chart lighting;
-        private System.Windows.Forms.DataVisualization.Charting.Chart energy;
         private System.Windows.Forms.ToolStripButton ManageRecords;
+        private System.Windows.Forms.ToolStripButton Overview;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cmbOverviewSort;
+        private System.Windows.Forms.Label label2;
     }
 }
-
