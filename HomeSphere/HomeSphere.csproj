@@ -129,9 +129,6 @@
     <EmbeddedResource Include="LightingChartForm.resx">
       <DependentUpon>LightingChartForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Meow.resx">
-      <DependentUpon>Meow.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MonthEnergyPromptForm.resx">
       <DependentUpon>MonthEnergyPromptForm.cs</DependentUpon>
     </EmbeddedResource>
