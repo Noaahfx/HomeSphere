@@ -94,12 +94,6 @@
     <Compile Include="LightingChartForm.Designer.cs">
       <DependentUpon>LightingChartForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Meow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Meow.Designer.cs">
-      <DependentUpon>Meow.cs</DependentUpon>
-    </Compile>
     <Compile Include="MonthEnergyPromptForm.cs">
       <SubType>Form</SubType>
     </Compile>
