@@ -88,6 +88,48 @@
     <Compile Include="Form1.designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmAdminDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAdminDashboard.designer.cs">
+      <DependentUpon>frmAdminDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAdminHomePage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAdminHomePage.designer.cs">
+      <DependentUpon>frmAdminHomePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAdminLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAdminLogin.designer.cs">
+      <DependentUpon>frmAdminLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmEditAlert.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEditAlert.designer.cs">
+      <DependentUpon>frmEditAlert.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLogin.designer.cs">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmNotificationPreferences.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNotificationPreferences.designer.cs">
+      <DependentUpon>frmNotificationPreferences.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmUserHomePage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUserHomePage.designer.cs">
+      <DependentUpon>frmUserHomePage.cs</DependentUpon>
+    </Compile>
     <Compile Include="LightingChartForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,6 +167,27 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAdminDashboard.resx">
+      <DependentUpon>frmAdminDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAdminHomePage.resx">
+      <DependentUpon>frmAdminHomePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAdminLogin.resx">
+      <DependentUpon>frmAdminLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEditAlert.resx">
+      <DependentUpon>frmEditAlert.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLogin.resx">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNotificationPreferences.resx">
+      <DependentUpon>frmNotificationPreferences.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUserHomePage.resx">
+      <DependentUpon>frmUserHomePage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LightingChartForm.resx">
       <DependentUpon>LightingChartForm.cs</DependentUpon>
