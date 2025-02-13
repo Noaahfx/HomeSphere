@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Configuration;
 
-namespace Keith_admindashboard
+namespace HomeSphere
 {
     public partial class OverviewForm : Form
     {

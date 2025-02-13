@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace Keith_admindashboard
+namespace HomeSphere
 {
     public partial class EnergyChartForm : Form
     {

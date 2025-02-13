@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Keith_admindashboard
+namespace HomeSphere
 {
     public partial class MonthEnergyPromptForm : Form
     {

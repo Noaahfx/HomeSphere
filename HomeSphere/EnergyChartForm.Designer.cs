@@ -1,4 +1,4 @@
-﻿namespace Keith_admindashboard
+﻿namespace HomeSphere
 {
     partial class EnergyChartForm
     {
