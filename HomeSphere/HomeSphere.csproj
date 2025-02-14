@@ -244,10 +244,13 @@
     <Content Include="Databases\IOTPRJ_Data_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\eye.png" />
+    <Content Include="Resources\padlock.png" />
+    <Content Include="Resources\profile %281%29.png" />
+    <Content Include="Resources\profile.png" />
+    <Content Include="Resources\smart-home.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
