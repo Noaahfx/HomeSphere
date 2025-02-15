@@ -298,5 +298,19 @@ namespace HomeSphere
                 adminLoginForm.Show();
             }
         }
+
+        private void tsmiViewCart_Click(object sender, EventArgs e)
+        {
+            frmCart frmcart = new frmCart();
+            frmcart.Show();
+            this.Hide();
+        }
+
+        private void tsmiOrderHistory_Click(object sender, EventArgs e)
+        {
+            frmOrderHistory orderHistoryForm = new frmOrderHistory();
+            orderHistoryForm.Show();
+            this.Hide();
+        }
     }
 }

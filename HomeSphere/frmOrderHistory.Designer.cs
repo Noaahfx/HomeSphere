@@ -1,6 +1,6 @@
 ﻿namespace HomeSphere
 {
-    partial class frmProductPage
+    partial class frmOrderHistory
     {
         /// <summary>
         /// Required designer variable.
@@ -28,30 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmProductPage));
-            this.flpProducts = new System.Windows.Forms.FlowLayoutPanel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmOrderHistory));
+            this.dgvOrderHistory = new System.Windows.Forms.DataGridView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.Home = new System.Windows.Forms.ToolStripButton();
             this.tsddbUserMenu = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiViewCart = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiLogout = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiOrderHistory = new System.Windows.Forms.ToolStripMenuItem();
             this.ManageRecords = new System.Windows.Forms.ToolStripButton();
             this.Overview = new System.Windows.Forms.ToolStripButton();
             this.Products = new System.Windows.Forms.ToolStripButton();
             this.EventManagement = new System.Windows.Forms.ToolStripButton();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiOrderHistory = new System.Windows.Forms.ToolStripMenuItem();
+            this.lbltitle = new System.Windows.Forms.Label();
+            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.lblsearch = new System.Windows.Forms.Label();
+            this.lblTotalSpent = new System.Windows.Forms.Label();
+            this.btnSearch = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvOrderHistory)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // flpProducts
+            // dgvOrderHistory
             // 
-            this.flpProducts.AccessibleName = "flpProducts";
-            this.flpProducts.Location = new System.Drawing.Point(12, 45);
-            this.flpProducts.Name = "flpProducts";
-            this.flpProducts.Size = new System.Drawing.Size(1289, 375);
-            this.flpProducts.TabIndex = 12;
+            this.dgvOrderHistory.AccessibleName = "dgvOrderHistory";
+            this.dgvOrderHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvOrderHistory.Location = new System.Drawing.Point(12, 66);
+            this.dgvOrderHistory.Name = "dgvOrderHistory";
+            this.dgvOrderHistory.RowTemplate.Height = 24;
+            this.dgvOrderHistory.Size = new System.Drawing.Size(780, 445);
+            this.dgvOrderHistory.TabIndex = 0;
             // 
             // toolStrip1
             // 
@@ -66,8 +72,8 @@
             this.EventManagement});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1308, 27);
-            this.toolStrip1.TabIndex = 13;
+            this.toolStrip1.Size = new System.Drawing.Size(1361, 27);
+            this.toolStrip1.TabIndex = 14;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // Home
@@ -113,6 +119,14 @@
             this.tsmiLogout.Size = new System.Drawing.Size(181, 26);
             this.tsmiLogout.Text = "Logout";
             this.tsmiLogout.Click += new System.EventHandler(this.tsmiLogout_Click);
+            // 
+            // tsmiOrderHistory
+            // 
+            this.tsmiOrderHistory.AccessibleName = "tsmiOrderHistory";
+            this.tsmiOrderHistory.Name = "tsmiOrderHistory";
+            this.tsmiOrderHistory.Size = new System.Drawing.Size(181, 26);
+            this.tsmiOrderHistory.Text = "Order History";
+            this.tsmiOrderHistory.Click += new System.EventHandler(this.tsmiOrderHistory_Click);
             // 
             // ManageRecords
             // 
@@ -162,35 +176,73 @@
             this.EventManagement.Text = "Alerts";
             this.EventManagement.Click += new System.EventHandler(this.EventManagement_Click);
             // 
-            // toolStripMenuItem1
+            // lbltitle
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(217, 26);
-            this.toolStripMenuItem1.Text = "toolStripMenuItem1";
+            this.lbltitle.AccessibleName = "lbltitle";
+            this.lbltitle.AutoSize = true;
+            this.lbltitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbltitle.Location = new System.Drawing.Point(12, 37);
+            this.lbltitle.Name = "lbltitle";
+            this.lbltitle.Size = new System.Drawing.Size(147, 25);
+            this.lbltitle.TabIndex = 15;
+            this.lbltitle.Text = "Order History:";
             // 
-            // toolStripMenuItem2
+            // txtSearch
             // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(32, 19);
-            this.toolStripMenuItem2.Text = "toolStripMenuItem2";
+            this.txtSearch.AccessibleName = "txtSearch";
+            this.txtSearch.Location = new System.Drawing.Point(798, 91);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(170, 22);
+            this.txtSearch.TabIndex = 16;
             // 
-            // tsmiOrderHistory
+            // lblsearch
             // 
-            this.tsmiOrderHistory.AccessibleName = "tsmiOrderHistory";
-            this.tsmiOrderHistory.Name = "tsmiOrderHistory";
-            this.tsmiOrderHistory.Size = new System.Drawing.Size(181, 26);
-            this.tsmiOrderHistory.Text = "Order History";
-            this.tsmiOrderHistory.Click += new System.EventHandler(this.tsmiOrderHistory_Click);
+            this.lblsearch.AccessibleName = "lblsearch";
+            this.lblsearch.AutoSize = true;
+            this.lblsearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblsearch.Location = new System.Drawing.Point(798, 66);
+            this.lblsearch.Name = "lblsearch";
+            this.lblsearch.Size = new System.Drawing.Size(82, 24);
+            this.lblsearch.TabIndex = 17;
+            this.lblsearch.Text = "Search:";
             // 
-            // frmProductPage
+            // lblTotalSpent
+            // 
+            this.lblTotalSpent.AccessibleName = "lblTotalSpent";
+            this.lblTotalSpent.AutoSize = true;
+            this.lblTotalSpent.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalSpent.Location = new System.Drawing.Point(798, 243);
+            this.lblTotalSpent.Name = "lblTotalSpent";
+            this.lblTotalSpent.Size = new System.Drawing.Size(119, 25);
+            this.lblTotalSpent.TabIndex = 18;
+            this.lblTotalSpent.Text = "Total Spent:";
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.AccessibleName = "btnSearch";
+            this.btnSearch.Location = new System.Drawing.Point(974, 89);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(90, 26);
+            this.btnSearch.TabIndex = 19;
+            this.btnSearch.Text = "Confirm";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // frmOrderHistory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1308, 509);
+            this.ClientSize = new System.Drawing.Size(1361, 523);
+            this.Controls.Add(this.btnSearch);
+            this.Controls.Add(this.lblTotalSpent);
+            this.Controls.Add(this.lblsearch);
+            this.Controls.Add(this.txtSearch);
+            this.Controls.Add(this.lbltitle);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.flpProducts);
-            this.Name = "frmProductPage";
-            this.Text = "fromProductPage";
+            this.Controls.Add(this.dgvOrderHistory);
+            this.Name = "frmOrderHistory";
+            this.Text = "frmOrderHistory";
+            ((System.ComponentModel.ISupportInitialize)(this.dgvOrderHistory)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -199,18 +251,22 @@
         }
 
         #endregion
-        private System.Windows.Forms.FlowLayoutPanel flpProducts;
+
+        private System.Windows.Forms.DataGridView dgvOrderHistory;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton Home;
+        private System.Windows.Forms.ToolStripDropDownButton tsddbUserMenu;
+        private System.Windows.Forms.ToolStripMenuItem tsmiViewCart;
+        private System.Windows.Forms.ToolStripMenuItem tsmiLogout;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOrderHistory;
         private System.Windows.Forms.ToolStripButton ManageRecords;
         private System.Windows.Forms.ToolStripButton Overview;
         private System.Windows.Forms.ToolStripButton Products;
         private System.Windows.Forms.ToolStripButton EventManagement;
-        private System.Windows.Forms.ToolStripDropDownButton tsddbUserMenu;
-        private System.Windows.Forms.ToolStripMenuItem tsmiViewCart;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem tsmiLogout;
-        private System.Windows.Forms.ToolStripMenuItem tsmiOrderHistory;
+        private System.Windows.Forms.Label lbltitle;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.Label lblsearch;
+        private System.Windows.Forms.Label lblTotalSpent;
+        private System.Windows.Forms.Button btnSearch;
     }
 }

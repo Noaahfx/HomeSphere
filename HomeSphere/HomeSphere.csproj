@@ -132,6 +132,18 @@
     <Compile Include="frmNotificationPreferences.designer.cs">
       <DependentUpon>frmNotificationPreferences.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmOrderHistory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOrderHistory.Designer.cs">
+      <DependentUpon>frmOrderHistory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPayment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPayment.Designer.cs">
+      <DependentUpon>frmPayment.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmUserHomePage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -143,6 +155,12 @@
     </Compile>
     <Compile Include="frmProductPage.Designer.cs">
       <DependentUpon>frmProductPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmUserManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUserManagement.Designer.cs">
+      <DependentUpon>frmUserManagement.cs</DependentUpon>
     </Compile>
     <Compile Include="LightingChartForm.cs">
       <SubType>Form</SubType>
@@ -203,11 +221,20 @@
     <EmbeddedResource Include="frmNotificationPreferences.resx">
       <DependentUpon>frmNotificationPreferences.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmOrderHistory.resx">
+      <DependentUpon>frmOrderHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPayment.resx">
+      <DependentUpon>frmPayment.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmUserHomePage.resx">
       <DependentUpon>frmUserHomePage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmProductPage.resx">
       <DependentUpon>frmProductPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUserManagement.resx">
+      <DependentUpon>frmUserManagement.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LightingChartForm.resx">
       <DependentUpon>LightingChartForm.cs</DependentUpon>

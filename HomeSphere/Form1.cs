@@ -232,5 +232,12 @@ namespace HomeSphere
             this.Hide();
             frmproductpage.Show();
         }
+
+        private void UserManagement_Click(object sender, EventArgs e)
+        {
+            frmUserManagement frmusermanagement = new frmUserManagement();
+            this.Hide();
+            frmusermanagement.Show();
+        }
     }
 }

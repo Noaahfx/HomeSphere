@@ -40,6 +40,7 @@
             this.Overview = new System.Windows.Forms.ToolStripButton();
             this.Products = new System.Windows.Forms.ToolStripButton();
             this.EventManagement = new System.Windows.Forms.ToolStripButton();
+            this.tsmiOrderHistory = new System.Windows.Forms.ToolStripMenuItem();
             this.flpCart.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -99,7 +100,8 @@
             this.tsddbUserMenu.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsddbUserMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiViewCart,
-            this.tsmiLogout});
+            this.tsmiLogout,
+            this.tsmiOrderHistory});
             this.tsddbUserMenu.Image = ((System.Drawing.Image)(resources.GetObject("tsddbUserMenu.Image")));
             this.tsddbUserMenu.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbUserMenu.Name = "tsddbUserMenu";
@@ -114,6 +116,7 @@
             this.tsmiViewCart.Name = "tsmiViewCart";
             this.tsmiViewCart.Size = new System.Drawing.Size(181, 26);
             this.tsmiViewCart.Text = "View Cart";
+            this.tsmiViewCart.Click += new System.EventHandler(this.tsmiViewCart_Click);
             // 
             // tsmiLogout
             // 
@@ -171,6 +174,14 @@
             this.EventManagement.Text = "Alerts";
             this.EventManagement.Click += new System.EventHandler(this.EventManagement_Click);
             // 
+            // tsmiOrderHistory
+            // 
+            this.tsmiOrderHistory.AccessibleName = "tsmiOrderHistory";
+            this.tsmiOrderHistory.Name = "tsmiOrderHistory";
+            this.tsmiOrderHistory.Size = new System.Drawing.Size(181, 26);
+            this.tsmiOrderHistory.Text = "Order History";
+            this.tsmiOrderHistory.Click += new System.EventHandler(this.tsmiOrderHistory_Click);
+            // 
             // frmCart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -202,5 +213,6 @@
         private System.Windows.Forms.ToolStripButton Overview;
         private System.Windows.Forms.ToolStripButton Products;
         private System.Windows.Forms.ToolStripButton EventManagement;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOrderHistory;
     }
 }

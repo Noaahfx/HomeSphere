@@ -28,7 +28,17 @@ namespace HomeSphere
 
             if (cartItems.Count == 0)
             {
-                MessageBox.Show("Your cart is empty!", "Cart", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // ❌ Remove MessageBox
+                Label lblEmptyCart = new Label
+                {
+                    Text = "No products in the cart",
+                    AutoSize = true,
+                    Font = new Font("Arial", 12, FontStyle.Bold),
+                    ForeColor = Color.Gray,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Dock = DockStyle.Top
+                };
+                flpCart.Controls.Add(lblEmptyCart);
                 return;
             }
 
@@ -69,7 +79,7 @@ namespace HomeSphere
                     }
                     else
                     {
-                        MessageBox.Show($"Error: Default image not found at {fallbackPath}", "Missing Image", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        pb.Image = null; // Set to null if image is missing
                     }
                 }
 
@@ -154,13 +164,24 @@ namespace HomeSphere
             flpCart.Controls.Add(btnClearCart);
         }
 
+
         private void CheckoutSingleItem(CartItem item)
         {
+            // ✅ Open Payment Form Before Proceeding
+            frmPayment paymentForm = new frmPayment();
+            paymentForm.ShowDialog();
+
+            if (!paymentForm.PaymentSuccessful)
+            {
+                MessageBox.Show("Payment failed or cancelled.", "Payment Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
                 conn.Open();
 
-                // ✅ Check if there is enough stock before checkout
+                // ✅ Check Available Stock Before Checkout
                 string stockCheckQuery = "SELECT Quantity FROM Products WHERE ProductID = @ProductID";
                 int availableStock = 0;
 
@@ -174,7 +195,7 @@ namespace HomeSphere
                     }
                 }
 
-                // ❌ If cart quantity > available stock, show an error and stop checkout
+                // ❌ If not enough stock, stop checkout
                 if (item.Quantity > availableStock)
                 {
                     MessageBox.Show($"Not enough stock for {item.Name}. Available: {availableStock}, In Cart: {item.Quantity}.\n" +
@@ -183,48 +204,27 @@ namespace HomeSphere
                     return;
                 }
 
-                // ✅ Proceed with checkout since stock is sufficient
-                string query;
-                bool hasUserID;
+                // ✅ Proceed with Checkout
+                string insertOrderQuery = @"
+            INSERT INTO Orders (UserID, ProductName, Price, Quantity, OrderDate)
+            VALUES (@UserID, @ProductName, @Price, @Quantity, GETDATE())";
 
-                using (SqlCommand checkCmd = new SqlCommand(
-                    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'Orders' AND COLUMN_NAME = 'UserID'", conn))
+                using (SqlCommand cmdOrder = new SqlCommand(insertOrderQuery, conn))
                 {
-                    hasUserID = (int)checkCmd.ExecuteScalar() > 0;
+                    cmdOrder.Parameters.AddWithValue("@UserID", CartManager.CurrentUser);
+                    cmdOrder.Parameters.AddWithValue("@ProductName", item.Name);
+                    cmdOrder.Parameters.AddWithValue("@Price", item.Price);
+                    cmdOrder.Parameters.AddWithValue("@Quantity", item.Quantity);
+                    cmdOrder.ExecuteNonQuery();
                 }
 
-                if (hasUserID)
-                {
-                    query = @"
-                INSERT INTO Orders (UserID, ProductName, Price, Quantity, OrderDate)
-                VALUES (@UserID, @ProductName, @Price, @Quantity, GETDATE())";
-                }
-                else
-                {
-                    query = @"
-                INSERT INTO Orders (ProductName, Price, Quantity, OrderDate)
-                VALUES (@ProductName, @Price, @Quantity, GETDATE())";
-                }
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    if (hasUserID)
-                    {
-                        cmd.Parameters.AddWithValue("@UserID", CartManager.CurrentUser);
-                    }
-                    cmd.Parameters.AddWithValue("@ProductName", item.Name);
-                    cmd.Parameters.AddWithValue("@Price", item.Price);
-                    cmd.Parameters.AddWithValue("@Quantity", item.Quantity);
-                    cmd.ExecuteNonQuery();
-                }
-
-                // ✅ Update the `Products` table to subtract the quantity purchased
-                string updateQuery = @"
+                // ✅ Update Stock in `Products` Table
+                string updateStockQuery = @"
             UPDATE Products 
             SET Quantity = Quantity - @Quantity 
             WHERE ProductID = @ProductID";
 
-                using (SqlCommand cmdUpdate = new SqlCommand(updateQuery, conn))
+                using (SqlCommand cmdUpdate = new SqlCommand(updateStockQuery, conn))
                 {
                     cmdUpdate.Parameters.AddWithValue("@Quantity", item.Quantity);
                     cmdUpdate.Parameters.AddWithValue("@ProductID", item.ProductID);
@@ -236,6 +236,7 @@ namespace HomeSphere
             RefreshCartView();
             MessageBox.Show("Item purchased successfully! Stock updated.", "Checkout Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
 
 
         private void RemoveItem(int productId)
@@ -269,6 +270,16 @@ namespace HomeSphere
                 return;
             }
 
+            // ✅ Open Payment Form Before Proceeding
+            frmPayment paymentForm = new frmPayment();
+            paymentForm.ShowDialog();
+
+            if (!paymentForm.PaymentSuccessful)
+            {
+                MessageBox.Show("Payment failed or cancelled.", "Payment Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
                 conn.Open();
@@ -284,7 +295,7 @@ namespace HomeSphere
                         object result = stockCheckCmd.ExecuteScalar();
                         int availableStock = result != null ? Convert.ToInt32(result) : 0;
 
-                        // ❌ If cart quantity > available stock, show an error and stop checkout
+                        // ❌ If cart quantity > available stock, stop checkout
                         if (item.Quantity > availableStock)
                         {
                             MessageBox.Show($"Not enough stock for {item.Name}. Available: {availableStock}, In Cart: {item.Quantity}.\n" +
@@ -299,8 +310,8 @@ namespace HomeSphere
                 if (hasStockIssue) return;
 
                 string orderQuery = @"
-            INSERT INTO Orders (ProductName, Price, Quantity, OrderDate)
-            VALUES (@ProductName, @Price, @Quantity, GETDATE())";
+            INSERT INTO Orders (UserID, ProductName, Price, Quantity, OrderDate)
+            VALUES (@UserID, @ProductName, @Price, @Quantity, GETDATE())";
 
                 string updateQuery = @"
             UPDATE Products 
@@ -311,6 +322,7 @@ namespace HomeSphere
                 {
                     using (SqlCommand cmdOrder = new SqlCommand(orderQuery, conn))
                     {
+                        cmdOrder.Parameters.AddWithValue("@UserID", CartManager.CurrentUser);
                         cmdOrder.Parameters.AddWithValue("@ProductName", item.Name);
                         cmdOrder.Parameters.AddWithValue("@Price", item.Price);
                         cmdOrder.Parameters.AddWithValue("@Quantity", item.Quantity);
@@ -330,6 +342,7 @@ namespace HomeSphere
             RefreshCartView();
             MessageBox.Show("All items purchased successfully! Stock updated.", "Checkout Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
 
 
         private void ClearCart(object sender, EventArgs e)
@@ -393,6 +406,20 @@ namespace HomeSphere
                 frmAdminLogin adminLoginForm = new frmAdminLogin();
                 adminLoginForm.Show();
             }
+        }
+
+        private void tsmiViewCart_Click(object sender, EventArgs e)
+        {
+            frmCart frmcart = new frmCart();
+            frmcart.Show();
+            this.Hide();
+        }
+
+        private void tsmiOrderHistory_Click(object sender, EventArgs e)
+        {
+            frmOrderHistory orderHistoryForm = new frmOrderHistory();
+            orderHistoryForm.Show();
+            this.Hide();
         }
     }
 }
