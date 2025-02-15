@@ -39,35 +39,33 @@
             this.btnLoginWithoutOTP = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.btnLoginForSavedDevice = new System.Windows.Forms.Button();
+            this.btnGoogleLogin = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblEmail
             // 
             this.lblEmail.AccessibleName = "lblEmail";
             this.lblEmail.AutoSize = true;
-            this.lblEmail.Location = new System.Drawing.Point(583, 196);
-            this.lblEmail.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblEmail.Location = new System.Drawing.Point(292, 102);
             this.lblEmail.Name = "lblEmail";
-            this.lblEmail.Size = new System.Drawing.Size(71, 25);
+            this.lblEmail.Size = new System.Drawing.Size(35, 13);
             this.lblEmail.TabIndex = 0;
             this.lblEmail.Text = "Email:";
             // 
             // tbEmail
             // 
             this.tbEmail.AccessibleName = "tbEmail";
-            this.tbEmail.Location = new System.Drawing.Point(665, 183);
-            this.tbEmail.Margin = new System.Windows.Forms.Padding(6);
+            this.tbEmail.Location = new System.Drawing.Point(332, 95);
             this.tbEmail.Name = "tbEmail";
-            this.tbEmail.Size = new System.Drawing.Size(496, 31);
+            this.tbEmail.Size = new System.Drawing.Size(250, 20);
             this.tbEmail.TabIndex = 1;
             // 
             // btnSendOTP
             // 
             this.btnSendOTP.AccessibleName = "btnSendOTP";
-            this.btnSendOTP.Location = new System.Drawing.Point(715, 331);
-            this.btnSendOTP.Margin = new System.Windows.Forms.Padding(6);
+            this.btnSendOTP.Location = new System.Drawing.Point(358, 172);
             this.btnSendOTP.Name = "btnSendOTP";
-            this.btnSendOTP.Size = new System.Drawing.Size(338, 60);
+            this.btnSendOTP.Size = new System.Drawing.Size(169, 31);
             this.btnSendOTP.TabIndex = 2;
             this.btnSendOTP.Text = "Send OTP";
             this.btnSendOTP.UseVisualStyleBackColor = true;
@@ -77,29 +75,26 @@
             // 
             this.lblOTP.AccessibleName = "lblOTP";
             this.lblOTP.AutoSize = true;
-            this.lblOTP.Location = new System.Drawing.Point(589, 491);
-            this.lblOTP.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblOTP.Location = new System.Drawing.Point(294, 255);
             this.lblOTP.Name = "lblOTP";
-            this.lblOTP.Size = new System.Drawing.Size(61, 25);
+            this.lblOTP.Size = new System.Drawing.Size(32, 13);
             this.lblOTP.TabIndex = 3;
             this.lblOTP.Text = "OTP:";
             // 
             // tbOTP
             // 
             this.tbOTP.AccessibleName = "tbOTP";
-            this.tbOTP.Location = new System.Drawing.Point(667, 475);
-            this.tbOTP.Margin = new System.Windows.Forms.Padding(6);
+            this.tbOTP.Location = new System.Drawing.Point(334, 247);
             this.tbOTP.Name = "tbOTP";
-            this.tbOTP.Size = new System.Drawing.Size(494, 31);
+            this.tbOTP.Size = new System.Drawing.Size(249, 20);
             this.tbOTP.TabIndex = 4;
             // 
             // btnLogin
             // 
             this.btnLogin.AccessibleName = "btnLogin";
-            this.btnLogin.Location = new System.Drawing.Point(715, 560);
-            this.btnLogin.Margin = new System.Windows.Forms.Padding(6);
+            this.btnLogin.Location = new System.Drawing.Point(358, 291);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(338, 63);
+            this.btnLogin.Size = new System.Drawing.Size(169, 33);
             this.btnLogin.TabIndex = 5;
             this.btnLogin.Text = "Login";
             this.btnLogin.UseVisualStyleBackColor = true;
@@ -109,10 +104,9 @@
             // 
             this.cbSaveDevice.AccessibleName = "cbSaveDevice";
             this.cbSaveDevice.AutoSize = true;
-            this.cbSaveDevice.Location = new System.Drawing.Point(785, 652);
-            this.cbSaveDevice.Margin = new System.Windows.Forms.Padding(6);
+            this.cbSaveDevice.Location = new System.Drawing.Point(392, 339);
             this.cbSaveDevice.Name = "cbSaveDevice";
-            this.cbSaveDevice.Size = new System.Drawing.Size(202, 29);
+            this.cbSaveDevice.Size = new System.Drawing.Size(105, 17);
             this.cbSaveDevice.TabIndex = 6;
             this.cbSaveDevice.Text = "Save this device";
             this.cbSaveDevice.UseVisualStyleBackColor = true;
@@ -121,9 +115,10 @@
             // 
             this.lnkLoginAsAdmin.AccessibleName = "lnkLoginAsAdmin";
             this.lnkLoginAsAdmin.AutoSize = true;
-            this.lnkLoginAsAdmin.Location = new System.Drawing.Point(806, 732);
+            this.lnkLoginAsAdmin.Location = new System.Drawing.Point(403, 381);
+            this.lnkLoginAsAdmin.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lnkLoginAsAdmin.Name = "lnkLoginAsAdmin";
-            this.lnkLoginAsAdmin.Size = new System.Drawing.Size(160, 25);
+            this.lnkLoginAsAdmin.Size = new System.Drawing.Size(79, 13);
             this.lnkLoginAsAdmin.TabIndex = 7;
             this.lnkLoginAsAdmin.TabStop = true;
             this.lnkLoginAsAdmin.Text = "Login as Admin";
@@ -132,9 +127,10 @@
             // btnLoginWithoutOTP
             // 
             this.btnLoginWithoutOTP.AccessibleName = "btnLoginWithoutOTP";
-            this.btnLoginWithoutOTP.Location = new System.Drawing.Point(1188, 174);
+            this.btnLoginWithoutOTP.Location = new System.Drawing.Point(594, 90);
+            this.btnLoginWithoutOTP.Margin = new System.Windows.Forms.Padding(2);
             this.btnLoginWithoutOTP.Name = "btnLoginWithoutOTP";
-            this.btnLoginWithoutOTP.Size = new System.Drawing.Size(234, 48);
+            this.btnLoginWithoutOTP.Size = new System.Drawing.Size(117, 25);
             this.btnLoginWithoutOTP.TabIndex = 8;
             this.btnLoginWithoutOTP.Text = "Login Without OTP";
             this.btnLoginWithoutOTP.UseVisualStyleBackColor = true;
@@ -143,10 +139,9 @@
             // btnExit
             // 
             this.btnExit.AccessibleName = "btnExit";
-            this.btnExit.Location = new System.Drawing.Point(1467, 15);
-            this.btnExit.Margin = new System.Windows.Forms.Padding(6);
+            this.btnExit.Location = new System.Drawing.Point(734, 8);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(254, 52);
+            this.btnExit.Size = new System.Drawing.Size(127, 27);
             this.btnExit.TabIndex = 9;
             this.btnExit.Text = "Exit Application";
             this.btnExit.UseVisualStyleBackColor = true;
@@ -155,19 +150,32 @@
             // btnLoginForSavedDevice
             // 
             this.btnLoginForSavedDevice.AccessibleName = "btnLoginForSavedDevice";
-            this.btnLoginForSavedDevice.Location = new System.Drawing.Point(715, 248);
+            this.btnLoginForSavedDevice.Location = new System.Drawing.Point(358, 129);
+            this.btnLoginForSavedDevice.Margin = new System.Windows.Forms.Padding(2);
             this.btnLoginForSavedDevice.Name = "btnLoginForSavedDevice";
-            this.btnLoginForSavedDevice.Size = new System.Drawing.Size(338, 60);
+            this.btnLoginForSavedDevice.Size = new System.Drawing.Size(169, 31);
             this.btnLoginForSavedDevice.TabIndex = 10;
             this.btnLoginForSavedDevice.Text = "Login for Saved Device";
             this.btnLoginForSavedDevice.UseVisualStyleBackColor = true;
             this.btnLoginForSavedDevice.Click += new System.EventHandler(this.btnLoginForSavedDevice_Click);
             // 
+            // btnGoogleLogin
+            // 
+            this.btnGoogleLogin.AccessibleName = "btnGoogleLogin";
+            this.btnGoogleLogin.Location = new System.Drawing.Point(380, 210);
+            this.btnGoogleLogin.Name = "btnGoogleLogin";
+            this.btnGoogleLogin.Size = new System.Drawing.Size(127, 31);
+            this.btnGoogleLogin.TabIndex = 11;
+            this.btnGoogleLogin.Text = "Login with Google";
+            this.btnGoogleLogin.UseVisualStyleBackColor = true;
+            this.btnGoogleLogin.Click += new System.EventHandler(this.btnGoogleLogin_Click);
+            // 
             // frmLogin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1735, 816);
+            this.ClientSize = new System.Drawing.Size(868, 424);
+            this.Controls.Add(this.btnGoogleLogin);
             this.Controls.Add(this.btnLoginForSavedDevice);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnLoginWithoutOTP);
@@ -179,7 +187,6 @@
             this.Controls.Add(this.btnSendOTP);
             this.Controls.Add(this.tbEmail);
             this.Controls.Add(this.lblEmail);
-            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "frmLogin";
             this.Text = " ";
             this.ResumeLayout(false);
@@ -200,6 +207,7 @@
         private System.Windows.Forms.Button btnLoginWithoutOTP;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnLoginForSavedDevice;
+        private System.Windows.Forms.Button btnGoogleLogin;
     }
 }
 
