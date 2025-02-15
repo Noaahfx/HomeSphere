@@ -22,7 +22,7 @@ namespace HomeSphere
             Application.SetCompatibleTextRenderingDefault(false);
 
             InitializeGlobalNotificationTimer();
-            Application.Run(new frmAdminLogin());
+            Application.Run(new DataViewJames());
         }
 
         public static void InitializeGlobalNotificationTimer()

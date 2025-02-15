@@ -48,6 +48,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommsUtil">
+      <HintPath>..\..\DataCommsStarters\CommsUtil.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -72,6 +75,12 @@
     </Compile>
     <Compile Include="CartItem.cs" />
     <Compile Include="CartManager.cs" />
+    <Compile Include="DataViewJames.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataViewJames.designer.cs">
+      <DependentUpon>DataViewJames.cs</DependentUpon>
+    </Compile>
     <Compile Include="DayFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +171,17 @@
     <Compile Include="frmUserManagement.Designer.cs">
       <DependentUpon>frmUserManagement.cs</DependentUpon>
     </Compile>
+    <Compile Include="GraphJames.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GraphJames.designer.cs">
+      <DependentUpon>GraphJames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HardwareDBDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HardwareDBDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="LightingChartForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,6 +210,9 @@
     </Compile>
     <EmbeddedResource Include="AddEditForm.resx">
       <DependentUpon>AddEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataViewJames.resx">
+      <DependentUpon>DataViewJames.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DayFilterForm.resx">
       <DependentUpon>DayFilterForm.cs</DependentUpon>
@@ -236,6 +259,9 @@
     <EmbeddedResource Include="frmUserManagement.resx">
       <DependentUpon>frmUserManagement.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GraphJames.resx">
+      <DependentUpon>GraphJames.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LightingChartForm.resx">
       <DependentUpon>LightingChartForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -257,6 +283,17 @@
     <EmbeddedResource Include="TableManagement.resx">
       <DependentUpon>TableManagement.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="HardwareDBDataSet.xsc">
+      <DependentUpon>HardwareDBDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="HardwareDBDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>HardwareDBDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="HardwareDBDataSet.xss">
+      <DependentUpon>HardwareDBDataSet.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
