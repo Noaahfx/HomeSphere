@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing; // ✅ Fix: Added for `Point`
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace HomeSphere
 {
@@ -34,24 +36,23 @@ namespace HomeSphere
             {
                 Panel card = new Panel
                 {
-                    Width = 220,
-                    Height = 300,
+                    Width = 250,
+                    Height = 350,
                     BorderStyle = BorderStyle.FixedSingle,
                     Margin = new Padding(5)
                 };
 
-                // ✅ Load Product Image (Same as `frmProductPage.cs`)
+                // ✅ Load Product Image
                 PictureBox pb = new PictureBox
                 {
                     SizeMode = PictureBoxSizeMode.Zoom,
                     Width = 180,
                     Height = 120,
                     Top = 5,
-                    Left = 5
+                    Left = 35
                 };
 
                 string binPath = System.IO.Path.Combine(Application.StartupPath, "ProductImages", item.ImagePath);
-
                 if (System.IO.File.Exists(binPath))
                 {
                     pb.Image = Image.FromFile(binPath);
@@ -72,6 +73,7 @@ namespace HomeSphere
                     }
                 }
 
+                // ✅ Product Name
                 Label lblProductName = new Label
                 {
                     Text = item.Name,
@@ -80,19 +82,261 @@ namespace HomeSphere
                     Left = 5
                 };
 
-                Label lblPrice = new Label
+                // ✅ Show Total Price Directly
+                Label lblTotalPrice = new Label
                 {
-                    Text = $"${item.Price} x {item.Quantity}",
+                    Text = $"Total: ${item.Total:F2}", // Calculates price * quantity
                     AutoSize = true,
                     Top = lblProductName.Bottom + 2,
                     Left = 5
                 };
 
+                // ✅ Show Quantity Separately
+                Label lblQuantity = new Label
+                {
+                    Text = $"Quantity: {item.Quantity}",
+                    AutoSize = true,
+                    Top = lblTotalPrice.Bottom + 2,
+                    Left = 5
+                };
+
+                // ✅ Checkout Item Button
+                Button btnCheckoutItem = new Button
+                {
+                    Text = "Checkout Item",
+                    AutoSize = true,
+                    Top = lblQuantity.Bottom + 5,
+                    Left = 5
+                };
+                btnCheckoutItem.Click += (s, e) => CheckoutSingleItem(item);
+
+                // ✅ Remove Item Button
+                Button btnRemoveItem = new Button
+                {
+                    Text = "Remove Item",
+                    AutoSize = true,
+                    Top = btnCheckoutItem.Bottom + 5,
+                    Left = 5
+                };
+                btnRemoveItem.Click += (s, e) => RemoveItem(item.ProductID);
+
+                // ✅ Add Controls to Card
                 card.Controls.Add(pb);
                 card.Controls.Add(lblProductName);
-                card.Controls.Add(lblPrice);
+                card.Controls.Add(lblTotalPrice);
+                card.Controls.Add(lblQuantity);
+                card.Controls.Add(btnCheckoutItem);
+                card.Controls.Add(btnRemoveItem);
+
                 flpCart.Controls.Add(card);
             }
+
+            // ✅ Add "Checkout All" & "Clear Cart" Buttons
+            Button btnCheckoutAll = new Button
+            {
+                Text = "Checkout All",
+                AutoSize = true,
+                Top = 10,
+                Left = 10
+            };
+            btnCheckoutAll.Click += new EventHandler(CheckoutAllItems);
+
+            Button btnClearCart = new Button
+            {
+                Text = "Clear Cart",
+                AutoSize = true,
+                Top = 10,
+                Left = 120
+            };
+            btnClearCart.Click += new EventHandler(ClearCart);
+
+            flpCart.Controls.Add(btnCheckoutAll);
+            flpCart.Controls.Add(btnClearCart);
+        }
+
+        private void CheckoutSingleItem(CartItem item)
+        {
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                conn.Open();
+
+                // ✅ Check if there is enough stock before checkout
+                string stockCheckQuery = "SELECT Quantity FROM Products WHERE ProductID = @ProductID";
+                int availableStock = 0;
+
+                using (SqlCommand stockCheckCmd = new SqlCommand(stockCheckQuery, conn))
+                {
+                    stockCheckCmd.Parameters.AddWithValue("@ProductID", item.ProductID);
+                    object result = stockCheckCmd.ExecuteScalar();
+                    if (result != null)
+                    {
+                        availableStock = Convert.ToInt32(result);
+                    }
+                }
+
+                // ❌ If cart quantity > available stock, show an error and stop checkout
+                if (item.Quantity > availableStock)
+                {
+                    MessageBox.Show($"Not enough stock for {item.Name}. Available: {availableStock}, In Cart: {item.Quantity}.\n" +
+                                    "Please update your cart and try again.",
+                                    "Stock Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // ✅ Proceed with checkout since stock is sufficient
+                string query;
+                bool hasUserID;
+
+                using (SqlCommand checkCmd = new SqlCommand(
+                    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'Orders' AND COLUMN_NAME = 'UserID'", conn))
+                {
+                    hasUserID = (int)checkCmd.ExecuteScalar() > 0;
+                }
+
+                if (hasUserID)
+                {
+                    query = @"
+                INSERT INTO Orders (UserID, ProductName, Price, Quantity, OrderDate)
+                VALUES (@UserID, @ProductName, @Price, @Quantity, GETDATE())";
+                }
+                else
+                {
+                    query = @"
+                INSERT INTO Orders (ProductName, Price, Quantity, OrderDate)
+                VALUES (@ProductName, @Price, @Quantity, GETDATE())";
+                }
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    if (hasUserID)
+                    {
+                        cmd.Parameters.AddWithValue("@UserID", CartManager.CurrentUser);
+                    }
+                    cmd.Parameters.AddWithValue("@ProductName", item.Name);
+                    cmd.Parameters.AddWithValue("@Price", item.Price);
+                    cmd.Parameters.AddWithValue("@Quantity", item.Quantity);
+                    cmd.ExecuteNonQuery();
+                }
+
+                // ✅ Update the `Products` table to subtract the quantity purchased
+                string updateQuery = @"
+            UPDATE Products 
+            SET Quantity = Quantity - @Quantity 
+            WHERE ProductID = @ProductID";
+
+                using (SqlCommand cmdUpdate = new SqlCommand(updateQuery, conn))
+                {
+                    cmdUpdate.Parameters.AddWithValue("@Quantity", item.Quantity);
+                    cmdUpdate.Parameters.AddWithValue("@ProductID", item.ProductID);
+                    cmdUpdate.ExecuteNonQuery();
+                }
+            }
+
+            RemoveItem(item.ProductID);
+            RefreshCartView();
+            MessageBox.Show("Item purchased successfully! Stock updated.", "Checkout Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+
+        private void RemoveItem(int productId)
+        {
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                conn.Open();
+                string query = @"
+            DELETE FROM CartItems
+            WHERE UserID = @UserID AND ProductID = @ProductID";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", CartManager.CurrentUser);
+                    cmd.Parameters.AddWithValue("@ProductID", productId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            RefreshCartView();
+            MessageBox.Show("Item removed from cart!", "Cart Updated", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void CheckoutAllItems(object sender, EventArgs e)
+        {
+            List<CartItem> cartItems = CartManager.GetCartItemsForUser(CartManager.CurrentUser);
+
+            if (cartItems.Count == 0)
+            {
+                MessageBox.Show("Your cart is empty!", "Checkout Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                conn.Open();
+
+                string stockCheckQuery = "SELECT Quantity FROM Products WHERE ProductID = @ProductID";
+                bool hasStockIssue = false;
+
+                foreach (var item in cartItems)
+                {
+                    using (SqlCommand stockCheckCmd = new SqlCommand(stockCheckQuery, conn))
+                    {
+                        stockCheckCmd.Parameters.AddWithValue("@ProductID", item.ProductID);
+                        object result = stockCheckCmd.ExecuteScalar();
+                        int availableStock = result != null ? Convert.ToInt32(result) : 0;
+
+                        // ❌ If cart quantity > available stock, show an error and stop checkout
+                        if (item.Quantity > availableStock)
+                        {
+                            MessageBox.Show($"Not enough stock for {item.Name}. Available: {availableStock}, In Cart: {item.Quantity}.\n" +
+                                            "Please update your cart and try again.",
+                                            "Stock Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            hasStockIssue = true;
+                        }
+                    }
+                }
+
+                // ❌ If any item had a stock issue, stop the checkout process
+                if (hasStockIssue) return;
+
+                string orderQuery = @"
+            INSERT INTO Orders (ProductName, Price, Quantity, OrderDate)
+            VALUES (@ProductName, @Price, @Quantity, GETDATE())";
+
+                string updateQuery = @"
+            UPDATE Products 
+            SET Quantity = Quantity - @Quantity 
+            WHERE ProductID = @ProductID";
+
+                foreach (var item in cartItems)
+                {
+                    using (SqlCommand cmdOrder = new SqlCommand(orderQuery, conn))
+                    {
+                        cmdOrder.Parameters.AddWithValue("@ProductName", item.Name);
+                        cmdOrder.Parameters.AddWithValue("@Price", item.Price);
+                        cmdOrder.Parameters.AddWithValue("@Quantity", item.Quantity);
+                        cmdOrder.ExecuteNonQuery();
+                    }
+
+                    using (SqlCommand cmdUpdate = new SqlCommand(updateQuery, conn))
+                    {
+                        cmdUpdate.Parameters.AddWithValue("@Quantity", item.Quantity);
+                        cmdUpdate.Parameters.AddWithValue("@ProductID", item.ProductID);
+                        cmdUpdate.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            CartManager.ClearCart();
+            RefreshCartView();
+            MessageBox.Show("All items purchased successfully! Stock updated.", "Checkout Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+
+        private void ClearCart(object sender, EventArgs e)
+        {
+            CartManager.ClearCart();
+            RefreshCartView();
+            MessageBox.Show("Cart has been cleared!", "Cart Cleared", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
 

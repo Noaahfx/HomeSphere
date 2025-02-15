@@ -37,11 +37,11 @@ namespace HomeSphere
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
+                // ✅ Remove "WHERE Quantity > 0" so we show out-of-stock products too.
                 string query = @"
-                    SELECT ProductID, Name, Price, ImagePath, Quantity
-                    FROM Products
-                    WHERE Quantity > 0
-                ";
+            SELECT ProductID, Name, Price, ImagePath, Quantity
+            FROM Products";
+
                 SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
@@ -53,6 +53,7 @@ namespace HomeSphere
                 }
             }
         }
+
 
         private Panel CreateProductCard(DataRow row)
         {
@@ -122,20 +123,22 @@ namespace HomeSphere
             panel.Controls.Add(lblPrice);
 
             Label lblStock = new Label();
-            lblStock.Text = "Stock: " + quantity;
+            lblStock.Text = quantity > 0 ? "Stock: " + quantity : "Out of Stock";
             lblStock.AutoSize = true;
             lblStock.Top = lblPrice.Bottom + 2;
             lblStock.Left = 5;
+            lblStock.ForeColor = quantity > 0 ? Color.Black : Color.Red; // Red if out of stock
             panel.Controls.Add(lblStock);
 
             // NumericUpDown
             NumericUpDown nudQuantity = new NumericUpDown();
             nudQuantity.Minimum = 1;
-            nudQuantity.Maximum = quantity;
+            nudQuantity.Maximum = quantity > 0 ? quantity : 1; // Prevents selecting more than available stock
             nudQuantity.Value = 1;
             nudQuantity.Top = lblStock.Bottom + 5;
             nudQuantity.Left = 5;
             nudQuantity.Width = 60;
+            nudQuantity.Enabled = quantity > 0; // Disable if out of stock
             panel.Controls.Add(nudQuantity);
 
             // Add to Cart button
@@ -144,6 +147,7 @@ namespace HomeSphere
             btnAdd.Top = nudQuantity.Bottom + 5;
             btnAdd.Left = 5;
             btnAdd.AutoSize = true;
+            btnAdd.Enabled = quantity > 0; // Disable if out of stock
 
             btnAdd.Click += (s, e) =>
             {
@@ -169,6 +173,7 @@ namespace HomeSphere
             panel.Controls.Add(btnAdd);
             return panel;
         }
+
 
         /// <summary>
         /// Optional: If you keep a Checkout button here as well.
