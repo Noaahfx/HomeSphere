@@ -19,35 +19,48 @@ namespace HomeSphere
 
             using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                conn.Open();
-                string query = "SELECT COUNT(1) FROM Admins WHERE Username = @Username AND Password = @Password";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                try
                 {
-                    cmd.Parameters.AddWithValue("@Username", username);
-                    cmd.Parameters.AddWithValue("@Password", password); // Pass plaintext for now
-
-                    int count = (int)cmd.ExecuteScalar();
-
-                    if (count == 1)
+                    conn.Open();
+                    string query = "SELECT COUNT(1) FROM Admins WHERE Username = @Username AND Password = @Password";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        MessageBox.Show("Admin login successful!");
-                        this.Close(); // Properly close the admin login form
-                        frmAdminHomePage adminHomePage = new frmAdminHomePage();
-                        adminHomePage.Show(); // Open the admin dashboard
+                        cmd.Parameters.AddWithValue("@Username", username);
+                        cmd.Parameters.AddWithValue("@Password", password);
+
+                        int count = (int)cmd.ExecuteScalar();
+
+                        if (count == 1)
+                        {
+                            MessageBox.Show("Admin login successful!");
+
+                            // ✅ Set CurrentUser in CartManager so the admin's cart is correctly loaded
+                            CartManager.CurrentUser = username;
+
+                            this.Hide(); // Hide login form
+                            Form1 form1 = new Form1();
+                            form1.Show(); // Use Show() instead of ShowDialog()
+                        }
+                        else
+                        {
+                            MessageBox.Show("Invalid admin credentials! Please check the username and password.", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
-                    else
-                    {
-                        MessageBox.Show("Invalid admin credentials! Please check the username and password.");
-                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("An error occurred while logging in: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
+
         private void lnkLoginAsUser_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            this.Close(); // Close the current admin login form
+            this.Hide(); // Hide instead of closing to allow returning if needed
             frmLogin loginForm = new frmLogin();
-            loginForm.Show(); // Show the user login form
+            loginForm.ShowDialog();
+            this.Show(); // Re-show login form if user login is canceled
         }
 
         private void btnExit_Click(object sender, EventArgs e)

@@ -70,6 +70,8 @@
     <Compile Include="AddEditForm.Designer.cs">
       <DependentUpon>AddEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CartItem.cs" />
+    <Compile Include="CartManager.cs" />
     <Compile Include="DayFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,11 +90,11 @@
     <Compile Include="Form1.designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmAdminDashboard.cs">
+    <Compile Include="frmAlertManagement.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmAdminDashboard.designer.cs">
-      <DependentUpon>frmAdminDashboard.cs</DependentUpon>
+    <Compile Include="frmAlertManagement.designer.cs">
+      <DependentUpon>frmAlertManagement.cs</DependentUpon>
     </Compile>
     <Compile Include="frmAdminHomePage.cs">
       <SubType>Form</SubType>
@@ -105,6 +107,12 @@
     </Compile>
     <Compile Include="frmAdminLogin.designer.cs">
       <DependentUpon>frmAdminLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCart.Designer.cs">
+      <DependentUpon>frmCart.cs</DependentUpon>
     </Compile>
     <Compile Include="frmEditAlert.cs">
       <SubType>Form</SubType>
@@ -129,6 +137,12 @@
     </Compile>
     <Compile Include="frmUserHomePage.designer.cs">
       <DependentUpon>frmUserHomePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmProductPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmProductPage.Designer.cs">
+      <DependentUpon>frmProductPage.cs</DependentUpon>
     </Compile>
     <Compile Include="LightingChartForm.cs">
       <SubType>Form</SubType>
@@ -168,14 +182,17 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmAdminDashboard.resx">
-      <DependentUpon>frmAdminDashboard.cs</DependentUpon>
+    <EmbeddedResource Include="frmAlertManagement.resx">
+      <DependentUpon>frmAlertManagement.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmAdminHomePage.resx">
       <DependentUpon>frmAdminHomePage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmAdminLogin.resx">
       <DependentUpon>frmAdminLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCart.resx">
+      <DependentUpon>frmCart.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmEditAlert.resx">
       <DependentUpon>frmEditAlert.cs</DependentUpon>
@@ -188,6 +205,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmUserHomePage.resx">
       <DependentUpon>frmUserHomePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmProductPage.resx">
+      <DependentUpon>frmProductPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LightingChartForm.resx">
       <DependentUpon>LightingChartForm.cs</DependentUpon>
@@ -244,7 +264,17 @@
     <Content Include="Databases\IOTPRJ_Data_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ProductImages\Aircon.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ProductImages\LEDLight.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ProductImages\WaterHeater.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

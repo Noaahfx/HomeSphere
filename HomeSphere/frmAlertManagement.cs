@@ -7,9 +7,9 @@ using Microsoft.VisualBasic;
 
 namespace HomeSphere
 {
-    public partial class frmAdminDashboard : Form
+    public partial class frmAlertManagement : Form
     {
-        public frmAdminDashboard()
+        public frmAlertManagement()
         {
             InitializeComponent();
             LoadAlerts(); // Load alerts from the database when the form loads
@@ -92,8 +92,8 @@ namespace HomeSphere
         {
             // Hide the current form and return to the admin home page
             this.Hide();
-            frmAdminHomePage adminHomePage = new frmAdminHomePage();
-            adminHomePage.Show();
+            Form1 form1 = new Form1();
+            form1.Show();
         }
 
         private void dgvAlerts_CellClick(object sender, DataGridViewCellEventArgs e)

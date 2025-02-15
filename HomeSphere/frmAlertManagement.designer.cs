@@ -1,6 +1,6 @@
 ﻿namespace HomeSphere
 {
-    partial class frmAdminDashboard
+    partial class frmAlertManagement
     {
         /// <summary>
         /// Required designer variable.

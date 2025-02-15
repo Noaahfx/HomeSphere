@@ -12,7 +12,7 @@ namespace HomeSphere
 
         private void lnkAlertManagement_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            frmAdminDashboard adminDashboard = new frmAdminDashboard();
+            frmAlertManagement adminDashboard = new frmAlertManagement();
             this.Hide();
             adminDashboard.Show();
         }

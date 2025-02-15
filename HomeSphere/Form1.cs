@@ -197,7 +197,13 @@ namespace HomeSphere
 
         private void Logout_Click(object sender, EventArgs e)
         {
-
+            var result = MessageBox.Show("Are you sure you want to log out?", "Logout Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                this.Close();
+                frmAdminLogin adminLoginForm = new frmAdminLogin();
+                adminLoginForm.Show();
+            }
         }
 
         private void ManageRecords_Click(object sender, EventArgs e)
@@ -206,6 +212,25 @@ namespace HomeSphere
             TableManagement tableManagement = new TableManagement();
             tableManagement.Show();
             this.Hide(); // Optional: Hides the main form while TableManagement is open
+        }
+
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void EventManagement_Click(object sender, EventArgs e)
+        {
+            frmAlertManagement alertManagement = new frmAlertManagement();
+            this.Hide();
+            alertManagement.Show();
+        }
+
+        private void Products_Click(object sender, EventArgs e)
+        {
+            frmProductPage frmproductpage = new frmProductPage();
+            this.Hide();
+            frmproductpage.Show();
         }
     }
 }

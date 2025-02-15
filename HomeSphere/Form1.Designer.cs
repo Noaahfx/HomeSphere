@@ -29,19 +29,21 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.Home = new System.Windows.Forms.ToolStripButton();
             this.Logout = new System.Windows.Forms.ToolStripButton();
             this.ManageRecords = new System.Windows.Forms.ToolStripButton();
             this.Overview = new System.Windows.Forms.ToolStripButton();
+            this.EventManagement = new System.Windows.Forms.ToolStripButton();
             this.lighting = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.energy = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.Products = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lighting)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.energy)).BeginInit();
@@ -55,12 +57,15 @@
             this.Home,
             this.Logout,
             this.ManageRecords,
-            this.Overview});
+            this.Overview,
+            this.Products,
+            this.EventManagement});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1329, 27);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip1_ItemClicked);
             // 
             // Home
             // 
@@ -109,19 +114,31 @@
             this.Overview.Text = "Overview";
             this.Overview.Click += new System.EventHandler(this.Overview_Click);
             // 
+            // EventManagement
+            // 
+            this.EventManagement.AccessibleName = "EventManagement";
+            this.EventManagement.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.EventManagement.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.EventManagement.Image = ((System.Drawing.Image)(resources.GetObject("EventManagement.Image")));
+            this.EventManagement.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.EventManagement.Name = "EventManagement";
+            this.EventManagement.Size = new System.Drawing.Size(51, 24);
+            this.EventManagement.Text = "Alerts";
+            this.EventManagement.Click += new System.EventHandler(this.EventManagement_Click);
+            // 
             // lighting
             // 
             this.lighting.AccessibleName = "lighting";
-            chartArea1.Name = "ChartArea1";
-            this.lighting.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.lighting.Legends.Add(legend1);
+            chartArea3.Name = "ChartArea1";
+            this.lighting.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.lighting.Legends.Add(legend3);
             this.lighting.Location = new System.Drawing.Point(28, 60);
             this.lighting.Name = "lighting";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.lighting.Series.Add(series1);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.lighting.Series.Add(series3);
             this.lighting.Size = new System.Drawing.Size(649, 369);
             this.lighting.TabIndex = 1;
             this.lighting.Text = "lighting";
@@ -130,21 +147,33 @@
             // energy
             // 
             this.energy.AccessibleName = "energy";
-            chartArea2.Name = "ChartArea1";
-            this.energy.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.energy.Legends.Add(legend2);
+            chartArea4.Name = "ChartArea1";
+            this.energy.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.energy.Legends.Add(legend4);
             this.energy.Location = new System.Drawing.Point(694, 60);
             this.energy.Name = "energy";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.energy.Series.Add(series2);
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.energy.Series.Add(series4);
             this.energy.Size = new System.Drawing.Size(574, 369);
             this.energy.TabIndex = 2;
             this.energy.Text = "energy";
             this.energy.Click += new System.EventHandler(this.energy_Click);
+            // 
+            // Products
+            // 
+            this.Products.AccessibleName = "Products";
+            this.Products.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.Products.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.Products.Image = ((System.Drawing.Image)(resources.GetObject("Products.Image")));
+            this.Products.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Products.Name = "Products";
+            this.Products.Size = new System.Drawing.Size(70, 24);
+            this.Products.Text = "Products";
+            this.Products.Click += new System.EventHandler(this.Products_Click);
             // 
             // Form1
             // 
@@ -175,6 +204,8 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart lighting;
         private System.Windows.Forms.DataVisualization.Charting.Chart energy;
         private System.Windows.Forms.ToolStripButton ManageRecords;
+        private System.Windows.Forms.ToolStripButton EventManagement;
+        private System.Windows.Forms.ToolStripButton Products;
     }
 }
 
