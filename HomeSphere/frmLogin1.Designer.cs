@@ -46,6 +46,7 @@
             this.forgetPasswordLink = new System.Windows.Forms.LinkLabel();
             this.btnGoogleLogin = new System.Windows.Forms.Button();
             this.lnkLoginAsAdmin = new System.Windows.Forms.LinkLabel();
+            this.cbRememberDevice = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -256,12 +257,24 @@
             this.lnkLoginAsAdmin.Text = "Login as Admin";
             this.lnkLoginAsAdmin.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkLoginAsAdmin_LinkClicked);
             // 
+            // cbRememberDevice
+            // 
+            this.cbRememberDevice.AccessibleName = "cbRememberDevice";
+            this.cbRememberDevice.AutoSize = true;
+            this.cbRememberDevice.Location = new System.Drawing.Point(146, 254);
+            this.cbRememberDevice.Name = "cbRememberDevice";
+            this.cbRememberDevice.Size = new System.Drawing.Size(137, 17);
+            this.cbRememberDevice.TabIndex = 20;
+            this.cbRememberDevice.Text = "Remember This Device";
+            this.cbRememberDevice.UseVisualStyleBackColor = true;
+            // 
             // frmLogin1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(895, 596);
+            this.ClientSize = new System.Drawing.Size(688, 542);
+            this.Controls.Add(this.cbRememberDevice);
             this.Controls.Add(this.lnkLoginAsAdmin);
             this.Controls.Add(this.btnGoogleLogin);
             this.Controls.Add(this.forgetPasswordLink);
@@ -310,5 +323,6 @@
         private System.Windows.Forms.LinkLabel forgetPasswordLink;
         private System.Windows.Forms.Button btnGoogleLogin;
         private System.Windows.Forms.LinkLabel lnkLoginAsAdmin;
+        private System.Windows.Forms.CheckBox cbRememberDevice;
     }
 }

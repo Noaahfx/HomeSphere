@@ -35,8 +35,9 @@ namespace HomeSphere
                 Program.CurrentUserId = -1;
 
                 // Close this form and show the login form
-                this.Close();
-                frmLogin loginForm = new frmLogin();
+                this.Hide();
+                frmLogin1 loginForm = new frmLogin1();
+                loginForm.FormClosed += (s, args) => this.Close();
                 loginForm.Show();
             }
         }
@@ -65,6 +66,13 @@ namespace HomeSphere
             {
                 MessageBox.Show($"Error checking for active alerts: {ex.Message}");
             }
+        }
+
+        private void lnkMFASettings_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            frmMFASettings mfaSettings = new frmMFASettings(userId);
+            this.Hide();
+            mfaSettings.Show();
         }
     }
 }

@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.btnSave = new System.Windows.Forms.Button();
-            this.tbEmail = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.tbUsername = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -47,23 +45,6 @@
             this.btnSave.Text = "Continue";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // tbEmail
-            // 
-            this.tbEmail.AccessibleName = "tbEmail";
-            this.tbEmail.Location = new System.Drawing.Point(315, 101);
-            this.tbEmail.Name = "tbEmail";
-            this.tbEmail.Size = new System.Drawing.Size(197, 20);
-            this.tbEmail.TabIndex = 1;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(390, 85);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Email:";
             // 
             // tbUsername
             // 
@@ -108,8 +89,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tbUsername);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.tbEmail);
             this.Controls.Add(this.btnSave);
             this.Name = "frmCompleteAccountSetup";
             this.Text = "frmCompleteAccountSetup";
@@ -121,8 +100,6 @@
         #endregion
 
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.TextBox tbEmail;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbUsername;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
