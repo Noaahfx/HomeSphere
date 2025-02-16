@@ -10,6 +10,8 @@ using Google.Apis.Services;
 using Google.Apis.Oauth2.v2;
 using Google.Apis.Oauth2.v2.Data;
 using System.Text.RegularExpressions;
+using System.Net.Mail;
+using System.Net;
 
 namespace HomeSphere
 {
@@ -108,24 +110,23 @@ namespace HomeSphere
 
         private void btnLogin_Click_1(object sender, EventArgs e)
         {
+            int userId = -1;
+            string email = string.Empty;
             errorProvider1.SetError(tbUsername, "");
             errorProvider1.SetError(tbPassword, "");
 
             string username = SanitizeInput(tbUsername.Text.Trim());
             string password = SanitizeInput(tbPassword.Text.Trim());
+            string deviceIdentifier = GetDeviceIdentifier();
+            bool rememberDevice = cbRememberDevice.Checked; // ✅ Ensure checkbox value is retrieved
 
-            if (string.IsNullOrWhiteSpace(username) || username == "Enter your username")
+            if (string.IsNullOrWhiteSpace(username))
             {
                 errorProvider1.SetError(tbUsername, "Username is required.");
                 return;
             }
-            else if (username.Length > 100)
-            {
-                errorProvider1.SetError(tbUsername, "Username too long (max 100 chars).");
-                return;
-            }
 
-            if (string.IsNullOrWhiteSpace(password) || password == "Enter your password")
+            if (string.IsNullOrWhiteSpace(password))
             {
                 errorProvider1.SetError(tbPassword, "Password is required.");
                 return;
@@ -136,7 +137,7 @@ namespace HomeSphere
                 using (SqlConnection conn = new SqlConnection(strConnectionString))
                 {
                     conn.Open();
-                    string query = "SELECT ID, PasswordHash FROM Users WHERE Username = @Username";
+                    string query = "SELECT ID, PasswordHash, Email, ISNULL(MFAType, 'None') AS MFAType FROM Users WHERE Username = @Username";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -146,8 +147,10 @@ namespace HomeSphere
                         {
                             if (reader.Read())
                             {
-                                int userId = Convert.ToInt32(reader["ID"]);
+                                userId = Convert.ToInt32(reader["ID"]);  // ✅ Correct: Assign value instead of redeclaring
+                                email = reader["Email"].ToString();      // ✅ Correct: Assign value instead of redeclaring
                                 string storedPasswordHash = reader["PasswordHash"].ToString();
+                                string mfaType = reader["MFAType"].ToString().Trim().ToLower();
 
                                 if (!BCrypt.Net.BCrypt.Verify(password, storedPasswordHash))
                                 {
@@ -155,10 +158,43 @@ namespace HomeSphere
                                     return;
                                 }
 
+                                // ✅ Check if device is already saved (bypass 2FA)
+                                if (IsDeviceSaved(userId, deviceIdentifier))
+                                {
+                                    MessageBox.Show("Device recognized. Bypassing 2FA and/or Login Alerts.");
+                                    Program.CurrentUserId = userId;
+                                    this.Hide();
+                                    frmUserHomePage homePage = new frmUserHomePage(userId);
+                                    homePage.Show();
+                                    return;
+                                }
+
+                                // ✅ If device is NOT saved, enforce 2FA if enabled
+                                if (mfaType.Contains("email"))
+                                {
+                                    MessageBox.Show("Redirecting to OTP Page...");
+                                    this.Hide();
+                                    frmVerifyOTP otpForm = new frmVerifyOTP(userId, email, rememberDevice); // ✅ Pass the missing argument
+                                    otpForm.Show();
+                                    return;
+                                }
+
+                                // ✅ Send login alert only if the device is NOT already saved
+                                if (!IsDeviceSaved(userId, deviceIdentifier))
+                                {
+                                    SendLoginNotification(email, deviceIdentifier);
+
+                                    // ✅ Only save the device if "Remember This Device" is checked
+                                    if (rememberDevice)
+                                    {
+                                        SaveDevice(userId, deviceIdentifier);
+                                    }
+                                }
+
                                 Program.CurrentUserId = userId;
                                 this.Hide();
-                                frmUserHomePage homePage = new frmUserHomePage(userId);
-                                homePage.Show();
+                                frmUserHomePage homePage2 = new frmUserHomePage(userId);
+                                homePage2.Show();
                             }
                             else
                             {
@@ -173,6 +209,131 @@ namespace HomeSphere
                 MessageBox.Show("Database Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+        private bool IsDeviceSaved(int userId, string deviceIdentifier)
+        {
+            using (SqlConnection conn = new SqlConnection(strConnectionString))
+            {
+                conn.Open();
+                string query = "SELECT COUNT(1) FROM Devices WHERE UserID = @UserID AND DeviceIdentifier = @DeviceIdentifier";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    cmd.Parameters.AddWithValue("@DeviceIdentifier", deviceIdentifier);
+
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    return count > 0;
+                }
+            }
+        }
+
+        private void SaveDevice(int userId, string deviceIdentifier)
+        {
+            using (SqlConnection conn = new SqlConnection(strConnectionString))
+            {
+                conn.Open();
+                string query = "INSERT INTO Devices (UserID, DeviceIdentifier) VALUES (@UserID, @DeviceIdentifier)";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    cmd.Parameters.AddWithValue("@DeviceIdentifier", deviceIdentifier);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void SendLoginNotification(string email, string deviceIdentifier)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("smarthomesystemsapplication@gmail.com");
+                mail.To.Add(email);
+                mail.Subject = "New Device Login Alert - Smart Home System";
+                mail.Body = $@"
+        <html>
+        <head>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    color: #333;
+                }}
+                .container {{
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    background-color: #f9f9f9;
+                }}
+                .header {{
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #FF5722;
+                    text-align: center;
+                    margin-bottom: 20px;
+                }}
+                .device-info {{
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: #333;
+                    text-align: center;
+                    margin: 10px 0;
+                    padding: 10px;
+                    border: 2px dashed #FF5722;
+                    display: inline-block;
+                }}
+                .footer {{
+                    font-size: 12px;
+                    text-align: center;
+                    color: #555;
+                    margin-top: 20px;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <div class='header'>New Device Login Alert</div>
+                <p>Hello,</p>
+                <p>A login attempt was detected from the following device:</p>
+                <div class='device-info'>{deviceIdentifier}</div>
+                <p><b>Date & Time:</b> {DateTime.Now.ToString("f")}</p>
+                <p>If this was you, no further action is needed. If this was not you, please secure your account immediately.</p>
+                <div class='footer'>
+                    Need help? Contact <a href='mailto:support@smarthomesystem.com'>support@smarthomesystem.com</a>.
+                </div>
+            </div>
+        </body>
+        </html>";
+                mail.IsBodyHtml = true;
+
+                // Configure SMTP Client
+                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("smarthomesystemsapplication@gmail.com", "dfwn lflx wmba cwfz"),
+                    EnableSsl = true
+                };
+
+                smtpClient.Send(mail);
+                MessageBox.Show($"Login alert sent to {email}.", "Notification Sent", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error sending login alert: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string GetDeviceIdentifier()
+        {
+            return $"{Environment.MachineName}-{Program.SessionId}";
+        }
+
+
+
 
         private void label1_Click(object sender, EventArgs e)
         {
@@ -287,10 +448,58 @@ namespace HomeSphere
                             if (result != null)
                             {
                                 int userId = Convert.ToInt32(result);
-                                this.Hide(); // ✅ Hide the login form first
-                                frmUserHomePage userHomePage = new frmUserHomePage(userId);
-                                userHomePage.FormClosed += (s, args) => this.Show(); // ✅ Show login form when HomePage is closed
-                                userHomePage.Show();
+
+                                // ✅ Check MFAType for Google Login
+                                string mfaType = "None";
+                                using (SqlCommand cmd2 = new SqlCommand("SELECT ISNULL(MFAType, 'None') AS MFAType FROM Users WHERE ID = @UserID", conn))
+                                {
+                                    cmd2.Parameters.AddWithValue("@UserID", userId);
+                                    object mfaResult = cmd2.ExecuteScalar();
+                                    if (mfaResult != null)
+                                    {
+                                        mfaType = mfaResult.ToString().Trim().ToLower();
+                                    }
+                                }
+
+                                MessageBox.Show($"MFAType for Google User: {mfaType}", "Debug Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                // ✅ Check if the device is already saved (bypass 2FA & no alerts)
+                                string deviceIdentifier = GetDeviceIdentifier();
+                                bool rememberDevice = cbRememberDevice.Checked;
+
+                                if (IsDeviceSaved(userId, deviceIdentifier))
+                                {
+                                    MessageBox.Show("Device recognized. Bypassing 2FA and/or Login Alerts.");
+                                    this.Hide();
+                                    frmUserHomePage userHomePage = new frmUserHomePage(userId);
+                                    userHomePage.Show();
+                                    return;
+                                }
+
+                                // ✅ If the device is new, enforce 2FA if enabled
+                                if (mfaType.Contains("email"))
+                                {
+                                    MessageBox.Show("Redirecting to OTP Page...");
+                                    this.Hide();
+                                    frmVerifyOTP otpForm = new frmVerifyOTP(userId, googleEmail, rememberDevice);
+                                    otpForm.Show();
+                                    return;
+                                }
+
+                                // ✅ Send login alert for new devices (even if "Remember Device" is NOT checked)
+                                SendLoginNotification(googleEmail, deviceIdentifier);
+
+                                // ✅ Only save device if "Remember Device" is checked
+                                if (rememberDevice)
+                                {
+                                    SaveDevice(userId, deviceIdentifier);
+                                }
+
+                                // ✅ Redirect to home page
+                                this.Hide();
+                                frmUserHomePage homePage = new frmUserHomePage(userId);
+                                homePage.FormClosed += (s, args) => this.Show();
+                                homePage.Show();
                             }
                             else
                             {

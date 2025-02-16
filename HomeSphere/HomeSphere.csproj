@@ -184,17 +184,17 @@
     <Compile Include="frmForgotPassword.designer.cs">
       <DependentUpon>frmForgotPassword.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmLogin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmLogin.designer.cs">
-      <DependentUpon>frmLogin.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmLogin1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmLogin1.designer.cs">
       <DependentUpon>frmLogin1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMFASettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMFASettings.Designer.cs">
+      <DependentUpon>frmMFASettings.cs</DependentUpon>
     </Compile>
     <Compile Include="frmNotificationPreferences.cs">
       <SubType>Form</SubType>
@@ -231,6 +231,12 @@
     </Compile>
     <Compile Include="frmUserManagement.Designer.cs">
       <DependentUpon>frmUserManagement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmVerifyOTP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVerifyOTP.Designer.cs">
+      <DependentUpon>frmVerifyOTP.cs</DependentUpon>
     </Compile>
     <Compile Include="Graph.cs">
       <SubType>Form</SubType>
@@ -317,11 +323,11 @@
     <EmbeddedResource Include="frmForgotPassword.resx">
       <DependentUpon>frmForgotPassword.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmLogin.resx">
-      <DependentUpon>frmLogin.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmLogin1.resx">
       <DependentUpon>frmLogin1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMFASettings.resx">
+      <DependentUpon>frmMFASettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmNotificationPreferences.resx">
       <DependentUpon>frmNotificationPreferences.cs</DependentUpon>
@@ -340,6 +346,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmUserManagement.resx">
       <DependentUpon>frmUserManagement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVerifyOTP.resx">
+      <DependentUpon>frmVerifyOTP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Graph.resx">
       <DependentUpon>Graph.cs</DependentUpon>
