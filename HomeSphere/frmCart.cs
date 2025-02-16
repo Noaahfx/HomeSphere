@@ -13,7 +13,6 @@ namespace HomeSphere
         {
             InitializeComponent();
             this.Load += new EventHandler(frmCart_Load);
-
         }
 
         private void frmCart_Load(object sender, EventArgs e)
@@ -28,7 +27,6 @@ namespace HomeSphere
 
             if (cartItems.Count == 0)
             {
-                // ❌ Remove MessageBox
                 Label lblEmptyCart = new Label
                 {
                     Text = "No products in the cart",
@@ -52,7 +50,7 @@ namespace HomeSphere
                     Margin = new Padding(5)
                 };
 
-                // ✅ Load Product Image
+                // Load Product Image
                 PictureBox pb = new PictureBox
                 {
                     SizeMode = PictureBoxSizeMode.Zoom,
@@ -83,7 +81,7 @@ namespace HomeSphere
                     }
                 }
 
-                // ✅ Product Name
+                // Product Name
                 Label lblProductName = new Label
                 {
                     Text = item.Name,
@@ -92,16 +90,16 @@ namespace HomeSphere
                     Left = 5
                 };
 
-                // ✅ Show Total Price Directly
+                // Show Total Price Directly
                 Label lblTotalPrice = new Label
                 {
-                    Text = $"Total: ${item.Total:F2}", // Calculates price * quantity
+                    Text = $"Total: ${item.Total:F2}",
                     AutoSize = true,
                     Top = lblProductName.Bottom + 2,
                     Left = 5
                 };
 
-                // ✅ Show Quantity Separately
+                // Show Quantity Separately
                 Label lblQuantity = new Label
                 {
                     Text = $"Quantity: {item.Quantity}",
@@ -110,7 +108,7 @@ namespace HomeSphere
                     Left = 5
                 };
 
-                // ✅ Checkout Item Button
+                // Checkout Item Button
                 Button btnCheckoutItem = new Button
                 {
                     Text = "Checkout Item",
@@ -120,7 +118,7 @@ namespace HomeSphere
                 };
                 btnCheckoutItem.Click += (s, e) => CheckoutSingleItem(item);
 
-                // ✅ Remove Item Button
+                // Remove Item Button
                 Button btnRemoveItem = new Button
                 {
                     Text = "Remove Item",
@@ -130,7 +128,7 @@ namespace HomeSphere
                 };
                 btnRemoveItem.Click += (s, e) => RemoveItem(item.ProductID);
 
-                // ✅ Add Controls to Card
+                // Add Controls to Card
                 card.Controls.Add(pb);
                 card.Controls.Add(lblProductName);
                 card.Controls.Add(lblTotalPrice);
@@ -141,7 +139,7 @@ namespace HomeSphere
                 flpCart.Controls.Add(card);
             }
 
-            // ✅ Add "Checkout All" & "Clear Cart" Buttons
+            // Add "Checkout All" & "Clear Cart" Buttons
             Button btnCheckoutAll = new Button
             {
                 Text = "Checkout All",
@@ -164,11 +162,11 @@ namespace HomeSphere
             flpCart.Controls.Add(btnClearCart);
         }
 
-
         private void CheckoutSingleItem(CartItem item)
         {
-            // ✅ Open Payment Form Before Proceeding
-            frmPayment paymentForm = new frmPayment();
+            // Calculate expected amount in cents for this item (assumed in dollars)
+            int expectedAmountInCents = (int)(item.Total * 100);
+            frmPayment paymentForm = new frmPayment(expectedAmountInCents);
             paymentForm.ShowDialog();
 
             if (!paymentForm.PaymentSuccessful)
@@ -181,7 +179,7 @@ namespace HomeSphere
             {
                 conn.Open();
 
-                // ✅ Check Available Stock Before Checkout
+                // Check Available Stock Before Checkout
                 string stockCheckQuery = "SELECT Quantity FROM Products WHERE ProductID = @ProductID";
                 int availableStock = 0;
 
@@ -195,7 +193,7 @@ namespace HomeSphere
                     }
                 }
 
-                // ❌ If not enough stock, stop checkout
+                // If not enough stock, stop checkout
                 if (item.Quantity > availableStock)
                 {
                     MessageBox.Show($"Not enough stock for {item.Name}. Available: {availableStock}, In Cart: {item.Quantity}.\n" +
@@ -204,7 +202,7 @@ namespace HomeSphere
                     return;
                 }
 
-                // ✅ Proceed with Checkout
+                // Proceed with Checkout
                 string insertOrderQuery = @"
             INSERT INTO Orders (UserID, ProductName, Price, Quantity, OrderDate)
             VALUES (@UserID, @ProductName, @Price, @Quantity, GETDATE())";
@@ -218,7 +216,7 @@ namespace HomeSphere
                     cmdOrder.ExecuteNonQuery();
                 }
 
-                // ✅ Update Stock in `Products` Table
+                // Update Stock in Products Table
                 string updateStockQuery = @"
             UPDATE Products 
             SET Quantity = Quantity - @Quantity 
@@ -236,8 +234,6 @@ namespace HomeSphere
             RefreshCartView();
             MessageBox.Show("Item purchased successfully! Stock updated.", "Checkout Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
-
 
         private void RemoveItem(int productId)
         {
@@ -270,8 +266,16 @@ namespace HomeSphere
                 return;
             }
 
-            // ✅ Open Payment Form Before Proceeding
-            frmPayment paymentForm = new frmPayment();
+            // Calculate total amount for all items (assumed in dollars), then convert to cents
+            // Use decimal for currency calculations to match CartItem.Total type.
+            decimal totalAmount = 0;
+            foreach (var item in cartItems)
+            {
+                totalAmount += item.Total;
+            }
+            int expectedAmountInCents = (int)(totalAmount * 100);
+
+            frmPayment paymentForm = new frmPayment(expectedAmountInCents);
             paymentForm.ShowDialog();
 
             if (!paymentForm.PaymentSuccessful)
@@ -295,7 +299,7 @@ namespace HomeSphere
                         object result = stockCheckCmd.ExecuteScalar();
                         int availableStock = result != null ? Convert.ToInt32(result) : 0;
 
-                        // ❌ If cart quantity > available stock, stop checkout
+                        // If cart quantity > available stock, stop checkout
                         if (item.Quantity > availableStock)
                         {
                             MessageBox.Show($"Not enough stock for {item.Name}. Available: {availableStock}, In Cart: {item.Quantity}.\n" +
@@ -306,7 +310,6 @@ namespace HomeSphere
                     }
                 }
 
-                // ❌ If any item had a stock issue, stop the checkout process
                 if (hasStockIssue) return;
 
                 string orderQuery = @"
@@ -343,15 +346,12 @@ namespace HomeSphere
             MessageBox.Show("All items purchased successfully! Stock updated.", "Checkout Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-
-
         private void ClearCart(object sender, EventArgs e)
         {
             CartManager.ClearCart();
             RefreshCartView();
             MessageBox.Show("Cart has been cleared!", "Cart Cleared", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
 
         private void Home_Click(object sender, EventArgs e)
         {
