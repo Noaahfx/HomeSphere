@@ -26,7 +26,6 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
             this.SuspendLayout();
-
             // 
             // cmbMFAType
             // 
@@ -35,7 +34,7 @@
             this.cmbMFAType.Location = new System.Drawing.Point(20, 30);
             this.cmbMFAType.Name = "cmbMFAType";
             this.cmbMFAType.Size = new System.Drawing.Size(180, 24);
-
+            this.cmbMFAType.TabIndex = 0;
             // 
             // btnSave
             // 
@@ -46,7 +45,6 @@
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-
             // 
             // btnBack
             // 
@@ -57,18 +55,18 @@
             this.btnBack.Text = "Back";
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
-
             // 
             // frmMFASettings
             // 
-            this.ClientSize = new System.Drawing.Size(250, 140);
+            this.ClientSize = new System.Drawing.Size(249, 147);
             this.Controls.Add(this.cmbMFAType);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnBack);
             this.Name = "frmMFASettings";
             this.Text = "MFA Settings";
-            this.Load += new System.EventHandler(this.frmMFASettings_Load); // Fix: Ensure event handler is linked
+            this.Load += new System.EventHandler(this.frmMFASettings_Load);
             this.ResumeLayout(false);
+
         }
 
 
