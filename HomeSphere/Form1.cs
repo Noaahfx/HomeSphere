@@ -230,8 +230,6 @@ namespace HomeSphere
         private void ManageRecords_Click(object sender, EventArgs e)
         {
             // Open the TableManagement form
-            TableManagement tableManagement = new TableManagement();
-            tableManagement.Show();
             this.Hide(); // Optional: Hides the main form while TableManagement is open
         }
 
