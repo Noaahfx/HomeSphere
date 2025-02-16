@@ -137,7 +137,7 @@ namespace HomeSphere
                 using (SqlConnection conn = new SqlConnection(strConnectionString))
                 {
                     conn.Open();
-                    string query = "SELECT ID, PasswordHash, Email, ISNULL(MFAType, 'None') AS MFAType FROM Users WHERE Username = @Username";
+                    string query = "SELECT ID, PasswordHash, Email, ISNULL(MFAType, 'None') AS MFAType, IsVerified FROM Users WHERE Username = @Username";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -151,12 +151,43 @@ namespace HomeSphere
                                 email = reader["Email"].ToString();      // ✅ Correct: Assign value instead of redeclaring
                                 string storedPasswordHash = reader["PasswordHash"].ToString();
                                 string mfaType = reader["MFAType"].ToString().Trim().ToLower();
+                                int isVerified = Convert.ToInt32(reader["IsVerified"]); // Check verification status
 
                                 if (!BCrypt.Net.BCrypt.Verify(password, storedPasswordHash))
                                 {
                                     MessageBox.Show("Incorrect password.");
                                     return;
                                 }
+
+                                if (isVerified == 0)
+                                {
+                                    string verificationCode = new Random().Next(100000, 999999).ToString();
+                                    DateTime expiryTime = DateTime.Now.AddMinutes(5);
+
+                                    using (SqlConnection updateConn = new SqlConnection(strConnectionString))
+                                    {
+                                        updateConn.Open();
+                                        string updateQuery = "UPDATE Users SET VerificationCode = @OTP, VerificationCodeExpiryTime = @ExpiryTime WHERE Email = @Email";
+
+                                        using (SqlCommand updateCmd = new SqlCommand(updateQuery, updateConn))
+                                        {
+                                            updateCmd.Parameters.AddWithValue("@OTP", verificationCode);
+                                            updateCmd.Parameters.AddWithValue("@ExpiryTime", expiryTime);
+                                            updateCmd.Parameters.AddWithValue("@Email", email);
+                                            updateCmd.ExecuteNonQuery();
+                                        }
+                                    }
+
+                                    MessageBox.Show("Your account is not verified. An OTP has been sent to your email. Please verify before logging in.", "Verification Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    SendOTPEmail(email, verificationCode);
+                                    
+
+                                    this.Hide();
+                                    frmEmailVerification verifyForm = new frmEmailVerification(email);
+                                    verifyForm.Show();
+                                    return;
+                                }
+
 
                                 // ✅ Check if device is already saved (bypass 2FA)
                                 if (IsDeviceSaved(userId, deviceIdentifier))
@@ -210,6 +241,90 @@ namespace HomeSphere
             }
         }
 
+        private void SendOTPEmail(string email, string otp)
+        {
+            try
+            {
+                // Create email message
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("smarthomesystemsapplication@gmail.com");
+                mail.To.Add(email);
+                mail.Subject = "Your OTP Code from Smart Home System";
+                mail.Body = $@"
+                <html>
+                <head>
+                    <style>
+                        body {{
+                            font-family: Arial, sans-serif;
+                            color: #333;
+                        }}
+                        .container {{
+                            max-width: 600px;
+                            margin: 0 auto;
+                            padding: 20px;
+                            border: 1px solid #ddd;
+                            border-radius: 8px;
+                            background-color: #f9f9f9;
+                        }}
+                        .header {{
+                            font-size: 24px;
+                            font-weight: bold;
+                            color: #007bff;
+                            text-align: center;
+                            margin-bottom: 20px;
+                        }}
+                        .otp-code {{
+                            font-size: 22px;
+                            font-weight: bold;
+                            color: #28a745;
+                            text-align: center;
+                            margin: 20px 0;
+                            padding: 10px;
+                            border: 2px dashed #28a745;
+                            display: inline-block;
+                        }}
+                        .footer {{
+                            font-size: 12px;
+                            text-align: center;
+                            color: #555;
+                            margin-top: 20px;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='container'>
+                        <div class='header'>Smart Home System - OTP Verification</div>
+                        <p>Hello,</p>
+                        <p>Your One-Time Password (OTP) for login is:</p>
+                        <div class='otp-code'>{otp}</div>
+                        <p>This code is valid for <b>5 minutes</b>. Please do not share it with anyone.</p>
+                        <p>If you did not request this OTP, please ignore this email.</p>
+                        <div class='footer'>
+                            Need help? Contact <a href='mailto:support@smarthomesystem.com'>support@smarthomesystem.com</a>.
+                        </div>
+                    </div>
+                </body>
+                </html>";
+                mail.IsBodyHtml = true;
+
+
+                // Configure SMTP client
+                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("smarthomesystemsapplication@gmail.com", "dfwn lflx wmba cwfz"),
+                    EnableSsl = true
+                };
+
+                // Send email
+                smtpClient.Send(mail);
+                MessageBox.Show($"OTP sent to {email}. Please check your inbox.", "OTP Sent", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error sending OTP: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private bool IsDeviceSaved(int userId, string deviceIdentifier)
         {
@@ -517,6 +632,7 @@ namespace HomeSphere
             }
         }
 
+
         private void lnkLoginAsAdmin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             frmAdminLogin adminLoginForm = new frmAdminLogin();
@@ -525,5 +641,3 @@ namespace HomeSphere
         }
     }
 }
-
-

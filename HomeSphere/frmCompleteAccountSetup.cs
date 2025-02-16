@@ -57,7 +57,7 @@ namespace HomeSphere
                 }
 
                 // ✅ Step 2: Insert User Details
-                string insertQuery = "INSERT INTO Users (Email, Username, PasswordHash, IsGoogleUser) VALUES (@Email, @Username, @Password, 1); SELECT SCOPE_IDENTITY();";
+                string insertQuery = "INSERT INTO Users (Email, Username, PasswordHash, IsGoogleUser, IsVerified) VALUES (@Email, @Username, @Password, 1, 1); SELECT SCOPE_IDENTITY();";
                 using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn))
                 {
                     insertCmd.Parameters.AddWithValue("@Email", userEmail);

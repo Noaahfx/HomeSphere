@@ -178,6 +178,12 @@
     <Compile Include="frmEditAlert.designer.cs">
       <DependentUpon>frmEditAlert.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmEmailVerification.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEmailVerification.Designer.cs">
+      <DependentUpon>frmEmailVerification.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmForgotPassword.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -319,6 +325,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmEditAlert.resx">
       <DependentUpon>frmEditAlert.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEmailVerification.resx">
+      <DependentUpon>frmEmailVerification.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmForgotPassword.resx">
       <DependentUpon>frmForgotPassword.cs</DependentUpon>
