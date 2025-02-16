@@ -57,21 +57,37 @@ namespace HomeSphere
             PerformSearch();
         }
 
-        private void btnDisableUser_Click_1(object sender, EventArgs e)
+        /// <summary>
+        /// Retrieves the numeric user ID from the selected row's underlying DataRow.
+        /// </summary>
+        /// <returns>The numeric user ID.</returns>
+        private int GetSelectedUserId()
         {
             if (dgvUsers.SelectedRows.Count == 0)
+                throw new Exception("No row selected.");
+
+            // Retrieve the underlying DataRowView to get the actual data from the DataTable.
+            DataRowView drv = (DataRowView)dgvUsers.SelectedRows[0].DataBoundItem;
+            return Convert.ToInt32(drv["ID"]);
+        }
+
+        private void btnDisableUser_Click_1(object sender, EventArgs e)
+        {
+            int userId;
+            try
             {
-                MessageBox.Show("Please select a user to disable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                userId = GetSelectedUserId();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error retrieving user ID: " + ex.Message);
                 return;
             }
-
-            int userId = Convert.ToInt32(dgvUsers.SelectedRows[0].Cells["ID"].Value);
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 string query = "UPDATE Users SET IsDisabled = 1 WHERE ID = @UserID";
-
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@UserID", userId);
@@ -85,19 +101,21 @@ namespace HomeSphere
 
         private void btnEnableUser_Click_1(object sender, EventArgs e)
         {
-            if (dgvUsers.SelectedRows.Count == 0)
+            int userId;
+            try
             {
-                MessageBox.Show("Please select a user to enable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                userId = GetSelectedUserId();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error retrieving user ID: " + ex.Message);
                 return;
             }
-
-            int userId = Convert.ToInt32(dgvUsers.SelectedRows[0].Cells["ID"].Value);
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 string query = "UPDATE Users SET IsDisabled = 0 WHERE ID = @UserID";
-
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@UserID", userId);
@@ -118,7 +136,6 @@ namespace HomeSphere
             {
                 conn.Open();
                 string query = "UPDATE Users SET IsDisabled = 1";
-
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.ExecuteNonQuery();
@@ -138,7 +155,6 @@ namespace HomeSphere
             {
                 conn.Open();
                 string query = "UPDATE Users SET IsDisabled = 0";
-
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.ExecuteNonQuery();
@@ -151,13 +167,16 @@ namespace HomeSphere
 
         private void btnDeleteUser_Click_1(object sender, EventArgs e)
         {
-            if (dgvUsers.SelectedRows.Count == 0)
+            int userId;
+            try
             {
-                MessageBox.Show("Please select a user to delete.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                userId = GetSelectedUserId();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error retrieving user ID: " + ex.Message);
                 return;
             }
-
-            int userId = Convert.ToInt32(dgvUsers.SelectedRows[0].Cells["ID"].Value);
 
             var confirm = MessageBox.Show("Are you sure you want to delete this user? This will remove their order history and cart data.", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (confirm != DialogResult.Yes) return;
@@ -174,15 +193,17 @@ namespace HomeSphere
                     cmd.ExecuteNonQuery();
                 }
 
-                // Delete user's order history
+                // Delete user's orders.
+                // Here we change the parameter type to NVarchar so that the int value (converted to string)
+                // will be compared to the Orders.UserID column without SQL Server trying to convert column values to int.
                 string deleteOrders = "DELETE FROM Orders WHERE UserID = @UserID";
                 using (SqlCommand cmd = new SqlCommand(deleteOrders, conn))
                 {
-                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    cmd.Parameters.Add("@UserID", System.Data.SqlDbType.NVarChar, 50).Value = userId.ToString();
                     cmd.ExecuteNonQuery();
                 }
 
-                // Delete user
+                // Delete the user
                 string deleteUser = "DELETE FROM Users WHERE ID = @UserID";
                 using (SqlCommand cmd = new SqlCommand(deleteUser, conn))
                 {
@@ -211,7 +232,7 @@ namespace HomeSphere
                     cmd.ExecuteNonQuery();
                 }
 
-                // Delete all order history
+                // Delete all orders
                 string deleteOrders = "DELETE FROM Orders";
                 using (SqlCommand cmd = new SqlCommand(deleteOrders, conn))
                 {
