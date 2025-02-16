@@ -66,5 +66,12 @@ namespace HomeSphere
                 MessageBox.Show($"Error checking for active alerts: {ex.Message}");
             }
         }
+
+        private void Products_Click(object sender, EventArgs e)
+        {
+            frmProductPage frmproductpage = new frmProductPage();
+            this.Hide();
+            frmproductpage.Show();
+        }
     }
 }

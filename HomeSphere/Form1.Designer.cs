@@ -42,12 +42,12 @@
             this.Overview = new System.Windows.Forms.ToolStripButton();
             this.Products = new System.Windows.Forms.ToolStripButton();
             this.EventManagement = new System.Windows.Forms.ToolStripButton();
-            this.lighting = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.energy = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.UserManagement = new System.Windows.Forms.ToolStripButton();
+            this.energy = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.sound = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lighting)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.energy)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sound)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -140,43 +140,6 @@
             this.EventManagement.Text = "Alerts";
             this.EventManagement.Click += new System.EventHandler(this.EventManagement_Click);
             // 
-            // lighting
-            // 
-            this.lighting.AccessibleName = "lighting";
-            chartArea1.Name = "ChartArea1";
-            this.lighting.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.lighting.Legends.Add(legend1);
-            this.lighting.Location = new System.Drawing.Point(28, 60);
-            this.lighting.Name = "lighting";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.lighting.Series.Add(series1);
-            this.lighting.Size = new System.Drawing.Size(649, 369);
-            this.lighting.TabIndex = 1;
-            this.lighting.Text = "lighting";
-            this.lighting.Click += new System.EventHandler(this.lighting_Click);
-            // 
-            // energy
-            // 
-            this.energy.AccessibleName = "energy";
-            chartArea2.Name = "ChartArea1";
-            this.energy.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.energy.Legends.Add(legend2);
-            this.energy.Location = new System.Drawing.Point(694, 60);
-            this.energy.Name = "energy";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.energy.Series.Add(series2);
-            this.energy.Size = new System.Drawing.Size(574, 369);
-            this.energy.TabIndex = 2;
-            this.energy.Text = "energy";
-            this.energy.Click += new System.EventHandler(this.energy_Click);
-            // 
             // UserManagement
             // 
             this.UserManagement.AccessibleName = "UserManagement";
@@ -189,21 +152,58 @@
             this.UserManagement.Text = "Manage Users";
             this.UserManagement.Click += new System.EventHandler(this.UserManagement_Click);
             // 
+            // energy
+            // 
+            this.energy.AccessibleName = "energy";
+            chartArea1.Name = "ChartArea1";
+            this.energy.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.energy.Legends.Add(legend1);
+            this.energy.Location = new System.Drawing.Point(715, 60);
+            this.energy.Name = "energy";
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.energy.Series.Add(series1);
+            this.energy.Size = new System.Drawing.Size(553, 369);
+            this.energy.TabIndex = 2;
+            this.energy.Text = "energy";
+            this.energy.Click += new System.EventHandler(this.energy_Click);
+            // 
+            // sound
+            // 
+            this.sound.AccessibleName = "sound";
+            chartArea2.Name = "ChartArea1";
+            this.sound.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.sound.Legends.Add(legend2);
+            this.sound.Location = new System.Drawing.Point(47, 60);
+            this.sound.Name = "sound";
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.sound.Series.Add(series2);
+            this.sound.Size = new System.Drawing.Size(625, 369);
+            this.sound.TabIndex = 3;
+            this.sound.Text = "sound";
+            this.sound.Click += new System.EventHandler(this.sound_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1329, 534);
+            this.Controls.Add(this.sound);
             this.Controls.Add(this.energy);
-            this.Controls.Add(this.lighting);
             this.Controls.Add(this.toolStrip1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lighting)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.energy)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sound)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -215,12 +215,12 @@
         private System.Windows.Forms.ToolStripButton Home;
         private System.Windows.Forms.ToolStripButton Overview;
         private System.Windows.Forms.ToolStripButton Logout;
-        private System.Windows.Forms.DataVisualization.Charting.Chart lighting;
         private System.Windows.Forms.DataVisualization.Charting.Chart energy;
         private System.Windows.Forms.ToolStripButton ManageRecords;
         private System.Windows.Forms.ToolStripButton EventManagement;
         private System.Windows.Forms.ToolStripButton Products;
         private System.Windows.Forms.ToolStripButton UserManagement;
+        private System.Windows.Forms.DataVisualization.Charting.Chart sound;
     }
 }
 

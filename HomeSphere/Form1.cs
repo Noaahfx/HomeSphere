@@ -11,7 +11,6 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Windows.Forms.DataVisualization.Charting;
 
-
 namespace HomeSphere
 {
     public partial class Form1 : Form
@@ -23,59 +22,10 @@ namespace HomeSphere
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            LoadLightingChart();
             LoadEnergyChart();
+            LoadSoundChartForLatestDay();
         }
 
-        private void LoadLightingChart()
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                // Query to fetch the latest date from the table
-                string latestDateQuery = "SELECT MAX(Date) FROM [Table]";
-                SqlCommand latestDateCommand = new SqlCommand(latestDateQuery, connection);
-
-                connection.Open();
-                var latestDate = latestDateCommand.ExecuteScalar();
-                connection.Close();
-
-                if (latestDate != DBNull.Value)
-                {
-                    // Query to fetch data for the latest date
-                    string query = "SELECT Time, LightUsage FROM [Table] WHERE Date = @LatestDate ORDER BY Time ASC";
-                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                    adapter.SelectCommand.Parameters.AddWithValue("@LatestDate", latestDate);
-
-                    DataTable dataTable = new DataTable();
-                    adapter.Fill(dataTable);
-
-                    lighting.Series.Clear(); // Clear existing series
-
-                    Series series = new Series("Light Usage")
-                    {
-                        ChartType = SeriesChartType.Column,
-                        XValueType = ChartValueType.String // Time stored as a string
-                    };
-
-                    foreach (DataRow row in dataTable.Rows)
-                    {
-                        series.Points.AddXY(row["Time"].ToString(), Convert.ToDouble(row["LightUsage"]));
-                    }
-
-                    lighting.Series.Add(series);
-                    lighting.ChartAreas[0].AxisX.Title = "Time (Hour)";
-                    lighting.ChartAreas[0].AxisY.Title = "Light Usage (%)";
-                    lighting.Titles.Clear();
-                    lighting.Titles.Add("Light Usage Throughout the Latest Day");
-                }
-                else
-                {
-                    MessageBox.Show("No data available in the table.", "No Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-        }
         private void LoadEnergyChart()
         {
             try
@@ -84,11 +34,11 @@ namespace HomeSphere
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    // Identify the latest month and year from the table
+                    // Identify the latest month and year from LEDSensorData (using Timestamp)
                     string latestMonthQuery = @"
-                SELECT DATEPART(MONTH, MAX(Date)) AS LatestMonth, 
-                       DATEPART(YEAR, MAX(Date)) AS LatestYear
-                FROM [Table]";
+                        SELECT DATEPART(MONTH, MAX(Timestamp)) AS LatestMonth, 
+                               DATEPART(YEAR, MAX(Timestamp)) AS LatestYear
+                        FROM LEDSensorData";
 
                     SqlCommand latestMonthCommand = new SqlCommand(latestMonthQuery, connection);
                     connection.Open();
@@ -104,13 +54,15 @@ namespace HomeSphere
                     reader.Close();
 
                     // Query to fetch average weekly energy usage for the latest month
+                    // Energy usage is calculated as Voltage * 0.5 (W)
                     string query = @"
-                SELECT CONCAT('Week ', DATEPART(WEEK, Date)) AS WeekLabel, 
-                       AVG(EnergyUsage) AS AvgEnergyUsage
-                FROM [Table]
-                WHERE DATEPART(MONTH, Date) = @LatestMonth AND DATEPART(YEAR, Date) = @LatestYear
-                GROUP BY DATEPART(WEEK, Date)
-                ORDER BY DATEPART(WEEK, Date)";
+                        SELECT CONCAT('Week ', DATEPART(WEEK, Timestamp)) AS WeekLabel, 
+                               AVG(Voltage * 0.5) AS AvgEnergyUsage
+                        FROM LEDSensorData
+                        WHERE DATEPART(MONTH, Timestamp) = @LatestMonth 
+                          AND DATEPART(YEAR, Timestamp) = @LatestYear
+                        GROUP BY DATEPART(WEEK, Timestamp)
+                        ORDER BY DATEPART(WEEK, Timestamp)";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
                     adapter.SelectCommand.Parameters.AddWithValue("@LatestMonth", latestMonth);
@@ -121,7 +73,7 @@ namespace HomeSphere
 
                     if (dataTable.Rows.Count == 0)
                     {
-                        MessageBox.Show("No data available for the latest month.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("No energy data available for the latest month.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
 
@@ -147,17 +99,87 @@ namespace HomeSphere
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred while loading the default energy chart: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"An error occurred while loading the energy chart: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void lighting_Click(object sender, EventArgs e)
+        private void LoadSoundChartForLatestDay()
         {
-            string latestDate = GetLatestDate(); // Call a helper function to fetch the latest date
-            LightingChartForm lightingChartForm = new LightingChartForm(latestDate);
-            lightingChartForm.Show();
-            this.Hide();
+            try
+            {
+                // Use the same connection string as before:
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    // 1. Get the latest date in SoundSensorData (ignoring time).
+                    string latestDateQuery = @"
+                SELECT TOP 1 CONVERT(date, Timestamp) AS LatestDate
+                FROM SoundSensorData
+                ORDER BY CONVERT(date, Timestamp) DESC";
+
+                    connection.Open();
+                    SqlCommand cmdLatestDate = new SqlCommand(latestDateQuery, connection);
+                    object latestDateObj = cmdLatestDate.ExecuteScalar();
+                    if (latestDateObj == null || latestDateObj == DBNull.Value)
+                    {
+                        MessageBox.Show("No sound data found.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+
+                    DateTime latestDate = (DateTime)latestDateObj;
+
+                    // 2. Retrieve all sound readings for that latest date (sorted in ascending time):
+                    string query = @"
+                SELECT FORMAT(Timestamp, 'HH:mm:ss') AS TimeLabel,
+                       SoundLevel
+                FROM SoundSensorData
+                WHERE CONVERT(date, Timestamp) = @LatestDate
+                ORDER BY Timestamp ASC";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+                    adapter.SelectCommand.Parameters.AddWithValue("@LatestDate", latestDate);
+
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    if (dt.Rows.Count == 0)
+                    {
+                        MessageBox.Show("No sound data available for the latest date.",
+                                        "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+
+                    // 3. Plot the results on the 'sound' chart control.
+                    sound.Series.Clear();
+                    Series series = new Series("Sound Level (Latest Day)")
+                    {
+                        ChartType = SeriesChartType.Line,  // Shows a line over time
+                        XValueType = ChartValueType.String
+                    };
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        double level = Convert.ToDouble(row["SoundLevel"]);
+                        string timeLabel = row["TimeLabel"].ToString();
+                        series.Points.AddXY(timeLabel, level);
+                    }
+
+                    sound.Series.Add(series);
+                    sound.ChartAreas[0].AxisX.Title = "Time (HH:mm:ss)";
+                    sound.ChartAreas[0].AxisY.Title = "Sound Level (units)";  // Change units as needed
+                    sound.Titles.Clear();
+                    sound.Titles.Add($"Sound Levels for {latestDate:dd MMM yyyy} (Latest)");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while loading the sound chart: {ex.Message}",
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+
 
         // Helper function to get the latest date
         private string GetLatestDate()
@@ -173,7 +195,6 @@ namespace HomeSphere
                 return command.ExecuteScalar()?.ToString(); // Get the latest date as a string
             }
         }
-
 
         private void energy_Click(object sender, EventArgs e)
         {
@@ -238,6 +259,13 @@ namespace HomeSphere
             frmUserManagement frmusermanagement = new frmUserManagement();
             this.Hide();
             frmusermanagement.Show();
+        }
+
+        private void sound_Click(object sender, EventArgs e)
+        {
+            SoundChartForm soundChartForm = new SoundChartForm(sound); // Pass the sound chart
+            this.Hide();
+            soundChartForm.Show();
         }
     }
 }
