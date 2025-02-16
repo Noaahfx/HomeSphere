@@ -44,6 +44,8 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.SignUpUser = new System.Windows.Forms.LinkLabel();
             this.forgetPasswordLink = new System.Windows.Forms.LinkLabel();
+            this.btnGoogleLogin = new System.Windows.Forms.Button();
+            this.lnkLoginAsAdmin = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -199,7 +201,7 @@
             // 
             this.SignUpUser.AccessibleName = "lnkLoginAsAdmin";
             this.SignUpUser.AutoSize = true;
-            this.SignUpUser.Location = new System.Drawing.Point(301, 379);
+            this.SignUpUser.Location = new System.Drawing.Point(306, 441);
             this.SignUpUser.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.SignUpUser.Name = "SignUpUser";
             this.SignUpUser.Size = new System.Drawing.Size(45, 13);
@@ -221,12 +223,47 @@
             this.forgetPasswordLink.Text = "Forget Password?";
             this.forgetPasswordLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
+            // btnGoogleLogin
+            // 
+            this.btnGoogleLogin.AccessibleName = "btnGoogleLogin";
+            this.btnGoogleLogin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
+            this.btnGoogleLogin.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnGoogleLogin.FlatAppearance.BorderSize = 0;
+            this.btnGoogleLogin.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
+            this.btnGoogleLogin.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
+            this.btnGoogleLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGoogleLogin.Font = new System.Drawing.Font("Bahnschrift", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGoogleLogin.ForeColor = System.Drawing.Color.White;
+            this.btnGoogleLogin.Location = new System.Drawing.Point(263, 384);
+            this.btnGoogleLogin.Margin = new System.Windows.Forms.Padding(2);
+            this.btnGoogleLogin.Name = "btnGoogleLogin";
+            this.btnGoogleLogin.Size = new System.Drawing.Size(135, 46);
+            this.btnGoogleLogin.TabIndex = 18;
+            this.btnGoogleLogin.Text = "Google Login";
+            this.btnGoogleLogin.UseVisualStyleBackColor = false;
+            this.btnGoogleLogin.Click += new System.EventHandler(this.btnGoogleLogin_Click);
+            // 
+            // lnkLoginAsAdmin
+            // 
+            this.lnkLoginAsAdmin.AccessibleName = "lnkLoginAsAdmin";
+            this.lnkLoginAsAdmin.AutoSize = true;
+            this.lnkLoginAsAdmin.Location = new System.Drawing.Point(285, 464);
+            this.lnkLoginAsAdmin.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lnkLoginAsAdmin.Name = "lnkLoginAsAdmin";
+            this.lnkLoginAsAdmin.Size = new System.Drawing.Size(79, 13);
+            this.lnkLoginAsAdmin.TabIndex = 19;
+            this.lnkLoginAsAdmin.TabStop = true;
+            this.lnkLoginAsAdmin.Text = "Login as Admin";
+            this.lnkLoginAsAdmin.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkLoginAsAdmin_LinkClicked);
+            // 
             // frmLogin1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(659, 410);
+            this.ClientSize = new System.Drawing.Size(895, 596);
+            this.Controls.Add(this.lnkLoginAsAdmin);
+            this.Controls.Add(this.btnGoogleLogin);
             this.Controls.Add(this.forgetPasswordLink);
             this.Controls.Add(this.SignUpUser);
             this.Controls.Add(this.panel2);
@@ -271,5 +308,7 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.LinkLabel SignUpUser;
         private System.Windows.Forms.LinkLabel forgetPasswordLink;
+        private System.Windows.Forms.Button btnGoogleLogin;
+        private System.Windows.Forms.LinkLabel lnkLoginAsAdmin;
     }
 }

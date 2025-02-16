@@ -1,83 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using System.Windows.Forms;
-//using System.Data.SqlClient;
-//using System.Configuration;
-
-//namespace PracticalADO_ReadDB
-//{
-//    public partial class frmLogin : Form
-//    {
-//        private string strConnectionString =
-//          ConfigurationManager.ConnectionStrings["SampleDBConnection"].ConnectionString;
-//        public frmLogin()
-//        {
-//            InitializeComponent();
-
-//        }
-
-//        ///
-//        private void label1_Click(object sender, EventArgs e)
-//        {
-
-//        }
-
-//        private void label2_Click(object sender, EventArgs e)
-//        {
-
-//        }
-
-
-//        private void btnCancel_Click(object sender, EventArgs e)
-//        {
-//            this.Close();
-//        }
-
-//        private void btnLogin_Click_1(object sender, EventArgs e)
-//        {
-//            SqlConnection myconnect = new SqlConnection(strConnectionString);
-//            string strCommandText = "SELECT Name, Password FROM MyUser";
-//            strCommandText += " WHERE Name=@uname AND Password=@pwd";
-//            SqlCommand cmd = new SqlCommand(strCommandText, myconnect);
-//            cmd.Parameters.AddWithValue("@uname", tbUsername.Text);
-//            cmd.Parameters.AddWithValue("@pwd", tbPassword.Text);
-
-//            try
-//            {
-//                myconnect.Open();
-
-//                SqlDataReader reader = cmd.ExecuteReader();
-//                if (reader.Read())
-//                    MessageBox.Show("Login Successful");
-//                else
-//                    MessageBox.Show("Login Fail");
-
-//                reader.Close();
-//            }
-//            catch (SqlException ex)
-//            {
-//                MessageBox.Show("Error: " + ex.Message.ToString());
-//            }
-//            finally
-//            {
-//                myconnect.Close();
-//            }
-
-//        }
-//    }
-//}
-
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Windows.Forms;
+using System.IO;
+using System.Threading;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Util.Store;
+using Google.Apis.Services;
+using Google.Apis.Oauth2.v2;
+using Google.Apis.Oauth2.v2.Data;
 using System.Text.RegularExpressions;
 
 namespace HomeSphere
@@ -303,6 +234,84 @@ namespace HomeSphere
         {
             frmForgotPassword forgotPasswordForm = new frmForgotPassword();
             forgotPasswordForm.Show();
+            this.Hide();
+        }
+
+        private async void btnGoogleLogin_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string[] scopes = { "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email" };
+                string credentialPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "client_secret.json");
+
+                // ✅ Step 1: Clear previous token (forces Google Sign-In prompt)
+                string tokenPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "GoogleOAuthToken");
+                if (Directory.Exists(tokenPath))
+                {
+                    Directory.Delete(tokenPath, true); // Deletes saved credentials
+                }
+
+                using (var stream = new FileStream(credentialPath, FileMode.Open, FileAccess.Read))
+                {
+                    var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                        GoogleClientSecrets.FromStream(stream).Secrets,
+                        scopes,
+                        "user",
+                        CancellationToken.None,
+                        new FileDataStore(tokenPath, false) // ✅ Prevents saving credentials
+                    );
+
+                    var oauthService = new Oauth2Service(new BaseClientService.Initializer()
+                    {
+                        HttpClientInitializer = credential,
+                        ApplicationName = "Smart Home System"
+                    });
+
+                    // ✅ Get User Information
+                    Userinfo userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
+                    string googleEmail = userInfo.Email;
+                    string googleName = userInfo.Name;
+
+                    MessageBox.Show($"Login Successful!\n\nWelcome {googleName}\nEmail: {googleEmail}", "Google Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // ✅ Redirect Logic (Check If User Exists or Needs Setup)
+                    using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+                    {
+                        conn.Open();
+                        string query = "SELECT ID FROM Users WHERE Email = @Email";
+                        using (SqlCommand cmd = new SqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@Email", googleEmail);
+                            var result = cmd.ExecuteScalar();
+
+                            if (result != null)
+                            {
+                                int userId = Convert.ToInt32(result);
+                                this.Hide(); // ✅ Hide the login form first
+                                frmUserHomePage userHomePage = new frmUserHomePage(userId);
+                                userHomePage.FormClosed += (s, args) => this.Show(); // ✅ Show login form when HomePage is closed
+                                userHomePage.Show();
+                            }
+                            else
+                            {
+                                this.Hide();
+                                frmCompleteAccountSetup setupForm = new frmCompleteAccountSetup(googleEmail, googleName);
+                                setupForm.Show();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Google Login Failed: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void lnkLoginAsAdmin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            frmAdminLogin adminLoginForm = new frmAdminLogin();
+            adminLoginForm.Show();
             this.Hide();
         }
     }

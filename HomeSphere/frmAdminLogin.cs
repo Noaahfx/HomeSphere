@@ -59,7 +59,7 @@ namespace HomeSphere
         private void lnkLoginAsUser_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             this.Hide(); // ✅ Hide `frmAdminLogin`
-            frmLogin loginForm = new frmLogin();
+            frmLogin1 loginForm = new frmLogin1();
             loginForm.FormClosed += (s, args) => this.Close(); // ✅ Close `frmAdminLogin` when `frmLogin` closes
             loginForm.Show();
         }

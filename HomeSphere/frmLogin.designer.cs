@@ -35,11 +35,9 @@
             this.tbOTP = new System.Windows.Forms.TextBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.cbSaveDevice = new System.Windows.Forms.CheckBox();
-            this.lnkLoginAsAdmin = new System.Windows.Forms.LinkLabel();
             this.btnLoginWithoutOTP = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.btnLoginForSavedDevice = new System.Windows.Forms.Button();
-            this.btnGoogleLogin = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblEmail
@@ -111,19 +109,6 @@
             this.cbSaveDevice.Text = "Save this device";
             this.cbSaveDevice.UseVisualStyleBackColor = true;
             // 
-            // lnkLoginAsAdmin
-            // 
-            this.lnkLoginAsAdmin.AccessibleName = "lnkLoginAsAdmin";
-            this.lnkLoginAsAdmin.AutoSize = true;
-            this.lnkLoginAsAdmin.Location = new System.Drawing.Point(403, 381);
-            this.lnkLoginAsAdmin.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lnkLoginAsAdmin.Name = "lnkLoginAsAdmin";
-            this.lnkLoginAsAdmin.Size = new System.Drawing.Size(79, 13);
-            this.lnkLoginAsAdmin.TabIndex = 7;
-            this.lnkLoginAsAdmin.TabStop = true;
-            this.lnkLoginAsAdmin.Text = "Login as Admin";
-            this.lnkLoginAsAdmin.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkLoginAsAdmin_LinkClicked);
-            // 
             // btnLoginWithoutOTP
             // 
             this.btnLoginWithoutOTP.AccessibleName = "btnLoginWithoutOTP";
@@ -159,27 +144,14 @@
             this.btnLoginForSavedDevice.UseVisualStyleBackColor = true;
             this.btnLoginForSavedDevice.Click += new System.EventHandler(this.btnLoginForSavedDevice_Click);
             // 
-            // btnGoogleLogin
-            // 
-            this.btnGoogleLogin.AccessibleName = "btnGoogleLogin";
-            this.btnGoogleLogin.Location = new System.Drawing.Point(380, 210);
-            this.btnGoogleLogin.Name = "btnGoogleLogin";
-            this.btnGoogleLogin.Size = new System.Drawing.Size(127, 31);
-            this.btnGoogleLogin.TabIndex = 11;
-            this.btnGoogleLogin.Text = "Login with Google";
-            this.btnGoogleLogin.UseVisualStyleBackColor = true;
-            this.btnGoogleLogin.Click += new System.EventHandler(this.btnGoogleLogin_Click);
-            // 
             // frmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(868, 424);
-            this.Controls.Add(this.btnGoogleLogin);
             this.Controls.Add(this.btnLoginForSavedDevice);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnLoginWithoutOTP);
-            this.Controls.Add(this.lnkLoginAsAdmin);
             this.Controls.Add(this.cbSaveDevice);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.tbOTP);
@@ -203,11 +175,9 @@
         private System.Windows.Forms.TextBox tbOTP;
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.CheckBox cbSaveDevice;
-        private System.Windows.Forms.LinkLabel lnkLoginAsAdmin;
         private System.Windows.Forms.Button btnLoginWithoutOTP;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnLoginForSavedDevice;
-        private System.Windows.Forms.Button btnGoogleLogin;
     }
 }
 
