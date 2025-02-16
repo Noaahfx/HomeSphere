@@ -97,7 +97,6 @@
             this.ManageRecords.AccessibleName = "ManageRecords";
             this.ManageRecords.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.ManageRecords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ManageRecords.Image = ((System.Drawing.Image)(resources.GetObject("ManageRecords.Image")));
             this.ManageRecords.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ManageRecords.Name = "ManageRecords";
             this.ManageRecords.Size = new System.Drawing.Size(120, 24);
