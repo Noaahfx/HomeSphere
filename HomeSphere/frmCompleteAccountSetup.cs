@@ -16,7 +16,6 @@ namespace HomeSphere
             InitializeComponent();
             userEmail = email;
             userName = name;
-            tbEmail.Text = email; // Set email in TextBox (Read-Only)
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -51,14 +50,14 @@ namespace HomeSphere
                         MessageBox.Show("This email is already registered. Redirecting to Login Page...", "Duplicate Email", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         this.Hide();
-                        frmLogin loginForm = new frmLogin();
+                        frmLogin1 loginForm = new frmLogin1();
                         loginForm.Show();
                         return; // Stop execution if the email already exists
                     }
                 }
 
                 // ✅ Step 2: Insert User Details
-                string insertQuery = "INSERT INTO Users (Email, Username, PasswordHash, IsGoogleUser) VALUES (@Email, @Username, @Password, 1); SELECT SCOPE_IDENTITY();";
+                string insertQuery = "INSERT INTO Users (Email, Username, PasswordHash, IsGoogleUser, IsVerified) VALUES (@Email, @Username, @Password, 1, 1); SELECT SCOPE_IDENTITY();";
                 using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn))
                 {
                     insertCmd.Parameters.AddWithValue("@Email", userEmail);
@@ -88,7 +87,7 @@ namespace HomeSphere
                         {
                             MessageBox.Show("Error retrieving User ID. Please log in manually.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             this.Hide();
-                            frmLogin loginForm = new frmLogin();
+                            frmLogin1 loginForm = new frmLogin1();
                             loginForm.Show();
                             return;
                         }

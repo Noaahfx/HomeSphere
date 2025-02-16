@@ -12,6 +12,8 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,10 +26,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -54,7 +54,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="CommsUtil">
-      <HintPath>..\..\..\..\Downloads\CommsUtil.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\Downloads\CommsUtil.dll</HintPath>
     </Reference>
     <Reference Include="Google.Apis, Version=1.69.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Apis.1.69.0\lib\net462\Google.Apis.dll</HintPath>
@@ -72,15 +72,9 @@
       <HintPath>..\packages\Google.Apis.Oauth2.v2.1.68.0.1869\lib\net462\Google.Apis.Oauth2.v2.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces">
-      <HintPath>..\..\..\..\Downloads\microsoft.bcl.asyncinterfaces.9.0.2\lib\netstandard2.0\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="Stripe.net">
-      <HintPath>..\..\..\..\Downloads\Stripe.net\lib\net461\Stripe.net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -129,12 +123,6 @@
     </Compile>
     <Compile Include="DataViewJames.designer.cs">
       <DependentUpon>DataViewJames.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DayEnergyPromptForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DayEnergyPromptForm.Designer.cs">
-      <DependentUpon>DayEnergyPromptForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DayFilterForm.cs">
       <SubType>Form</SubType>
@@ -190,23 +178,29 @@
     <Compile Include="frmEditAlert.designer.cs">
       <DependentUpon>frmEditAlert.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmEmailVerification.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEmailVerification.Designer.cs">
+      <DependentUpon>frmEmailVerification.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmForgotPassword.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmForgotPassword.designer.cs">
       <DependentUpon>frmForgotPassword.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmLogin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmLogin.designer.cs">
-      <DependentUpon>frmLogin.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmLogin1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmLogin1.designer.cs">
       <DependentUpon>frmLogin1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMFASettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMFASettings.Designer.cs">
+      <DependentUpon>frmMFASettings.cs</DependentUpon>
     </Compile>
     <Compile Include="frmNotificationPreferences.cs">
       <SubType>Form</SubType>
@@ -243,6 +237,12 @@
     </Compile>
     <Compile Include="frmUserManagement.Designer.cs">
       <DependentUpon>frmUserManagement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmVerifyOTP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVerifyOTP.Designer.cs">
+      <DependentUpon>frmVerifyOTP.cs</DependentUpon>
     </Compile>
     <Compile Include="Graph.cs">
       <SubType>Form</SubType>
@@ -281,18 +281,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoundChartForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SoundChartForm.Designer.cs">
-      <DependentUpon>SoundChartForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TableManagement.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TableManagement.Designer.cs">
-      <DependentUpon>TableManagement.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserSignUp.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -304,9 +292,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataViewJames.resx">
       <DependentUpon>DataViewJames.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DayEnergyPromptForm.resx">
-      <DependentUpon>DayEnergyPromptForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DayFilterForm.resx">
       <DependentUpon>DayFilterForm.cs</DependentUpon>
@@ -335,14 +320,17 @@
     <EmbeddedResource Include="frmEditAlert.resx">
       <DependentUpon>frmEditAlert.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmEmailVerification.resx">
+      <DependentUpon>frmEmailVerification.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmForgotPassword.resx">
       <DependentUpon>frmForgotPassword.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmLogin.resx">
-      <DependentUpon>frmLogin.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmLogin1.resx">
       <DependentUpon>frmLogin1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMFASettings.resx">
+      <DependentUpon>frmMFASettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmNotificationPreferences.resx">
       <DependentUpon>frmNotificationPreferences.cs</DependentUpon>
@@ -361,6 +349,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmUserManagement.resx">
       <DependentUpon>frmUserManagement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVerifyOTP.resx">
+      <DependentUpon>frmVerifyOTP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Graph.resx">
       <DependentUpon>Graph.cs</DependentUpon>
@@ -387,12 +378,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SoundChartForm.resx">
-      <DependentUpon>SoundChartForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TableManagement.resx">
-      <DependentUpon>TableManagement.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UserSignUp.resx">
       <DependentUpon>UserSignUp.cs</DependentUpon>
     </EmbeddedResource>
@@ -440,10 +425,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Databases\IOTPRJ_Data.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Databases\IOTPRJ_Data_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <DependentUpon>IOTPRJ_Data.mdf</DependentUpon>
     </Content>
     <Content Include="ProductImages\Aircon.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

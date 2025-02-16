@@ -1,84 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using System.Windows.Forms;
-//using System.Data.SqlClient;
-//using System.Configuration;
-
-//namespace PracticalADO_ReadDB
-//{
-//    public partial class frmLogin : Form
-//    {
-//        private string strConnectionString =
-//          ConfigurationManager.ConnectionStrings["SampleDBConnection"].ConnectionString;
-//        public frmLogin()
-//        {
-//            InitializeComponent();
-
-//        }
-
-//        ///
-//        private void label1_Click(object sender, EventArgs e)
-//        {
-
-//        }
-
-//        private void label2_Click(object sender, EventArgs e)
-//        {
-
-//        }
-
-
-//        private void btnCancel_Click(object sender, EventArgs e)
-//        {
-//            this.Close();
-//        }
-
-//        private void btnLogin_Click_1(object sender, EventArgs e)
-//        {
-//            SqlConnection myconnect = new SqlConnection(strConnectionString);
-//            string strCommandText = "SELECT Name, Password FROM MyUser";
-//            strCommandText += " WHERE Name=@uname AND Password=@pwd";
-//            SqlCommand cmd = new SqlCommand(strCommandText, myconnect);
-//            cmd.Parameters.AddWithValue("@uname", tbUsername.Text);
-//            cmd.Parameters.AddWithValue("@pwd", tbPassword.Text);
-
-//            try
-//            {
-//                myconnect.Open();
-
-//                SqlDataReader reader = cmd.ExecuteReader();
-//                if (reader.Read())
-//                    MessageBox.Show("Login Successful");
-//                else
-//                    MessageBox.Show("Login Fail");
-
-//                reader.Close();
-//            }
-//            catch (SqlException ex)
-//            {
-//                MessageBox.Show("Error: " + ex.Message.ToString());
-//            }
-//            finally
-//            {
-//                myconnect.Close();
-//            }
-
-//        }
-//    }
-//}
-
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Windows.Forms;
+using System.IO;
+using System.Threading;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Util.Store;
+using Google.Apis.Services;
+using Google.Apis.Oauth2.v2;
+using Google.Apis.Oauth2.v2.Data;
 using System.Text.RegularExpressions;
+using System.Net.Mail;
+using System.Net;
 
 namespace HomeSphere
 {
@@ -177,24 +110,23 @@ namespace HomeSphere
 
         private void btnLogin_Click_1(object sender, EventArgs e)
         {
+            int userId = -1;
+            string email = string.Empty;
             errorProvider1.SetError(tbUsername, "");
             errorProvider1.SetError(tbPassword, "");
 
             string username = SanitizeInput(tbUsername.Text.Trim());
             string password = SanitizeInput(tbPassword.Text.Trim());
+            string deviceIdentifier = GetDeviceIdentifier();
+            bool rememberDevice = cbRememberDevice.Checked; // ✅ Ensure checkbox value is retrieved
 
-            if (string.IsNullOrWhiteSpace(username) || username == "Enter your username")
+            if (string.IsNullOrWhiteSpace(username))
             {
                 errorProvider1.SetError(tbUsername, "Username is required.");
                 return;
             }
-            else if (username.Length > 100)
-            {
-                errorProvider1.SetError(tbUsername, "Username too long (max 100 chars).");
-                return;
-            }
 
-            if (string.IsNullOrWhiteSpace(password) || password == "Enter your password")
+            if (string.IsNullOrWhiteSpace(password))
             {
                 errorProvider1.SetError(tbPassword, "Password is required.");
                 return;
@@ -205,7 +137,7 @@ namespace HomeSphere
                 using (SqlConnection conn = new SqlConnection(strConnectionString))
                 {
                     conn.Open();
-                    string query = "SELECT ID, PasswordHash FROM Users WHERE Username = @Username";
+                    string query = "SELECT ID, PasswordHash, Email, ISNULL(MFAType, 'None') AS MFAType, IsVerified FROM Users WHERE Username = @Username";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -215,8 +147,11 @@ namespace HomeSphere
                         {
                             if (reader.Read())
                             {
-                                int userId = Convert.ToInt32(reader["ID"]);
+                                userId = Convert.ToInt32(reader["ID"]);  // ✅ Correct: Assign value instead of redeclaring
+                                email = reader["Email"].ToString();      // ✅ Correct: Assign value instead of redeclaring
                                 string storedPasswordHash = reader["PasswordHash"].ToString();
+                                string mfaType = reader["MFAType"].ToString().Trim().ToLower();
+                                int isVerified = Convert.ToInt32(reader["IsVerified"]); // Check verification status
 
                                 if (!BCrypt.Net.BCrypt.Verify(password, storedPasswordHash))
                                 {
@@ -224,10 +159,75 @@ namespace HomeSphere
                                     return;
                                 }
 
+                                if (isVerified == 0)
+                                {
+                                    string verificationCode = new Random().Next(100000, 999999).ToString();
+                                    DateTime expiryTime = DateTime.Now.AddMinutes(5);
+
+                                    using (SqlConnection updateConn = new SqlConnection(strConnectionString))
+                                    {
+                                        updateConn.Open();
+                                        string updateQuery = "UPDATE Users SET VerificationCode = @OTP, VerificationCodeExpiryTime = @ExpiryTime WHERE Email = @Email";
+
+                                        using (SqlCommand updateCmd = new SqlCommand(updateQuery, updateConn))
+                                        {
+                                            updateCmd.Parameters.AddWithValue("@OTP", verificationCode);
+                                            updateCmd.Parameters.AddWithValue("@ExpiryTime", expiryTime);
+                                            updateCmd.Parameters.AddWithValue("@Email", email);
+                                            updateCmd.ExecuteNonQuery();
+                                        }
+                                    }
+
+                                    MessageBox.Show("Your account is not verified. An OTP has been sent to your email. Please verify before logging in.", "Verification Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    SendOTPEmail(email, verificationCode);
+                                    
+
+                                    this.Hide();
+                                    frmEmailVerification verifyForm = new frmEmailVerification(email);
+                                    verifyForm.Show();
+                                    return;
+                                }
+
+
+                                // ✅ Check if device is already saved (bypass 2FA)
+                                if (IsDeviceSaved(userId, deviceIdentifier))
+                                {
+                                    MessageBox.Show("Device recognized. Bypassing 2FA and/or Login Alerts.");
+                                    Program.CurrentUserId = userId;
+                                    this.Hide();
+                                    frmUserHomePage homePage = new frmUserHomePage(userId);
+                                    homePage.Show();
+                                    return;
+                                }
+
+                                // ✅ If device is NOT saved, enforce 2FA if enabled
+                                if (mfaType.Contains("email"))
+                                {
+                                    MessageBox.Show("Redirecting to OTP Page...");
+                                    this.Hide();
+                                    frmVerifyOTP otpForm = new frmVerifyOTP(userId, email, rememberDevice); // ✅ Pass the missing argument
+                                    otpForm.Show();
+                                    return;
+                                }
+
+                                // ✅ Send login alert only if the device is NOT already saved
+                                if (!IsDeviceSaved(userId, deviceIdentifier))
+                                {
+                                    SendLoginNotification(email, deviceIdentifier);
+
+                                    // ✅ Only save the device if "Remember This Device" is checked
+                                    if (rememberDevice)
+                                    {
+                                        SaveDevice(userId, deviceIdentifier);
+                                    }
+                                }
+
+                                CheckForActiveAlert(userId);
+
                                 Program.CurrentUserId = userId;
                                 this.Hide();
-                                frmUserHomePage homePage = new frmUserHomePage(userId);
-                                homePage.Show();
+                                frmUserHomePage homePage2 = new frmUserHomePage(userId);
+                                homePage2.Show();
                             }
                             else
                             {
@@ -242,6 +242,215 @@ namespace HomeSphere
                 MessageBox.Show("Database Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void SendOTPEmail(string email, string otp)
+        {
+            try
+            {
+                // Create email message
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("smarthomesystemsapplication@gmail.com");
+                mail.To.Add(email);
+                mail.Subject = "Your OTP Code from Smart Home System";
+                mail.Body = $@"
+                <html>
+                <head>
+                    <style>
+                        body {{
+                            font-family: Arial, sans-serif;
+                            color: #333;
+                        }}
+                        .container {{
+                            max-width: 600px;
+                            margin: 0 auto;
+                            padding: 20px;
+                            border: 1px solid #ddd;
+                            border-radius: 8px;
+                            background-color: #f9f9f9;
+                        }}
+                        .header {{
+                            font-size: 24px;
+                            font-weight: bold;
+                            color: #007bff;
+                            text-align: center;
+                            margin-bottom: 20px;
+                        }}
+                        .otp-code {{
+                            font-size: 22px;
+                            font-weight: bold;
+                            color: #28a745;
+                            text-align: center;
+                            margin: 20px 0;
+                            padding: 10px;
+                            border: 2px dashed #28a745;
+                            display: inline-block;
+                        }}
+                        .footer {{
+                            font-size: 12px;
+                            text-align: center;
+                            color: #555;
+                            margin-top: 20px;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='container'>
+                        <div class='header'>Smart Home System - OTP Verification</div>
+                        <p>Hello,</p>
+                        <p>Your One-Time Password (OTP) for login is:</p>
+                        <div class='otp-code'>{otp}</div>
+                        <p>This code is valid for <b>5 minutes</b>. Please do not share it with anyone.</p>
+                        <p>If you did not request this OTP, please ignore this email.</p>
+                        <div class='footer'>
+                            Need help? Contact <a href='mailto:support@smarthomesystem.com'>support@smarthomesystem.com</a>.
+                        </div>
+                    </div>
+                </body>
+                </html>";
+                mail.IsBodyHtml = true;
+
+
+                // Configure SMTP client
+                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("smarthomesystemsapplication@gmail.com", "dfwn lflx wmba cwfz"),
+                    EnableSsl = true
+                };
+
+                // Send email
+                smtpClient.Send(mail);
+                MessageBox.Show($"OTP sent to {email}. Please check your inbox.", "OTP Sent", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error sending OTP: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private bool IsDeviceSaved(int userId, string deviceIdentifier)
+        {
+            using (SqlConnection conn = new SqlConnection(strConnectionString))
+            {
+                conn.Open();
+                string query = "SELECT COUNT(1) FROM Devices WHERE UserID = @UserID AND DeviceIdentifier = @DeviceIdentifier";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    cmd.Parameters.AddWithValue("@DeviceIdentifier", deviceIdentifier);
+
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    return count > 0;
+                }
+            }
+        }
+
+        private void SaveDevice(int userId, string deviceIdentifier)
+        {
+            using (SqlConnection conn = new SqlConnection(strConnectionString))
+            {
+                conn.Open();
+                string query = "INSERT INTO Devices (UserID, DeviceIdentifier) VALUES (@UserID, @DeviceIdentifier)";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    cmd.Parameters.AddWithValue("@DeviceIdentifier", deviceIdentifier);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void SendLoginNotification(string email, string deviceIdentifier)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("smarthomesystemsapplication@gmail.com");
+                mail.To.Add(email);
+                mail.Subject = "New Device Login Alert - Smart Home System";
+                mail.Body = $@"
+        <html>
+        <head>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    color: #333;
+                }}
+                .container {{
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    background-color: #f9f9f9;
+                }}
+                .header {{
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #FF5722;
+                    text-align: center;
+                    margin-bottom: 20px;
+                }}
+                .device-info {{
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: #333;
+                    text-align: center;
+                    margin: 10px 0;
+                    padding: 10px;
+                    border: 2px dashed #FF5722;
+                    display: inline-block;
+                }}
+                .footer {{
+                    font-size: 12px;
+                    text-align: center;
+                    color: #555;
+                    margin-top: 20px;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <div class='header'>New Device Login Alert</div>
+                <p>Hello,</p>
+                <p>A login attempt was detected from the following device:</p>
+                <div class='device-info'>{deviceIdentifier}</div>
+                <p><b>Date & Time:</b> {DateTime.Now.ToString("f")}</p>
+                <p>If this was you, no further action is needed. If this was not you, please secure your account immediately.</p>
+                <div class='footer'>
+                    Need help? Contact <a href='mailto:support@smarthomesystem.com'>support@smarthomesystem.com</a>.
+                </div>
+            </div>
+        </body>
+        </html>";
+                mail.IsBodyHtml = true;
+
+                // Configure SMTP Client
+                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("smarthomesystemsapplication@gmail.com", "dfwn lflx wmba cwfz"),
+                    EnableSsl = true
+                };
+
+                smtpClient.Send(mail);
+                MessageBox.Show($"Login alert sent to {email}.", "Notification Sent", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error sending login alert: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string GetDeviceIdentifier()
+        {
+            return $"{Environment.MachineName}-{Program.SessionId}";
+        }
+
+
+
 
         private void label1_Click(object sender, EventArgs e)
         {
@@ -305,7 +514,165 @@ namespace HomeSphere
             forgotPasswordForm.Show();
             this.Hide();
         }
+
+        private async void btnGoogleLogin_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string[] scopes = { "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email" };
+                string credentialPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "client_secret.json");
+
+                // ✅ Step 1: Clear previous token (forces Google Sign-In prompt)
+                string tokenPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "GoogleOAuthToken");
+                if (Directory.Exists(tokenPath))
+                {
+                    Directory.Delete(tokenPath, true); // Deletes saved credentials
+                }
+
+                using (var stream = new FileStream(credentialPath, FileMode.Open, FileAccess.Read))
+                {
+                    var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                        GoogleClientSecrets.FromStream(stream).Secrets,
+                        scopes,
+                        "user",
+                        CancellationToken.None,
+                        new FileDataStore(tokenPath, false) // ✅ Prevents saving credentials
+                    );
+
+                    var oauthService = new Oauth2Service(new BaseClientService.Initializer()
+                    {
+                        HttpClientInitializer = credential,
+                        ApplicationName = "Smart Home System"
+                    });
+
+                    // ✅ Get User Information
+                    Userinfo userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
+                    string googleEmail = userInfo.Email;
+                    string googleName = userInfo.Name;
+
+                    MessageBox.Show($"Login Successful!\n\nWelcome {googleName}\nEmail: {googleEmail}", "Google Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // ✅ Redirect Logic (Check If User Exists or Needs Setup)
+                    using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+                    {
+                        conn.Open();
+                        string query = "SELECT ID FROM Users WHERE Email = @Email";
+                        using (SqlCommand cmd = new SqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@Email", googleEmail);
+                            var result = cmd.ExecuteScalar();
+
+                            if (result != null)
+                            {
+                                int userId = Convert.ToInt32(result);
+
+                                // ✅ Check MFAType for Google Login
+                                string mfaType = "None";
+                                using (SqlCommand cmd2 = new SqlCommand("SELECT ISNULL(MFAType, 'None') AS MFAType FROM Users WHERE ID = @UserID", conn))
+                                {
+                                    cmd2.Parameters.AddWithValue("@UserID", userId);
+                                    object mfaResult = cmd2.ExecuteScalar();
+                                    if (mfaResult != null)
+                                    {
+                                        mfaType = mfaResult.ToString().Trim().ToLower();
+                                    }
+                                }
+
+                                MessageBox.Show($"MFAType for Google User: {mfaType}", "Debug Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                // ✅ Check if the device is already saved (bypass 2FA & no alerts)
+                                string deviceIdentifier = GetDeviceIdentifier();
+                                bool rememberDevice = cbRememberDevice.Checked;
+
+                                if (IsDeviceSaved(userId, deviceIdentifier))
+                                {
+                                    MessageBox.Show("Device recognized. Bypassing 2FA and/or Login Alerts.");
+                                    this.Hide();
+                                    frmUserHomePage userHomePage = new frmUserHomePage(userId);
+                                    userHomePage.Show();
+                                    return;
+                                }
+
+                                // ✅ If the device is new, enforce 2FA if enabled
+                                if (mfaType.Contains("email"))
+                                {
+                                    MessageBox.Show("Redirecting to OTP Page...");
+                                    this.Hide();
+                                    frmVerifyOTP otpForm = new frmVerifyOTP(userId, googleEmail, rememberDevice);
+                                    otpForm.Show();
+                                    return;
+                                }
+
+                                // ✅ Send login alert for new devices (even if "Remember Device" is NOT checked)
+                                SendLoginNotification(googleEmail, deviceIdentifier);
+
+                                // ✅ Only save device if "Remember Device" is checked
+                                if (rememberDevice)
+                                {
+                                    SaveDevice(userId, deviceIdentifier);
+                                }
+
+                                CheckForActiveAlert(userId);
+                                // ✅ Redirect to home page
+                                this.Hide();
+                                frmUserHomePage homePage = new frmUserHomePage(userId);
+                                homePage.FormClosed += (s, args) => this.Show();
+                                homePage.Show();
+                            }
+                            else
+                            {
+                                this.Hide();
+                                frmCompleteAccountSetup setupForm = new frmCompleteAccountSetup(googleEmail, googleName);
+                                setupForm.Show();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Google Login Failed: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void lnkLoginAsAdmin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            frmAdminLogin adminLoginForm = new frmAdminLogin();
+            adminLoginForm.Show();
+            this.Hide();
+        }
+
+        private void CheckForActiveAlert(int userId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT Message FROM Alerts WHERE IsActive = 1 AND StartTime <= GETDATE() AND EndTime >= GETDATE() ORDER BY CreatedAt DESC";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string alertMessage = reader["Message"].ToString();
+
+                                // Show a separate message box for each alert
+                                MessageBox.Show(alertMessage, "Scheduled Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error checking for scheduled alerts: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
     }
 }
-
-
