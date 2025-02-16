@@ -50,7 +50,7 @@
             this.energy = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chartTemperature = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lighting)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.energy)).BeginInit();
@@ -221,21 +221,22 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "Temperature Graph";
             // 
-            // button1
+            // btnRefresh
             // 
-            this.button1.Location = new System.Drawing.Point(207, 442);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnRefresh.Location = new System.Drawing.Point(204, 442);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.TabIndex = 5;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1329, 947);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.chartTemperature);
             this.Controls.Add(this.energy);
@@ -268,7 +269,7 @@
         private System.Windows.Forms.ToolStripButton UserManagement;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartTemperature;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnRefresh;
     }
 }
 

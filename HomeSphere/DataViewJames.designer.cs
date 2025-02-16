@@ -43,8 +43,10 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataViewJames));
             this.tabControlSensors = new System.Windows.Forms.TabControl();
             this.LEDtab = new System.Windows.Forms.TabPage();
+            this.btnClearAllData = new System.Windows.Forms.Button();
             this.btnTestConnection = new System.Windows.Forms.Button();
             this.btnsendredoff = new System.Windows.Forms.Button();
             this.btnsendredon = new System.Windows.Forms.Button();
@@ -112,7 +114,6 @@
             this.soundSensorDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.btnRefreshSound = new System.Windows.Forms.Button();
             this.Temperaturetab = new System.Windows.Forms.TabPage();
-            this.btnOpenForm2 = new System.Windows.Forms.Button();
             this.dataGridViewTemperature = new System.Windows.Forms.DataGridView();
             this.iDDataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.temperatureDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -138,7 +139,14 @@
             this.ultrasonicSensorDataTableAdapter = new HomeSphere.HardwareDBDataSetTableAdapters.UltrasonicSensorDataTableAdapter();
             this.lEDSensorDataTableAdapter = new HomeSphere.HardwareDBDataSetTableAdapters.LEDSensorDataTableAdapter();
             this.hardwareDBDataSet1 = new HomeSphere.HardwareDBDataSet();
-            this.btnClearAllData = new System.Windows.Forms.Button();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.Home = new System.Windows.Forms.ToolStripButton();
+            this.Logout = new System.Windows.Forms.ToolStripButton();
+            this.SensorData = new System.Windows.Forms.ToolStripButton();
+            this.Overview = new System.Windows.Forms.ToolStripButton();
+            this.Products = new System.Windows.Forms.ToolStripButton();
+            this.EventManagement = new System.Windows.Forms.ToolStripButton();
+            this.UserManagement = new System.Windows.Forms.ToolStripButton();
             this.tabControlSensors.SuspendLayout();
             this.LEDtab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLED)).BeginInit();
@@ -173,6 +181,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ultrasonicSensorDataBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lEDSensorDataBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hardwareDBDataSet1)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlSensors
@@ -187,7 +196,7 @@
             this.tabControlSensors.Controls.Add(this.Soundtab);
             this.tabControlSensors.Controls.Add(this.Temperaturetab);
             this.tabControlSensors.Controls.Add(this.Ultrasonictab);
-            this.tabControlSensors.Location = new System.Drawing.Point(12, 12);
+            this.tabControlSensors.Location = new System.Drawing.Point(12, 71);
             this.tabControlSensors.Name = "tabControlSensors";
             this.tabControlSensors.SelectedIndex = 0;
             this.tabControlSensors.Size = new System.Drawing.Size(800, 600);
@@ -207,6 +216,16 @@
             this.LEDtab.Size = new System.Drawing.Size(792, 571);
             this.LEDtab.TabIndex = 0;
             this.LEDtab.Text = "LED";
+            // 
+            // btnClearAllData
+            // 
+            this.btnClearAllData.Location = new System.Drawing.Point(506, 535);
+            this.btnClearAllData.Name = "btnClearAllData";
+            this.btnClearAllData.Size = new System.Drawing.Size(131, 23);
+            this.btnClearAllData.TabIndex = 5;
+            this.btnClearAllData.Text = "Clear all data\r\n";
+            this.btnClearAllData.UseVisualStyleBackColor = true;
+            this.btnClearAllData.Click += new System.EventHandler(this.btnClearAllData_Click);
             // 
             // btnTestConnection
             // 
@@ -583,7 +602,7 @@
             dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewRFID.DefaultCellStyle = dataGridViewCellStyle5;
-            this.dataGridViewRFID.Location = new System.Drawing.Point(20, 50);
+            this.dataGridViewRFID.Location = new System.Drawing.Point(20, 59);
             this.dataGridViewRFID.Name = "dataGridViewRFID";
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
@@ -902,7 +921,6 @@
             // 
             // Temperaturetab
             // 
-            this.Temperaturetab.Controls.Add(this.btnOpenForm2);
             this.Temperaturetab.Controls.Add(this.dataGridViewTemperature);
             this.Temperaturetab.Controls.Add(this.btnRefreshTemperature);
             this.Temperaturetab.Location = new System.Drawing.Point(4, 25);
@@ -910,16 +928,6 @@
             this.Temperaturetab.Size = new System.Drawing.Size(792, 571);
             this.Temperaturetab.TabIndex = 8;
             this.Temperaturetab.Text = "Temperature";
-            // 
-            // btnOpenForm2
-            // 
-            this.btnOpenForm2.Location = new System.Drawing.Point(162, 10);
-            this.btnOpenForm2.Name = "btnOpenForm2";
-            this.btnOpenForm2.Size = new System.Drawing.Size(108, 30);
-            this.btnOpenForm2.TabIndex = 2;
-            this.btnOpenForm2.Text = "Temp Graph";
-            this.btnOpenForm2.UseVisualStyleBackColor = true;
-            this.btnOpenForm2.Click += new System.EventHandler(this.btnOpenForm2_Click);
             // 
             // dataGridViewTemperature
             // 
@@ -1131,21 +1139,108 @@
             this.hardwareDBDataSet1.DataSetName = "HardwareDBDataSet";
             this.hardwareDBDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
-            // btnClearAllData
+            // toolStrip1
             // 
-            this.btnClearAllData.Location = new System.Drawing.Point(506, 535);
-            this.btnClearAllData.Name = "btnClearAllData";
-            this.btnClearAllData.Size = new System.Drawing.Size(131, 23);
-            this.btnClearAllData.TabIndex = 5;
-            this.btnClearAllData.Text = "Clear all data\r\n";
-            this.btnClearAllData.UseVisualStyleBackColor = true;
-            this.btnClearAllData.Click += new System.EventHandler(this.btnClearAllData_Click);
+            this.toolStrip1.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Home,
+            this.Logout,
+            this.SensorData,
+            this.Overview,
+            this.Products,
+            this.EventManagement,
+            this.UserManagement});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(820, 27);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip1_ItemClicked);
             // 
-            // Form1
+            // Home
             // 
-            this.ClientSize = new System.Drawing.Size(820, 630);
+            this.Home.AccessibleName = "Home";
+            this.Home.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.Home.Image = ((System.Drawing.Image)(resources.GetObject("Home.Image")));
+            this.Home.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Home.Name = "Home";
+            this.Home.Size = new System.Drawing.Size(54, 24);
+            this.Home.Text = "Home";
+            this.Home.Click += new System.EventHandler(this.Home_Click);
+            // 
+            // Logout
+            // 
+            this.Logout.AccessibleName = "Logout";
+            this.Logout.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.Logout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.Logout.Image = ((System.Drawing.Image)(resources.GetObject("Logout.Image")));
+            this.Logout.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Logout.Name = "Logout";
+            this.Logout.Size = new System.Drawing.Size(60, 24);
+            this.Logout.Text = "Logout";
+            // 
+            // SensorData
+            // 
+            this.SensorData.AccessibleName = "ManageRecords";
+            this.SensorData.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.SensorData.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.SensorData.Image = ((System.Drawing.Image)(resources.GetObject("SensorData.Image")));
+            this.SensorData.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.SensorData.Name = "SensorData";
+            this.SensorData.Size = new System.Drawing.Size(93, 24);
+            this.SensorData.Text = "Sensor Data";
+            // 
+            // Overview
+            // 
+            this.Overview.AccessibleName = "Overview";
+            this.Overview.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.Overview.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.Overview.Image = ((System.Drawing.Image)(resources.GetObject("Overview.Image")));
+            this.Overview.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Overview.Name = "Overview";
+            this.Overview.Size = new System.Drawing.Size(74, 24);
+            this.Overview.Text = "Overview";
+            // 
+            // Products
+            // 
+            this.Products.AccessibleName = "Products";
+            this.Products.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.Products.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.Products.Image = ((System.Drawing.Image)(resources.GetObject("Products.Image")));
+            this.Products.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Products.Name = "Products";
+            this.Products.Size = new System.Drawing.Size(70, 24);
+            this.Products.Text = "Products";
+            // 
+            // EventManagement
+            // 
+            this.EventManagement.AccessibleName = "EventManagement";
+            this.EventManagement.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.EventManagement.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.EventManagement.Image = ((System.Drawing.Image)(resources.GetObject("EventManagement.Image")));
+            this.EventManagement.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.EventManagement.Name = "EventManagement";
+            this.EventManagement.Size = new System.Drawing.Size(51, 24);
+            this.EventManagement.Text = "Alerts";
+            // 
+            // UserManagement
+            // 
+            this.UserManagement.AccessibleName = "UserManagement";
+            this.UserManagement.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.UserManagement.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.UserManagement.Image = ((System.Drawing.Image)(resources.GetObject("UserManagement.Image")));
+            this.UserManagement.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.UserManagement.Name = "UserManagement";
+            this.UserManagement.Size = new System.Drawing.Size(106, 24);
+            this.UserManagement.Text = "Manage Users";
+            // 
+            // DataViewJames
+            // 
+            this.ClientSize = new System.Drawing.Size(820, 713);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tabControlSensors);
-            this.Name = "Form1";
+            this.Name = "DataViewJames";
             this.Text = "Hardware Sensor Manager";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControlSensors.ResumeLayout(false);
@@ -1183,7 +1278,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.ultrasonicSensorDataBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lEDSensorDataBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hardwareDBDataSet1)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1249,8 +1347,15 @@
         private System.Windows.Forms.Button btnTestConnection;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxRFID;
-        private System.Windows.Forms.Button btnOpenForm2;
         private HardwareDBDataSet hardwareDBDataSet1;
         private System.Windows.Forms.Button btnClearAllData;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton Home;
+        private System.Windows.Forms.ToolStripButton Logout;
+        private System.Windows.Forms.ToolStripButton SensorData;
+        private System.Windows.Forms.ToolStripButton Overview;
+        private System.Windows.Forms.ToolStripButton Products;
+        private System.Windows.Forms.ToolStripButton EventManagement;
+        private System.Windows.Forms.ToolStripButton UserManagement;
     }
 }

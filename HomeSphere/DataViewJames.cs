@@ -754,11 +754,7 @@ namespace HomeSphere
             Debug.WriteLine($"RFID Text Box Updated: {textBoxRFID.Text}");
         }
 
-        private void btnOpenForm2_Click(object sender, EventArgs e)
-        {
-            GraphJames form2 = new GraphJames();
-            form2.Show();
-        }
+        
 
         private void btnClearAllData_Click(object sender, EventArgs e)
         {
@@ -835,5 +831,16 @@ namespace HomeSphere
             }
         }
 
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void Home_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            Form1 Form1 = new Form1();
+            Form1.Show();
+        }
     }
 }

@@ -128,7 +128,7 @@ namespace HomeSphere
 
         private void Home_Click(object sender, EventArgs e)
         {
-
+           
         }
 
         private void Overview_Click(object sender, EventArgs e)
@@ -151,11 +151,12 @@ namespace HomeSphere
 
         private void ManageRecords_Click(object sender, EventArgs e)
         {
-            // Open the TableManagement form
-            TableManagement tableManagement = new TableManagement();
-            tableManagement.Show();
-            this.Hide(); // Optional: Hides the main form while TableManagement is open
+            // Open the DataViewJames form instead of TableManagement
+            DataViewJames dataView = new DataViewJames();
+            dataView.Show();
+            this.Hide(); // Optional: Hides the current form
         }
+
 
         private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
@@ -181,6 +182,11 @@ namespace HomeSphere
             frmUserManagement frmusermanagement = new frmUserManagement();
             this.Hide();
             frmusermanagement.Show();
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadTemperatureData();
         }
     }
 }

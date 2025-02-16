@@ -260,7 +260,7 @@ namespace HomeSphere
 
         private void ManageRecords_Click(object sender, EventArgs e)
         {
-            TableManagement tableManagement = new TableManagement();
+            DataViewJames tableManagement = new DataViewJames();
             tableManagement.Show();
             this.Hide();
         }
