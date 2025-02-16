@@ -80,17 +80,63 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Text.RegularExpressions;
 
-namespace PracticalADO_ReadDB
+namespace HomeSphere
 {
     public partial class frmLogin1 : Form
     {
         
         private string strConnectionString =
-            ConfigurationManager.ConnectionStrings["SampleDBConnection"].ConnectionString;
+            ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         public frmLogin1()
         {
             InitializeComponent();
+            InitializePlaceholders();
+        }
+        private void InitializePlaceholders()
+        {
+            SetPlaceholder(tbUsername, "Enter your username");
+            SetPlaceholder(tbPassword, "Enter your password");
+
+            tbUsername.GotFocus += RemovePlaceholder;
+            tbUsername.LostFocus += AddPlaceholder;
+
+            tbPassword.GotFocus += RemovePlaceholder;
+            tbPassword.LostFocus += AddPlaceholder;
+        }
+
+        private void SetPlaceholder(TextBox textBox, string placeholder)
+        {
+            textBox.Text = placeholder;
+            textBox.ForeColor = System.Drawing.Color.Gray;
+        }
+
+        private void RemovePlaceholder(object sender, EventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox != null && textBox.ForeColor == System.Drawing.Color.Gray)
+            {
+                textBox.Text = "";
+                textBox.ForeColor = System.Drawing.Color.Black;
+                if (textBox == tbPassword)
+                {
+                    textBox.UseSystemPasswordChar = true;
+                }
+            }
+        }
+
+        private void AddPlaceholder(object sender, EventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
+            {
+                if (textBox == tbUsername)
+                    SetPlaceholder(textBox, "Enter your username");
+                else if (textBox == tbPassword)
+                    SetPlaceholder(textBox, "Enter your password");
+
+                textBox.UseSystemPasswordChar = false;
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -131,91 +177,61 @@ namespace PracticalADO_ReadDB
 
         private void btnLogin_Click_1(object sender, EventArgs e)
         {
-            // Clear old errors
             errorProvider1.SetError(tbUsername, "");
             errorProvider1.SetError(tbPassword, "");
 
-            bool isValid = true;
+            string username = SanitizeInput(tbUsername.Text.Trim());
+            string password = SanitizeInput(tbPassword.Text.Trim());
 
-            // 1) Get the raw input from textboxes
-            string usernameRaw = tbUsername.Text.Trim();
-            string passwordRaw = tbPassword.Text.Trim();
-
-            // 2) Sanitize to remove < or > to mitigate naive HTML injection
-            string username = SanitizeInput(usernameRaw);
-            string password = SanitizeInput(passwordRaw);
-
-            // 3) Validate Username
-            if (string.IsNullOrWhiteSpace(username))
+            if (string.IsNullOrWhiteSpace(username) || username == "Enter your username")
             {
                 errorProvider1.SetError(tbUsername, "Username is required.");
-                isValid = false;
+                return;
             }
-            else if (username.Length > 50)
+            else if (username.Length > 100)
             {
-                errorProvider1.SetError(tbUsername, "Username too long (max 50 chars).");
-                isValid = false;
+                errorProvider1.SetError(tbUsername, "Username too long (max 100 chars).");
+                return;
             }
-            // Optional additional check:
-            // if (!Regex.IsMatch(username, @"^[a-zA-Z0-9_]+$"))
-            // {
-            //     errorProvider1.SetError(tbUsername, "Username contains invalid characters.");
-            //     isValid = false;
-            // }
 
-            // 4) Validate Password (complexity, length, etc.)
-            if (string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(password) || password == "Enter your password")
             {
                 errorProvider1.SetError(tbPassword, "Password is required.");
-                isValid = false;
-            }
-            else
-            {
-                // Check if it meets complexity: 8–50 chars, must have letter, digit, special char
-                if (!IsPasswordComplex(password))
-                {
-                    errorProvider1.SetError(tbPassword,
-                        "Must be 8–50 chars long & include letters, digits, and special characters.");
-                    isValid = false;
-                }
+                return;
             }
 
-            // If any validation failed, stop
-            if (!isValid) return;
-
-            // 5) Attempt login with parameterized SQL query to prevent SQL injection
             try
             {
                 using (SqlConnection conn = new SqlConnection(strConnectionString))
                 {
                     conn.Open();
-                    string strCommandText =
-                        @"SELECT Name, Password , UniqueRFID
-                          FROM MyUser
-                          WHERE Name = @uname 
-                            AND Password = @pwd";
+                    string query = "SELECT ID, PasswordHash FROM Users WHERE Username = @Username";
 
-                    using (SqlCommand cmd = new SqlCommand(strCommandText, conn))
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@uname", username);
-                        cmd.Parameters.AddWithValue("@pwd", password);
+                        cmd.Parameters.AddWithValue("@Username", username);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                MessageBox.Show("Login Successful!");
-                                // e.g., proceed to main form
-                                int uniqueRFID = Convert.ToInt32(reader["UniqueRFID"]);
-                                Graph dashboard = new Graph(uniqueRFID);  // "Graph" is your other form
-                                dashboard.Show();
+                                int userId = Convert.ToInt32(reader["ID"]);
+                                string storedPasswordHash = reader["PasswordHash"].ToString();
 
-                                // Option A: Hide this login form (so the user can’t go back)
+                                if (!BCrypt.Net.BCrypt.Verify(password, storedPasswordHash))
+                                {
+                                    MessageBox.Show("Incorrect password.");
+                                    return;
+                                }
+
+                                Program.CurrentUserId = userId;
                                 this.Hide();
+                                frmUserHomePage homePage = new frmUserHomePage(userId);
+                                homePage.Show();
                             }
                             else
                             {
-                                MessageBox.Show("Login Failed!");
+                                MessageBox.Show("Login Failed! Username not found.");
                             }
                         }
                     }
@@ -223,8 +239,7 @@ namespace PracticalADO_ReadDB
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Database Error: " + ex.Message, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Database Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -270,6 +285,25 @@ namespace PracticalADO_ReadDB
 
         {
           
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SignUpUser_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            UserSignUp signUpForm = new UserSignUp();
+            signUpForm.Show();
+            this.Hide();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            frmForgotPassword forgotPasswordForm = new frmForgotPassword();
+            forgotPasswordForm.Show();
+            this.Hide();
         }
     }
 }

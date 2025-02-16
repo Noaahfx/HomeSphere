@@ -37,9 +37,10 @@ namespace HomeSphere
                             // ✅ Set CurrentUser in CartManager so the admin's cart is correctly loaded
                             CartManager.CurrentUser = username;
 
-                            this.Hide(); // Hide login form
+                            this.Hide(); // ✅ Hide login form first
                             Form1 form1 = new Form1();
-                            form1.Show(); // Use Show() instead of ShowDialog()
+                            form1.FormClosed += (s, args) => this.Close(); // ✅ Ensure `frmAdminLogin` closes when `Form1` is closed
+                            form1.Show();
                         }
                         else
                         {
@@ -57,10 +58,10 @@ namespace HomeSphere
 
         private void lnkLoginAsUser_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            this.Hide(); // Hide instead of closing to allow returning if needed
+            this.Hide(); // ✅ Hide `frmAdminLogin`
             frmLogin loginForm = new frmLogin();
-            loginForm.ShowDialog();
-            this.Show(); // Re-show login form if user login is canceled
+            loginForm.FormClosed += (s, args) => this.Close(); // ✅ Close `frmAdminLogin` when `frmLogin` closes
+            loginForm.Show();
         }
 
         private void btnExit_Click(object sender, EventArgs e)

@@ -1,4 +1,4 @@
-﻿namespace PracticalADO_ReadDB
+﻿namespace HomeSphere
 {
     partial class frmLogin1
     {
@@ -42,6 +42,8 @@
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.SignUpUser = new System.Windows.Forms.LinkLabel();
+            this.forgetPasswordLink = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -167,7 +169,7 @@
             // 
             // pictureBox4
             // 
-            this.pictureBox4.Image = global::PracticalADO_ReadDB.Properties.Resources.padlock;
+            this.pictureBox4.Image = global::HomeSphere.Properties.Resources.padlock;
             this.pictureBox4.Location = new System.Drawing.Point(216, 220);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(24, 24);
@@ -176,7 +178,7 @@
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Image = global::PracticalADO_ReadDB.Properties.Resources.profile__1_;
+            this.pictureBox2.Image = global::HomeSphere.Properties.Resources.profile__1_;
             this.pictureBox2.Location = new System.Drawing.Point(216, 144);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(24, 24);
@@ -185,19 +187,48 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::PracticalADO_ReadDB.Properties.Resources.smart_home;
+            this.pictureBox1.Image = global::HomeSphere.Properties.Resources.smart_home;
             this.pictureBox1.Location = new System.Drawing.Point(299, 28);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(64, 64);
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
-            // frmLogin
+            // SignUpUser
+            // 
+            this.SignUpUser.AccessibleName = "lnkLoginAsAdmin";
+            this.SignUpUser.AutoSize = true;
+            this.SignUpUser.Location = new System.Drawing.Point(301, 379);
+            this.SignUpUser.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.SignUpUser.Name = "SignUpUser";
+            this.SignUpUser.Size = new System.Drawing.Size(45, 13);
+            this.SignUpUser.TabIndex = 16;
+            this.SignUpUser.TabStop = true;
+            this.SignUpUser.Text = "Sign Up";
+            this.SignUpUser.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.SignUpUser_LinkClicked);
+            // 
+            // forgetPasswordLink
+            // 
+            this.forgetPasswordLink.AccessibleName = "lnkLoginAsAdmin";
+            this.forgetPasswordLink.AutoSize = true;
+            this.forgetPasswordLink.Location = new System.Drawing.Point(367, 251);
+            this.forgetPasswordLink.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.forgetPasswordLink.Name = "forgetPasswordLink";
+            this.forgetPasswordLink.Size = new System.Drawing.Size(92, 13);
+            this.forgetPasswordLink.TabIndex = 17;
+            this.forgetPasswordLink.TabStop = true;
+            this.forgetPasswordLink.Text = "Forget Password?";
+            this.forgetPasswordLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // frmLogin1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(659, 410);
+            this.Controls.Add(this.forgetPasswordLink);
+            this.Controls.Add(this.SignUpUser);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.panel3);
@@ -209,7 +240,7 @@
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnLogin);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "frmLogin";
+            this.Name = "frmLogin1";
             this.Text = "frmLogin";
             this.Load += new System.EventHandler(this.frmLogin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
@@ -238,5 +269,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.LinkLabel SignUpUser;
+        private System.Windows.Forms.LinkLabel forgetPasswordLink;
     }
 }
