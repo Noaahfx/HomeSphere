@@ -22,7 +22,7 @@ namespace HomeSphere
             Application.SetCompatibleTextRenderingDefault(false);
 
             InitializeGlobalNotificationTimer();
-            Application.Run(new frmLogin1());
+            Application.Run(new Form1());
         }
 
         public static void InitializeGlobalNotificationTimer()

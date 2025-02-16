@@ -10,12 +10,13 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Windows.Forms.DataVisualization.Charting;
-
+using System.Diagnostics;
 
 namespace HomeSphere
 {
     public partial class Form1 : Form
     {
+        private string strConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Databases\IOTPRJ_Data.mdf;Integrated Security=True;";
         public Form1()
         {
             InitializeComponent();
@@ -23,133 +24,11 @@ namespace HomeSphere
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            LoadLightingChart();
-            LoadEnergyChart();
+            
+            LoadTemperatureData();
         }
 
-        private void LoadLightingChart()
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                // Query to fetch the latest date from the table
-                string latestDateQuery = "SELECT MAX(Date) FROM [Table]";
-                SqlCommand latestDateCommand = new SqlCommand(latestDateQuery, connection);
-
-                connection.Open();
-                var latestDate = latestDateCommand.ExecuteScalar();
-                connection.Close();
-
-                if (latestDate != DBNull.Value)
-                {
-                    // Query to fetch data for the latest date
-                    string query = "SELECT Time, LightUsage FROM [Table] WHERE Date = @LatestDate ORDER BY Time ASC";
-                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                    adapter.SelectCommand.Parameters.AddWithValue("@LatestDate", latestDate);
-
-                    DataTable dataTable = new DataTable();
-                    adapter.Fill(dataTable);
-
-                    lighting.Series.Clear(); // Clear existing series
-
-                    Series series = new Series("Light Usage")
-                    {
-                        ChartType = SeriesChartType.Column,
-                        XValueType = ChartValueType.String // Time stored as a string
-                    };
-
-                    foreach (DataRow row in dataTable.Rows)
-                    {
-                        series.Points.AddXY(row["Time"].ToString(), Convert.ToDouble(row["LightUsage"]));
-                    }
-
-                    lighting.Series.Add(series);
-                    lighting.ChartAreas[0].AxisX.Title = "Time (Hour)";
-                    lighting.ChartAreas[0].AxisY.Title = "Light Usage (%)";
-                    lighting.Titles.Clear();
-                    lighting.Titles.Add("Light Usage Throughout the Latest Day");
-                }
-                else
-                {
-                    MessageBox.Show("No data available in the table.", "No Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-        }
-        private void LoadEnergyChart()
-        {
-            try
-            {
-                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    // Identify the latest month and year from the table
-                    string latestMonthQuery = @"
-                SELECT DATEPART(MONTH, MAX(Date)) AS LatestMonth, 
-                       DATEPART(YEAR, MAX(Date)) AS LatestYear
-                FROM [Table]";
-
-                    SqlCommand latestMonthCommand = new SqlCommand(latestMonthQuery, connection);
-                    connection.Open();
-                    SqlDataReader reader = latestMonthCommand.ExecuteReader();
-
-                    int latestMonth = 0;
-                    int latestYear = 0;
-                    if (reader.Read())
-                    {
-                        latestMonth = reader.GetInt32(0);
-                        latestYear = reader.GetInt32(1);
-                    }
-                    reader.Close();
-
-                    // Query to fetch average weekly energy usage for the latest month
-                    string query = @"
-                SELECT CONCAT('Week ', DATEPART(WEEK, Date)) AS WeekLabel, 
-                       AVG(EnergyUsage) AS AvgEnergyUsage
-                FROM [Table]
-                WHERE DATEPART(MONTH, Date) = @LatestMonth AND DATEPART(YEAR, Date) = @LatestYear
-                GROUP BY DATEPART(WEEK, Date)
-                ORDER BY DATEPART(WEEK, Date)";
-
-                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                    adapter.SelectCommand.Parameters.AddWithValue("@LatestMonth", latestMonth);
-                    adapter.SelectCommand.Parameters.AddWithValue("@LatestYear", latestYear);
-
-                    DataTable dataTable = new DataTable();
-                    adapter.Fill(dataTable);
-
-                    if (dataTable.Rows.Count == 0)
-                    {
-                        MessageBox.Show("No data available for the latest month.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
-                    }
-
-                    // Populate the energy chart
-                    energy.Series.Clear();
-                    Series series = new Series("Average Energy Usage by Week (Latest Month)")
-                    {
-                        ChartType = SeriesChartType.Line, // Display as a line chart
-                        XValueType = ChartValueType.String
-                    };
-
-                    foreach (DataRow row in dataTable.Rows)
-                    {
-                        series.Points.AddXY(row["WeekLabel"].ToString(), Convert.ToDouble(row["AvgEnergyUsage"]));
-                    }
-
-                    energy.Series.Add(series);
-                    energy.ChartAreas[0].AxisX.Title = "Week in Latest Month";
-                    energy.ChartAreas[0].AxisY.Title = "Average Energy Usage (W)";
-                    energy.Titles.Clear();
-                    energy.Titles.Add($"Energy Usage Throughout {new DateTime(latestYear, latestMonth, 1).ToString("MMMM yyyy")} (Latest Data)");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred while loading the default energy chart: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+       
 
         private void lighting_Click(object sender, EventArgs e)
         {
@@ -174,6 +53,70 @@ namespace HomeSphere
             }
         }
 
+
+        private void LoadTemperatureData()
+        {
+            try
+            {
+                Debug.WriteLine("Attempting to connect to the database...");
+                using (SqlConnection connection = new SqlConnection(strConnectionString))
+                {
+                    string query = "SELECT Timestamp, Temperature FROM TemperatureSensorData ORDER BY Timestamp ASC";
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+                    DataTable temperatureData = new DataTable();
+
+                    connection.Open(); // Ensure the connection is opened explicitly
+                    Debug.WriteLine("Database connection successful.");
+
+                    adapter.Fill(temperatureData);
+                    Debug.WriteLine($"Rows returned: {temperatureData.Rows.Count}");
+
+                    foreach (DataRow row in temperatureData.Rows)
+                    {
+                        Debug.WriteLine($"Timestamp: {row["Timestamp"]}, Temperature: {row["Temperature"]}");
+                    }
+
+                    if (temperatureData.Rows.Count > 0)
+                    {
+                        chartTemperature.Series.Clear();
+                        chartTemperature.ChartAreas.Clear();
+                        chartTemperature.ChartAreas.Add(new ChartArea("Default"));
+
+                        Series series = new Series("Temperature");
+                        series.ChartType = SeriesChartType.Line;
+                        series.XValueType = ChartValueType.DateTime;
+
+                        foreach (DataRow row in temperatureData.Rows)
+                        {
+                            DateTime timestamp = Convert.ToDateTime(row["Timestamp"]);
+                            double temperature = Convert.ToDouble(row["Temperature"]);
+                            series.Points.AddXY(timestamp, temperature);
+                        }
+
+                        chartTemperature.Series.Add(series);
+
+                        chartTemperature.ChartAreas[0].AxisX.Title = "Timestamp";
+                        chartTemperature.ChartAreas[0].AxisY.Title = "Temperature (°C)";
+                        chartTemperature.ChartAreas[0].AxisX.LabelStyle.Format = "dd/MM/yyyy HH:mm:ss";
+                        chartTemperature.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Auto;
+                        chartTemperature.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
+
+
+                        chartTemperature.Invalidate();
+                        Debug.WriteLine("Temperature data plotted successfully.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("No temperature data found in the database.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading temperature data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Debug.WriteLine($"Error: {ex.Message}");
+            }
+        }
 
         private void energy_Click(object sender, EventArgs e)
         {
