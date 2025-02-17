@@ -292,13 +292,20 @@ namespace HomeSphere
             }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+
+        private void btnCancel_Click_1(object sender, EventArgs e)
         {
-            tbEmail.Text = string.Empty;
-            tbUsername.Text = string.Empty;
-            tbPassword.Text = string.Empty;
-            tbConfirmPassword.Text = string.Empty;
-            tbEmail.Focus();
+            this.Hide();
+            frmLogin1 loginForm = Application.OpenForms["frmLogin1"] as frmLogin1;
+
+            if (loginForm != null)
+            {
+                loginForm.Show();
+            }
+            else
+            {
+                new frmLogin1().Show();
+            }
         }
     }
 }

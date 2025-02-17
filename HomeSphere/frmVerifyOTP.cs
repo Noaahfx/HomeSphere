@@ -208,6 +208,22 @@ namespace HomeSphere
             GenerateAndSendOTP();
         }
 
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            frmLogin1 loginForm = Application.OpenForms["frmLogin1"] as frmLogin1;
+
+            if (loginForm != null)
+            {
+                loginForm.Show();
+            }
+            else
+            {
+                new frmLogin1().Show();
+            }
+        }
+
+
         private void GenerateAndSendOTP()
         {
             string otp = new Random().Next(100000, 999999).ToString();
