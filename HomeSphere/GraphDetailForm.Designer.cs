@@ -106,6 +106,7 @@
             this.btnApplyFilter.TabIndex = 6;
             this.btnApplyFilter.Text = "Apply";
             this.btnApplyFilter.UseVisualStyleBackColor = true;
+            this.btnApplyFilter.Click += new System.EventHandler(this.btnApplyFilter_Click);
             // 
             // GraphDetailForm
             // 

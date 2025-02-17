@@ -256,5 +256,12 @@ namespace HomeSphere
         {
             PerformSearch();
         }
+
+        private void Home_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            Form1 Form1 = new Form1();
+            Form1.Show();
+        }
     }
 }

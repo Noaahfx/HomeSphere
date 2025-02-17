@@ -99,8 +99,8 @@
             this.tsddbUserMenu.Image = ((System.Drawing.Image)(resources.GetObject("tsddbUserMenu.Image")));
             this.tsddbUserMenu.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbUserMenu.Name = "tsddbUserMenu";
-            this.tsddbUserMenu.Size = new System.Drawing.Size(55, 24);
-            this.tsddbUserMenu.Text = "User:";
+            this.tsddbUserMenu.Size = new System.Drawing.Size(70, 24);
+            this.tsddbUserMenu.Text = "Admin:";
             this.tsddbUserMenu.ToolTipText = "tsddbUserMenu";
             this.tsddbUserMenu.Click += new System.EventHandler(this.tsddbUserMenu_Click);
             // 
