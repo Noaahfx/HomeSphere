@@ -31,11 +31,15 @@
             this.components = new System.ComponentModel.Container();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tbPassword = new System.Windows.Forms.TextBox();
             this.tbEmail = new System.Windows.Forms.TextBox();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
             this.tbConfirmPassword = new System.Windows.Forms.TextBox();
@@ -43,23 +47,19 @@
             this.btnSignUp = new System.Windows.Forms.Button();
             this.panel7 = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.tbUsername = new System.Windows.Forms.TextBox();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel5.SuspendLayout();
-            this.panel7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            this.panel5.SuspendLayout();
+            this.panel7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel2
@@ -81,6 +81,16 @@
             this.panel4.Size = new System.Drawing.Size(472, 2);
             this.panel4.TabIndex = 14;
             // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Image = global::HomeSphere.Properties.Resources.padlock;
+            this.pictureBox4.Location = new System.Drawing.Point(210, 465);
+            this.pictureBox4.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(48, 46);
+            this.pictureBox4.TabIndex = 22;
+            this.pictureBox4.TabStop = false;
+            // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
@@ -100,6 +110,16 @@
             this.panel1.Size = new System.Drawing.Size(472, 2);
             this.panel1.TabIndex = 14;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::HomeSphere.Properties.Resources.profile__1_;
+            this.pictureBox2.Location = new System.Drawing.Point(208, 300);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(48, 46);
+            this.pictureBox2.TabIndex = 20;
+            this.pictureBox2.TabStop = false;
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -111,6 +131,16 @@
             this.label3.Size = new System.Drawing.Size(223, 66);
             this.label3.TabIndex = 19;
             this.label3.Text = "Sign Up";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::HomeSphere.Properties.Resources.smart_home;
+            this.pictureBox1.Location = new System.Drawing.Point(376, 52);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(128, 123);
+            this.pictureBox1.TabIndex = 18;
+            this.pictureBox1.TabStop = false;
             // 
             // tbPassword
             // 
@@ -136,6 +166,16 @@
             this.tbEmail.Name = "tbEmail";
             this.tbEmail.Size = new System.Drawing.Size(414, 46);
             this.tbEmail.TabIndex = 16;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Image = global::HomeSphere.Properties.Resources.padlock;
+            this.pictureBox3.Location = new System.Drawing.Point(210, 550);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(48, 46);
+            this.pictureBox3.TabIndex = 26;
+            this.pictureBox3.TabStop = false;
             // 
             // panel5
             // 
@@ -171,7 +211,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
+            this.btnCancel.BackColor = System.Drawing.Color.Red;
             this.btnCancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btnCancel.FlatAppearance.BorderSize = 0;
             this.btnCancel.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
@@ -179,13 +219,14 @@
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.Font = new System.Drawing.Font("Bahnschrift", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(354, 758);
+            this.btnCancel.Location = new System.Drawing.Point(733, 52);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(150, 85);
             this.btnCancel.TabIndex = 28;
-            this.btnCancel.Text = "Clear";
+            this.btnCancel.Text = "Back";
             this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click_1);
             // 
             // btnSignUp
             // 
@@ -225,6 +266,16 @@
             this.panel8.Size = new System.Drawing.Size(472, 2);
             this.panel8.TabIndex = 14;
             // 
+            // pictureBox5
+            // 
+            this.pictureBox5.Image = global::HomeSphere.Properties.Resources.profile__1_;
+            this.pictureBox5.Location = new System.Drawing.Point(208, 385);
+            this.pictureBox5.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(48, 46);
+            this.pictureBox5.TabIndex = 25;
+            this.pictureBox5.TabStop = false;
+            // 
             // tbUsername
             // 
             this.tbUsername.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -240,56 +291,6 @@
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
-            // 
-            // pictureBox5
-            // 
-            this.pictureBox5.Image = global::HomeSphere.Properties.Resources.profile__1_;
-            this.pictureBox5.Location = new System.Drawing.Point(208, 385);
-            this.pictureBox5.Margin = new System.Windows.Forms.Padding(6);
-            this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(48, 46);
-            this.pictureBox5.TabIndex = 25;
-            this.pictureBox5.TabStop = false;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Image = global::HomeSphere.Properties.Resources.padlock;
-            this.pictureBox3.Location = new System.Drawing.Point(210, 550);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(6);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(48, 46);
-            this.pictureBox3.TabIndex = 26;
-            this.pictureBox3.TabStop = false;
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.Image = global::HomeSphere.Properties.Resources.padlock;
-            this.pictureBox4.Location = new System.Drawing.Point(210, 465);
-            this.pictureBox4.Margin = new System.Windows.Forms.Padding(6);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(48, 46);
-            this.pictureBox4.TabIndex = 22;
-            this.pictureBox4.TabStop = false;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = global::HomeSphere.Properties.Resources.profile__1_;
-            this.pictureBox2.Location = new System.Drawing.Point(208, 300);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(6);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(48, 46);
-            this.pictureBox2.TabIndex = 20;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::HomeSphere.Properties.Resources.smart_home;
-            this.pictureBox1.Location = new System.Drawing.Point(376, 52);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(6);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(128, 123);
-            this.pictureBox1.TabIndex = 18;
-            this.pictureBox1.TabStop = false;
             // 
             // UserSignUp
             // 
@@ -317,15 +318,15 @@
             this.Text = "UserSignUp";
             this.Load += new System.EventHandler(this.UserSignUp_Load);
             this.panel2.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel5.ResumeLayout(false);
-            this.panel7.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            this.panel5.ResumeLayout(false);
+            this.panel7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

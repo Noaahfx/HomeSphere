@@ -49,6 +49,7 @@
             this.cbRememberDevice = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -67,8 +68,8 @@
             this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogin.Font = new System.Drawing.Font("Bahnschrift", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogin.ForeColor = System.Drawing.Color.White;
-            this.btnLogin.Location = new System.Drawing.Point(576, 508);
-            this.btnLogin.Margin = new System.Windows.Forms.Padding(4);
+            this.btnLogin.Location = new System.Drawing.Point(576, 541);
+            this.btnLogin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(150, 85);
             this.btnLogin.TabIndex = 0;
@@ -78,7 +79,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
+            this.btnCancel.BackColor = System.Drawing.Color.Red;
             this.btnCancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btnCancel.FlatAppearance.BorderSize = 0;
             this.btnCancel.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
@@ -86,12 +87,12 @@
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.Font = new System.Drawing.Font("Bahnschrift", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(576, 627);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
+            this.btnCancel.Location = new System.Drawing.Point(1122, 54);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(150, 85);
             this.btnCancel.TabIndex = 1;
-            this.btnCancel.Text = "Clear";
+            this.btnCancel.Text = "Exit";
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
@@ -100,8 +101,8 @@
             this.tbUsername.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbUsername.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbUsername.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
-            this.tbUsername.Location = new System.Drawing.Point(484, 308);
-            this.tbUsername.Margin = new System.Windows.Forms.Padding(4);
+            this.tbUsername.Location = new System.Drawing.Point(484, 275);
+            this.tbUsername.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tbUsername.Multiline = true;
             this.tbUsername.Name = "tbUsername";
             this.tbUsername.Size = new System.Drawing.Size(414, 46);
@@ -114,7 +115,7 @@
             this.tbPassword.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.tbPassword.Location = new System.Drawing.Point(482, 421);
-            this.tbPassword.Margin = new System.Windows.Forms.Padding(4);
+            this.tbPassword.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tbPassword.Multiline = true;
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.Size = new System.Drawing.Size(414, 46);
@@ -144,7 +145,7 @@
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.panel3.Controls.Add(this.panel1);
             this.panel3.Location = new System.Drawing.Point(432, 475);
-            this.panel3.Margin = new System.Windows.Forms.Padding(6);
+            this.panel3.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(472, 2);
             this.panel3.TabIndex = 13;
@@ -153,7 +154,7 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.panel1.Location = new System.Drawing.Point(0, -152);
-            this.panel1.Margin = new System.Windows.Forms.Padding(6);
+            this.panel1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(472, 2);
             this.panel1.TabIndex = 14;
@@ -162,8 +163,8 @@
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.panel2.Controls.Add(this.panel4);
-            this.panel2.Location = new System.Drawing.Point(432, 362);
-            this.panel2.Margin = new System.Windows.Forms.Padding(6);
+            this.panel2.Location = new System.Drawing.Point(432, 329);
+            this.panel2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(472, 2);
             this.panel2.TabIndex = 15;
@@ -172,7 +173,7 @@
             // 
             this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.panel4.Location = new System.Drawing.Point(0, -152);
-            this.panel4.Margin = new System.Windows.Forms.Padding(6);
+            this.panel4.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(472, 2);
             this.panel4.TabIndex = 14;
@@ -181,7 +182,7 @@
             // 
             this.pictureBox4.Image = global::HomeSphere.Properties.Resources.padlock;
             this.pictureBox4.Location = new System.Drawing.Point(432, 423);
-            this.pictureBox4.Margin = new System.Windows.Forms.Padding(6);
+            this.pictureBox4.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(48, 46);
             this.pictureBox4.TabIndex = 14;
@@ -190,8 +191,8 @@
             // pictureBox2
             // 
             this.pictureBox2.Image = global::HomeSphere.Properties.Resources.profile__1_;
-            this.pictureBox2.Location = new System.Drawing.Point(432, 310);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(6);
+            this.pictureBox2.Location = new System.Drawing.Point(432, 277);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(48, 46);
             this.pictureBox2.TabIndex = 8;
@@ -201,7 +202,7 @@
             // 
             this.pictureBox1.Image = global::HomeSphere.Properties.Resources.smart_home;
             this.pictureBox1.Location = new System.Drawing.Point(598, 54);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(6);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(128, 123);
             this.pictureBox1.TabIndex = 6;
@@ -212,7 +213,7 @@
             // 
             this.SignUpUser.AccessibleName = "lnkLoginAsAdmin";
             this.SignUpUser.AutoSize = true;
-            this.SignUpUser.Location = new System.Drawing.Point(612, 848);
+            this.SignUpUser.Location = new System.Drawing.Point(719, 741);
             this.SignUpUser.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.SignUpUser.Name = "SignUpUser";
             this.SignUpUser.Size = new System.Drawing.Size(88, 25);
@@ -225,7 +226,7 @@
             // 
             this.forgetPasswordLink.AccessibleName = "lnkLoginAsAdmin";
             this.forgetPasswordLink.AutoSize = true;
-            this.forgetPasswordLink.Location = new System.Drawing.Point(734, 483);
+            this.forgetPasswordLink.Location = new System.Drawing.Point(690, 785);
             this.forgetPasswordLink.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.forgetPasswordLink.Name = "forgetPasswordLink";
             this.forgetPasswordLink.Size = new System.Drawing.Size(186, 25);
@@ -245,8 +246,8 @@
             this.btnGoogleLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGoogleLogin.Font = new System.Drawing.Font("Bahnschrift", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGoogleLogin.ForeColor = System.Drawing.Color.White;
-            this.btnGoogleLogin.Location = new System.Drawing.Point(526, 738);
-            this.btnGoogleLogin.Margin = new System.Windows.Forms.Padding(4);
+            this.btnGoogleLogin.Location = new System.Drawing.Point(517, 638);
+            this.btnGoogleLogin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnGoogleLogin.Name = "btnGoogleLogin";
             this.btnGoogleLogin.Size = new System.Drawing.Size(270, 88);
             this.btnGoogleLogin.TabIndex = 18;
@@ -258,7 +259,7 @@
             // 
             this.lnkLoginAsAdmin.AccessibleName = "lnkLoginAsAdmin";
             this.lnkLoginAsAdmin.AutoSize = true;
-            this.lnkLoginAsAdmin.Location = new System.Drawing.Point(570, 892);
+            this.lnkLoginAsAdmin.Location = new System.Drawing.Point(670, 834);
             this.lnkLoginAsAdmin.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lnkLoginAsAdmin.Name = "lnkLoginAsAdmin";
             this.lnkLoginAsAdmin.Size = new System.Drawing.Size(160, 25);
@@ -271,8 +272,8 @@
             // 
             this.cbRememberDevice.AccessibleName = "cbRememberDevice";
             this.cbRememberDevice.AutoSize = true;
-            this.cbRememberDevice.Location = new System.Drawing.Point(292, 488);
-            this.cbRememberDevice.Margin = new System.Windows.Forms.Padding(6);
+            this.cbRememberDevice.Location = new System.Drawing.Point(531, 502);
+            this.cbRememberDevice.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.cbRememberDevice.Name = "cbRememberDevice";
             this.cbRememberDevice.Size = new System.Drawing.Size(267, 29);
             this.cbRememberDevice.TabIndex = 20;
@@ -282,20 +283,29 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(424, 276);
+            this.label1.Location = new System.Drawing.Point(477, 741);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(116, 25);
+            this.label1.Size = new System.Drawing.Size(234, 25);
             this.label1.TabIndex = 21;
-            this.label1.Text = "Username:";
+            this.label1.Text = "Dont have an account?";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(427, 383);
+            this.label2.Location = new System.Drawing.Point(526, 834);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(112, 25);
+            this.label2.Size = new System.Drawing.Size(137, 25);
             this.label2.TabIndex = 22;
-            this.label2.Text = "Password:";
+            this.label2.Text = "Admin Login:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(451, 785);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(232, 25);
+            this.label4.TabIndex = 23;
+            this.label4.Text = "Forgot your password?";
             // 
             // frmLogin1
             // 
@@ -303,6 +313,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1376, 1042);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbRememberDevice);
@@ -320,7 +331,7 @@
             this.Controls.Add(this.tbUsername);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnLogin);
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "frmLogin1";
             this.Text = "frmLogin";
             this.Load += new System.EventHandler(this.frmLogin_Load);
@@ -355,6 +366,7 @@
         private System.Windows.Forms.Button btnGoogleLogin;
         private System.Windows.Forms.LinkLabel lnkLoginAsAdmin;
         private System.Windows.Forms.CheckBox cbRememberDevice;
+        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
     }

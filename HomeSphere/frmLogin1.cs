@@ -31,9 +31,11 @@ namespace HomeSphere
       
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            // Clear the text fields and reset focus.
+            // Clear the text in the email and password fields
             tbUsername.Text = string.Empty;
             tbPassword.Text = string.Empty;
+
+            // Optionally, set focus back to the first field
             tbUsername.Focus();
         }
 

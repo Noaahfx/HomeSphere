@@ -75,5 +75,17 @@ namespace HomeSphere
             this.Hide();
             notificationPreferences.Show();
         }
+
+        private void lnkManageDevices_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            frmManageDevices manageDevicesForm = new frmManageDevices(userId);
+            manageDevicesForm.Show();
+        }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+            frmManageDevices manageDevicesForm = new frmManageDevices(userId);
+            manageDevicesForm.Show();
+        }
     }
 }

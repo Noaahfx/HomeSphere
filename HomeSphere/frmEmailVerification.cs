@@ -98,6 +98,21 @@ namespace HomeSphere
             MessageBox.Show("New OTP sent to your email. It will expire in 5 minutes.");
         }
 
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            frmLogin1 loginForm = Application.OpenForms["frmLogin1"] as frmLogin1;
+
+            if (loginForm != null)
+            {
+                loginForm.Show();
+            }
+            else
+            {
+                new frmLogin1().Show();
+            }
+        }
+
 
         private void SendOTPEmail(string email, string otp)
         {
