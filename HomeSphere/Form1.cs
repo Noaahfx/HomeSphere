@@ -26,6 +26,7 @@ namespace HomeSphere
         {
             
             LoadTemperatureData();
+            LoadUltrasonicData();
         }
 
        
@@ -118,6 +119,70 @@ namespace HomeSphere
             }
         }
 
+        private void LoadUltrasonicData()
+        {
+            try
+            {
+                Debug.WriteLine("Attempting to connect to the database for ultrasonic data...");
+                using (SqlConnection connection = new SqlConnection(strConnectionString))
+                {
+                    string query = "SELECT Timestamp, Distance FROM UltrasonicSensorData ORDER BY Timestamp ASC";
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+                    DataTable ultrasonicData = new DataTable();
+
+                    connection.Open(); // Open database connection
+                    Debug.WriteLine("Database connection successful for ultrasonic data.");
+
+                    adapter.Fill(ultrasonicData);
+                    Debug.WriteLine($"Rows returned for ultrasonic data: {ultrasonicData.Rows.Count}");
+
+                    foreach (DataRow row in ultrasonicData.Rows)
+                    {
+                        Debug.WriteLine($"Timestamp: {row["Timestamp"]}, Distance: {row["Distance"]}");
+                    }
+
+                    if (ultrasonicData.Rows.Count > 0)
+                    {
+                        chartUltrasonic.Series.Clear();
+                        chartUltrasonic.ChartAreas.Clear();
+                        chartUltrasonic.ChartAreas.Add(new ChartArea("Default"));
+
+                        Series series = new Series("Ultrasonic Distance");
+                        series.ChartType = SeriesChartType.Line;
+                        series.XValueType = ChartValueType.DateTime;
+
+                        foreach (DataRow row in ultrasonicData.Rows)
+                        {
+                            DateTime timestamp = Convert.ToDateTime(row["Timestamp"]);
+                            double distance = Convert.ToDouble(row["Distance"]);
+                            series.Points.AddXY(timestamp, distance);
+                        }
+
+                        chartUltrasonic.Series.Add(series);
+
+                        chartUltrasonic.ChartAreas[0].AxisX.Title = "Timestamp";
+                        chartUltrasonic.ChartAreas[0].AxisY.Title = "Distance (cm)";
+                        chartUltrasonic.ChartAreas[0].AxisX.LabelStyle.Format = "dd/MM/yyyy HH:mm:ss";
+                        chartUltrasonic.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Auto;
+                        chartUltrasonic.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
+
+                        chartUltrasonic.Invalidate();
+                        Debug.WriteLine("Ultrasonic sensor data plotted successfully.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("No ultrasonic sensor data found in the database.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading ultrasonic sensor data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Debug.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+
         private void energy_Click(object sender, EventArgs e)
         {
             // Navigate to EnergyChartForm
@@ -187,6 +252,26 @@ namespace HomeSphere
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             LoadTemperatureData();
+            LoadUltrasonicData();
+        }
+
+        
+
+        private void label2_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chartTemperature_Click(object sender, EventArgs e)
+        {
+            GraphDetailForm tempGraph = new GraphDetailForm("Temperature");
+            tempGraph.Show();
+        }
+
+        private void chartUltrasonic_Click(object sender, EventArgs e)
+        {
+            GraphDetailForm ultrasonicGraph = new GraphDetailForm("Ultrasonic");
+            ultrasonicGraph.Show();
         }
     }
 }

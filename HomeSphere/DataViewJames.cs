@@ -842,5 +842,26 @@ namespace HomeSphere
             Form1 Form1 = new Form1();
             Form1.Show();
         }
+
+        private void UserManagement_Click(object sender, EventArgs e)
+        {
+            frmUserManagement frmusermanagement = new frmUserManagement();
+            this.Hide();
+            frmusermanagement.Show();
+        }
+
+        private void Products_Click(object sender, EventArgs e)
+        {
+            frmProductPage frmproductpage = new frmProductPage();
+            this.Hide();
+            frmproductpage.Show();
+        }
+
+        private void EventManagement_Click(object sender, EventArgs e)
+        {
+            frmAlertManagement alertManagement = new frmAlertManagement();
+            this.Hide();
+            alertManagement.Show();
+        }
     }
 }
