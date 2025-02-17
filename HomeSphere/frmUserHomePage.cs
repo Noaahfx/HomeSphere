@@ -54,5 +54,26 @@ namespace HomeSphere
             this.Hide();
             frmproductpage.Show();
         }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            frmMFASettings mfaSettings = new frmMFASettings(userId);
+            this.Hide();
+            mfaSettings.Show();
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            UserDashboard userdashboard = new UserDashboard();
+            this.Hide();
+            userdashboard.Show();
+        }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            frmNotificationPreferences notificationPreferences = new frmNotificationPreferences(userId);
+            this.Hide();
+            notificationPreferences.Show();
+        }
     }
 }
