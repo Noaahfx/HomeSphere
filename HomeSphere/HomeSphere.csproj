@@ -211,6 +211,12 @@
     <Compile Include="frmLogin1.designer.cs">
       <DependentUpon>frmLogin1.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmManageDevices.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmManageDevices.Designer.cs">
+      <DependentUpon>frmManageDevices.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmMFASettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -376,6 +382,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmLogin1.resx">
       <DependentUpon>frmLogin1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmManageDevices.resx">
+      <DependentUpon>frmManageDevices.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMFASettings.resx">
       <DependentUpon>frmMFASettings.cs</DependentUpon>
