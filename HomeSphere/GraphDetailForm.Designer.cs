@@ -38,7 +38,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnApplyFilter = new System.Windows.Forms.Button();
+            this.numMinValue = new System.Windows.Forms.NumericUpDown();
+            this.numMaxValue = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chartDetail)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMinValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxValue)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTitle
@@ -100,7 +107,7 @@
             // 
             // btnApplyFilter
             // 
-            this.btnApplyFilter.Location = new System.Drawing.Point(1036, 246);
+            this.btnApplyFilter.Location = new System.Drawing.Point(1036, 423);
             this.btnApplyFilter.Name = "btnApplyFilter";
             this.btnApplyFilter.Size = new System.Drawing.Size(75, 33);
             this.btnApplyFilter.TabIndex = 6;
@@ -108,11 +115,52 @@
             this.btnApplyFilter.UseVisualStyleBackColor = true;
             this.btnApplyFilter.Click += new System.EventHandler(this.btnApplyFilter_Click);
             // 
+            // numMinValue
+            // 
+            this.numMinValue.Location = new System.Drawing.Point(1036, 302);
+            this.numMinValue.Name = "numMinValue";
+            this.numMinValue.Size = new System.Drawing.Size(120, 22);
+            this.numMinValue.TabIndex = 7;
+            // 
+            // numMaxValue
+            // 
+            this.numMaxValue.Location = new System.Drawing.Point(1036, 369);
+            this.numMaxValue.Name = "numMaxValue";
+            this.numMaxValue.Size = new System.Drawing.Size(120, 22);
+            this.numMaxValue.TabIndex = 8;
+            // 
+            // label3
+            // 
+            
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(1036, 282);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(30, 17);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Min";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(1036, 349);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(33, 17);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Max";
+            // 
             // GraphDetailForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1248, 844);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.numMaxValue);
+            this.Controls.Add(this.numMinValue);
             this.Controls.Add(this.btnApplyFilter);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -123,6 +171,8 @@
             this.Name = "GraphDetailForm";
             this.Text = "GraphDetailForm";
             ((System.ComponentModel.ISupportInitialize)(this.chartDetail)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMinValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxValue)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -137,5 +187,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnApplyFilter;
+        private System.Windows.Forms.NumericUpDown numMinValue;
+        private System.Windows.Forms.NumericUpDown numMaxValue;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
     }
 }
