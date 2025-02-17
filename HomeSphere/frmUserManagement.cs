@@ -167,10 +167,10 @@ namespace HomeSphere
 
         private void btnDeleteUser_Click_1(object sender, EventArgs e)
         {
-            int userId;
+            string userId;
             try
             {
-                userId = GetSelectedUserId();
+                userId = GetSelectedUserId().ToString();  // Convert user ID to string since DB uses NVARCHAR
             }
             catch (Exception ex)
             {
@@ -178,7 +178,8 @@ namespace HomeSphere
                 return;
             }
 
-            var confirm = MessageBox.Show("Are you sure you want to delete this user? This will remove their order history and cart data.", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var confirm = MessageBox.Show("Are you sure you want to delete this user? This will remove their order history and cart data.",
+                                          "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (confirm != DialogResult.Yes) return;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -189,25 +190,23 @@ namespace HomeSphere
                 string deleteCart = "DELETE FROM CartItems WHERE UserID = @UserID";
                 using (SqlCommand cmd = new SqlCommand(deleteCart, conn))
                 {
-                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    cmd.Parameters.Add("@UserID", SqlDbType.NVarChar, 50).Value = userId;
                     cmd.ExecuteNonQuery();
                 }
 
-                // Delete user's orders.
-                // Here we change the parameter type to NVarchar so that the int value (converted to string)
-                // will be compared to the Orders.UserID column without SQL Server trying to convert column values to int.
+                // Delete user's orders (ensure NVARCHAR matching)
                 string deleteOrders = "DELETE FROM Orders WHERE UserID = @UserID";
                 using (SqlCommand cmd = new SqlCommand(deleteOrders, conn))
                 {
-                    cmd.Parameters.Add("@UserID", System.Data.SqlDbType.NVarChar, 50).Value = userId.ToString();
+                    cmd.Parameters.Add("@UserID", SqlDbType.NVarChar, 50).Value = userId;
                     cmd.ExecuteNonQuery();
                 }
 
-                // Delete the user
+                // Delete the user from Users table
                 string deleteUser = "DELETE FROM Users WHERE ID = @UserID";
                 using (SqlCommand cmd = new SqlCommand(deleteUser, conn))
                 {
-                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    cmd.Parameters.Add("@UserID", SqlDbType.NVarChar, 50).Value = userId;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -218,7 +217,8 @@ namespace HomeSphere
 
         private void btnDeleteAllUsers_Click_1(object sender, EventArgs e)
         {
-            var confirm = MessageBox.Show("Are you sure you want to delete ALL users? This will remove all order history and cart data.", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var confirm = MessageBox.Show("Are you sure you want to delete ALL users? This will remove all order history and cart data.",
+                                          "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (confirm != DialogResult.Yes) return;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -232,7 +232,7 @@ namespace HomeSphere
                     cmd.ExecuteNonQuery();
                 }
 
-                // Delete all orders
+                // Delete all orders (ensuring UserID is handled as NVARCHAR)
                 string deleteOrders = "DELETE FROM Orders";
                 using (SqlCommand cmd = new SqlCommand(deleteOrders, conn))
                 {
@@ -250,6 +250,7 @@ namespace HomeSphere
             LoadUsers();
             MessageBox.Show("All users have been deleted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {

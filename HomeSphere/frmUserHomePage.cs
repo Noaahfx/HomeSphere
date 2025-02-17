@@ -13,7 +13,6 @@ namespace HomeSphere
         {
             InitializeComponent();
             this.userId = userId;
-            CheckForActiveAlert();
         }
 
         private void lnkNotificationSettings_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -42,37 +41,18 @@ namespace HomeSphere
             }
         }
 
-        // New method: Check for active alerts
-        private void CheckForActiveAlert()
-        {
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
-                {
-                    conn.Open();
-                    string query = "SELECT TOP 1 Message FROM Alerts WHERE IsActive = 1 ORDER BY CreatedAt DESC";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        object result = cmd.ExecuteScalar();
-                        if (result != null)
-                        {
-                            string alertMessage = result.ToString();
-                            MessageBox.Show(alertMessage, "Active Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error checking for active alerts: {ex.Message}");
-            }
-        }
-
         private void lnkMFASettings_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             frmMFASettings mfaSettings = new frmMFASettings(userId);
             this.Hide();
             mfaSettings.Show();
+        }
+
+        private void Products_Click(object sender, EventArgs e)
+        {
+            frmProductPage frmproductpage = new frmProductPage();
+            this.Hide();
+            frmproductpage.Show();
         }
     }
 }
