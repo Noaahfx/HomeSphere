@@ -138,5 +138,12 @@ namespace HomeSphere
             }
             base.OnFormClosing(e);
         }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            frmUserHomePage homePage = new frmUserHomePage(Program.CurrentUserId);
+            homePage.Show();
+        }
     }
 }
