@@ -5,10 +5,20 @@ namespace HomeSphere
 {
     public partial class UserDashboard : Form
     {
-        public UserDashboard()
+        private int userId;
+
+        // Modified constructor to accept a userId
+        public UserDashboard(int userId)
         {
             InitializeComponent();
+            this.userId = userId;
             InitializeNavBar();
+        }
+
+        // Optional: Retain a parameterless constructor for designer support,
+        // but it can call the parameterized one with a default or invalid userId.
+        public UserDashboard() : this(-1)
+        {
         }
 
         private void InitializeNavBar()
@@ -22,7 +32,7 @@ namespace HomeSphere
             soundGraphTab.Click += SoundGraphTab_Click;
 
             ToolStripMenuItem energyGraphTab = new ToolStripMenuItem("Energy Graph");
-            //energyGraphTab.Click += EnergyGraphTab_Click;
+            energyGraphTab.Click += EnergyGraphTab_Click;
 
             menuStrip.Items.Add(temperatureGraphTab);
             menuStrip.Items.Add(soundGraphTab);
@@ -34,20 +44,30 @@ namespace HomeSphere
 
         private void TemperatureGraphTab_Click(object sender, EventArgs e)
         {
+            // If your graph form now accepts a userId, pass it along
             frmTemperatureGraph tempGraphForm = new frmTemperatureGraph();
             tempGraphForm.Show();
         }
 
         private void SoundGraphTab_Click(object sender, EventArgs e)
         {
+            // If your graph form now accepts a userId, pass it along
             frmSoundGraph soundGraphForm = new frmSoundGraph();
             soundGraphForm.Show();
         }
 
-        //private void EnergyGraphTab_Click(object sender, EventArgs e)
-        //{
-        //    frmEnergyGraph energyGraphForm = new frmEnergyGraph();
-         //   energyGraphForm.Show();
-        //}
+        private void EnergyGraphTab_Click(object sender, EventArgs e)
+        {
+            // If your graph form now accepts a userId, pass it along
+            UserEnergyGraph energyGraphForm = new UserEnergyGraph();
+            energyGraphForm.Show();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            frmUserHomePage homePage = new frmUserHomePage(userId);
+            this.Hide();
+            homePage.Show();
+        }
     }
 }

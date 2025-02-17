@@ -64,7 +64,7 @@ namespace HomeSphere
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            UserDashboard userdashboard = new UserDashboard();
+            UserDashboard userdashboard = new UserDashboard(userId);
             this.Hide();
             userdashboard.Show();
         }
