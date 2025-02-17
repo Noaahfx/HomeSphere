@@ -51,16 +51,19 @@
             this.chartUltrasonic = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.Home = new System.Windows.Forms.ToolStripButton();
             this.Logout = new System.Windows.Forms.ToolStripButton();
-            this.SensorData = new System.Windows.Forms.ToolStripButton();
+            this.ManageRecords = new System.Windows.Forms.ToolStripButton();
             this.Overview = new System.Windows.Forms.ToolStripButton();
             this.Products = new System.Windows.Forms.ToolStripButton();
             this.EventManagement = new System.Windows.Forms.ToolStripButton();
             this.UserManagement = new System.Windows.Forms.ToolStripButton();
+            this.lighting = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.energy = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chartTemperature = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lighting)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.energy)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartTemperature)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartUltrasonic)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -70,7 +73,7 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Home,
             this.Logout,
-            this.SensorData,
+            this.ManageRecords,
             this.Overview,
             this.Products,
             this.EventManagement,
@@ -206,17 +209,16 @@
             this.Logout.Text = "Logout";
             this.Logout.Click += new System.EventHandler(this.Logout_Click);
             // 
-            // SensorData
+            // ManageRecords
             // 
-            this.SensorData.AccessibleName = "ManageRecords";
-            this.SensorData.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.SensorData.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.SensorData.Image = ((System.Drawing.Image)(resources.GetObject("SensorData.Image")));
-            this.SensorData.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.SensorData.Name = "SensorData";
-            this.SensorData.Size = new System.Drawing.Size(93, 24);
-            this.SensorData.Text = "Sensor Data";
-            this.SensorData.Click += new System.EventHandler(this.ManageRecords_Click);
+            this.ManageRecords.AccessibleName = "ManageRecords";
+            this.ManageRecords.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.ManageRecords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ManageRecords.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ManageRecords.Name = "ManageRecords";
+            this.ManageRecords.Size = new System.Drawing.Size(120, 24);
+            this.ManageRecords.Text = "ManageRecords";
+            this.ManageRecords.Click += new System.EventHandler(this.ManageRecords_Click);
             // 
             // Overview
             // 
@@ -266,28 +268,95 @@
             this.UserManagement.Text = "Manage Users";
             this.UserManagement.Click += new System.EventHandler(this.UserManagement_Click);
             // 
+            // lighting
+            // 
+            this.lighting.AccessibleName = "lighting";
+            chartArea1.Name = "ChartArea1";
+            this.lighting.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.lighting.Legends.Add(legend1);
+            this.lighting.Location = new System.Drawing.Point(28, 60);
+            this.lighting.Name = "lighting";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.lighting.Series.Add(series1);
+            this.lighting.Size = new System.Drawing.Size(649, 369);
+            this.lighting.TabIndex = 1;
+            this.lighting.Text = "lighting";
+            this.lighting.Click += new System.EventHandler(this.lighting_Click);
+            // 
+            // energy
+            // 
+            this.energy.AccessibleName = "energy";
+            chartArea2.Name = "ChartArea1";
+            this.energy.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.energy.Legends.Add(legend2);
+            this.energy.Location = new System.Drawing.Point(694, 60);
+            this.energy.Name = "energy";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.energy.Series.Add(series2);
+            this.energy.Size = new System.Drawing.Size(574, 369);
+            this.energy.TabIndex = 2;
+            this.energy.Text = "energy";
+            this.energy.Click += new System.EventHandler(this.energy_Click);
+            // 
+            // chartTemperature
+            // 
+            chartArea3.Name = "ChartArea1";
+            this.chartTemperature.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.chartTemperature.Legends.Add(legend3);
+            this.chartTemperature.Location = new System.Drawing.Point(28, 475);
+            this.chartTemperature.Name = "chartTemperature";
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chartTemperature.Series.Add(series3);
+            this.chartTemperature.Size = new System.Drawing.Size(649, 451);
+            this.chartTemperature.TabIndex = 3;
+            this.chartTemperature.Text = "chart1";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(40, 445);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(134, 17);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Temperature Graph";
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(204, 442);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.TabIndex = 5;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1329, 947);
-            this.Controls.Add(this.chartUltrasonic);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.chartTemperature);
             this.Controls.Add(this.energy);
-            this.Controls.Add(this.lighting);
             this.Controls.Add(this.toolStrip1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lighting)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.energy)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartTemperature)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartUltrasonic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -299,17 +368,14 @@
         private System.Windows.Forms.ToolStripButton Home;
         private System.Windows.Forms.ToolStripButton Overview;
         private System.Windows.Forms.ToolStripButton Logout;
-        private System.Windows.Forms.DataVisualization.Charting.Chart lighting;
         private System.Windows.Forms.DataVisualization.Charting.Chart energy;
-        private System.Windows.Forms.ToolStripButton SensorData;
+        private System.Windows.Forms.ToolStripButton ManageRecords;
         private System.Windows.Forms.ToolStripButton EventManagement;
         private System.Windows.Forms.ToolStripButton Products;
         private System.Windows.Forms.ToolStripButton UserManagement;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartTemperature;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chartUltrasonic;
     }
 }
 
