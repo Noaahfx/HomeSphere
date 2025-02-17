@@ -53,8 +53,9 @@
       <HintPath>..\packages\BCrypt.Net-Next.4.0.3\lib\net472\BCrypt.Net-Next.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CommsUtil">
-      <HintPath>..\..\..\..\..\..\..\..\..\Downloads\CommsUtil.dll</HintPath>
+    <Reference Include="CommsUtil, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\Noah\Downloads\CommsUtil.dll</HintPath>
     </Reference>
     <Reference Include="Google.Apis, Version=1.69.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Apis.1.69.0\lib\net462\Google.Apis.dll</HintPath>
@@ -72,15 +73,17 @@
       <HintPath>..\packages\Google.Apis.Oauth2.v2.1.68.0.1869\lib\net462\Google.Apis.Oauth2.v2.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces">
-      <HintPath>..\..\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\Noah\Downloads\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stripe.net">
-      <HintPath>..\..\Stripe.net.dll</HintPath>
+    <Reference Include="Stripe.net, Version=47.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\Noah\Downloads\Stripe.net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -232,6 +235,18 @@
     <Compile Include="frmPayment.Designer.cs">
       <DependentUpon>frmPayment.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSoundGraph.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSoundGraph.designer.cs">
+      <DependentUpon>frmSoundGraph.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTemperatureGraph.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTemperatureGraph.designer.cs">
+      <DependentUpon>frmTemperatureGraph.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmUserHomePage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -305,6 +320,12 @@
     <Compile Include="SoundChartForm.designer.cs">
       <DependentUpon>SoundChartForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserDashboard.designer.cs">
+      <DependentUpon>UserDashboard.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserSignUp.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -368,6 +389,12 @@
     <EmbeddedResource Include="frmPayment.resx">
       <DependentUpon>frmPayment.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmSoundGraph.resx">
+      <DependentUpon>frmSoundGraph.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTemperatureGraph.resx">
+      <DependentUpon>frmTemperatureGraph.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmUserHomePage.resx">
       <DependentUpon>frmUserHomePage.cs</DependentUpon>
     </EmbeddedResource>
@@ -410,6 +437,9 @@
     </Compile>
     <EmbeddedResource Include="SoundChartForm.resx">
       <DependentUpon>SoundChartForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserDashboard.resx">
+      <DependentUpon>UserDashboard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserSignUp.resx">
       <DependentUpon>UserSignUp.cs</DependentUpon>
