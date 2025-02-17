@@ -51,9 +51,9 @@ namespace HomeSphere
                         chartArea.AxisX.LabelStyle.Font = new System.Drawing.Font("Arial", 10, System.Drawing.FontStyle.Bold);
                         chartArea.AxisX.LabelStyle.Format = "dd/MM"; // ✅ Simplify timestamp format
                         chartArea.AxisX.IntervalType = DateTimeIntervalType.Days; // Use daily intervals for clarity
-                        chartArea.AxisX.Interval = 5; // Set interval to 1 day for better spacing
-                        chartArea.AxisX.LabelStyle.Angle = -60; // Maintain angle for readability
-                        chartArea.AxisX.LabelStyle.IsStaggered = true; // Stagger labels to prevent overlap
+                        chartArea.AxisX.Interval = 2; // Set interval to 1 day for better spacing
+                        chartArea.AxisX.LabelStyle.Angle = -45; // Maintain angle for readability
+                        chartArea.AxisX.LabelStyle.IsStaggered = false; // Stagger labels to prevent overlap
                         chartArea.AxisX.IsLabelAutoFit = false; // Disable auto-fit for manual spacing control
                         chartArea.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
 
@@ -66,12 +66,14 @@ namespace HomeSphere
 
                         Series series = new Series("Temperature")
                         {
-                            ChartType = SeriesChartType.Column,
+                            ChartType = SeriesChartType.Line,  // Change to Line Chart
                             XValueType = ChartValueType.DateTime,
                             BorderWidth = 3,
-                            Color = System.Drawing.Color.OrangeRed
+                            Color = System.Drawing.Color.OrangeRed,
+                            MarkerStyle = MarkerStyle.Circle, // Add markers for better visibility
+                            MarkerSize = 7
                         };
-                        series["PixelPointWidth"] = "50";
+
                         foreach (DataRow row in temperatureData.Rows)
                         {
                             DateTime timestamp;

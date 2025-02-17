@@ -55,7 +55,7 @@
     </Reference>
     <Reference Include="CommsUtil, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Users\Noah\Downloads\CommsUtil.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Downloads\CommsUtil.dll</HintPath>
     </Reference>
     <Reference Include="Google.Apis, Version=1.69.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Apis.1.69.0\lib\net462\Google.Apis.dll</HintPath>
@@ -73,6 +73,9 @@
       <HintPath>..\packages\Google.Apis.Oauth2.v2.1.68.0.1869\lib\net462\Google.Apis.Oauth2.v2.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces %281%29">
+      <HintPath>..\..\..\..\..\..\Downloads\Microsoft.Bcl.AsyncInterfaces (1).dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Users\Noah\Downloads\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -83,7 +86,7 @@
     </Reference>
     <Reference Include="Stripe.net, Version=47.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Users\Noah\Downloads\Stripe.net.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Downloads\Stripe.net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -326,6 +329,12 @@
     <Compile Include="UserDashboard.designer.cs">
       <DependentUpon>UserDashboard.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserEnergyGraph.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserEnergyGraph.Designer.cs">
+      <DependentUpon>UserEnergyGraph.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserSignUp.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -440,6 +449,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserDashboard.resx">
       <DependentUpon>UserDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserEnergyGraph.resx">
+      <DependentUpon>UserEnergyGraph.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserSignUp.resx">
       <DependentUpon>UserSignUp.cs</DependentUpon>

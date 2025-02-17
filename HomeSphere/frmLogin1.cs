@@ -17,94 +17,61 @@ namespace HomeSphere
 {
     public partial class frmLogin1 : Form
     {
-        
         private string strConnectionString =
             ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         public frmLogin1()
         {
             InitializeComponent();
-            InitializePlaceholders();
-        }
-        private void InitializePlaceholders()
-        {
-            SetPlaceholder(tbUsername, "Enter your username");
-            SetPlaceholder(tbPassword, "Enter your password");
-
-            tbUsername.GotFocus += RemovePlaceholder;
-            tbUsername.LostFocus += AddPlaceholder;
-
-            tbPassword.GotFocus += RemovePlaceholder;
-            tbPassword.LostFocus += AddPlaceholder;
+           
         }
 
-        private void SetPlaceholder(TextBox textBox, string placeholder)
-        {
-            textBox.Text = placeholder;
-            textBox.ForeColor = System.Drawing.Color.Gray;
-        }
+       
 
-        private void RemovePlaceholder(object sender, EventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            if (textBox != null && textBox.ForeColor == System.Drawing.Color.Gray)
-            {
-                textBox.Text = "";
-                textBox.ForeColor = System.Drawing.Color.Black;
-                if (textBox == tbPassword)
-                {
-                    textBox.UseSystemPasswordChar = true;
-                }
-            }
-        }
-
-        private void AddPlaceholder(object sender, EventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
-            {
-                if (textBox == tbUsername)
-                    SetPlaceholder(textBox, "Enter your username");
-                else if (textBox == tbPassword)
-                    SetPlaceholder(textBox, "Enter your password");
-
-                textBox.UseSystemPasswordChar = false;
-            }
-        }
-
+      
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            // Clear the text in the email and password fields
+            // Clear the text fields and reset focus.
             tbUsername.Text = string.Empty;
             tbPassword.Text = string.Empty;
-
-            // Optionally, set focus back to the first field
             tbUsername.Focus();
         }
 
         /// <summary>
-        /// Remove potentially dangerous characters like '<' or '>'
-        /// to reduce the risk of naive HTML/JS injection.
+        /// Sanitizes input based on whether the input is a password or not.
+        /// For non-password fields (e.g. usernames or emails), only allow alphanumeric characters,
+        /// underscore, dash, dot, and the '@' symbol.
+        /// For passwords, only remove characters that might lead to HTML injection.
         /// </summary>
-        private string SanitizeInput(string input)
+        private string SanitizeInput(string input, bool isPassword = false)
         {
-            return input.Replace("<", string.Empty)
-                        .Replace(">", string.Empty);
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            // Trim any leading/trailing whitespace
+            input = input.Trim();
+
+            if (!isPassword)
+            {
+                // For usernames/emails: allow letters, digits, underscore, dash, dot, and @.
+                return Regex.Replace(input, @"[^\w\-.@]", "");
+            }
+            else
+            {
+                // For passwords: remove characters that could be interpreted as HTML.
+                return input.Replace("<", string.Empty).Replace(">", string.Empty);
+            }
         }
 
         /// <summary>
-        /// Regex-based check for password complexity:
-        /// - 8 to 50 characters
-        /// - Must include a letter, a digit, and a special character from a defined set
+        /// Checks password complexity using regex:
+        /// - Length 8 to 50 characters
+        /// - Must include a letter, a digit, and a special character
         /// </summary>
         private bool IsPasswordComplex(string password)
         {
-            // Adjust the special characters set to your needs:
-            //  - Must have at least 1 letter, 1 digit, 1 special char from the set
-            //  - Overall length must be between 8 and 50
             string pattern = @"^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?])" +
                              @"[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]{8,50}$";
-
             return Regex.IsMatch(password, pattern);
         }
 
@@ -115,11 +82,13 @@ namespace HomeSphere
             errorProvider1.SetError(tbUsername, "");
             errorProvider1.SetError(tbPassword, "");
 
-            string username = SanitizeInput(tbUsername.Text.Trim());
-            string password = SanitizeInput(tbPassword.Text.Trim());
+            // Use the improved sanitization methods:
+            string username = SanitizeInput(tbUsername.Text, isPassword: false);
+            string password = SanitizeInput(tbPassword.Text, isPassword: true);
             string deviceIdentifier = GetDeviceIdentifier();
-            bool rememberDevice = cbRememberDevice.Checked; // ✅ Ensure checkbox value is retrieved
+            bool rememberDevice = cbRememberDevice.Checked;
 
+            // Additional validations:
             if (string.IsNullOrWhiteSpace(username))
             {
                 errorProvider1.SetError(tbUsername, "Username is required.");
@@ -147,11 +116,11 @@ namespace HomeSphere
                         {
                             if (reader.Read())
                             {
-                                userId = Convert.ToInt32(reader["ID"]);  // ✅ Correct: Assign value instead of redeclaring
-                                email = reader["Email"].ToString();      // ✅ Correct: Assign value instead of redeclaring
+                                userId = Convert.ToInt32(reader["ID"]);
+                                email = reader["Email"].ToString();
                                 string storedPasswordHash = reader["PasswordHash"].ToString();
                                 string mfaType = reader["MFAType"].ToString().Trim().ToLower();
-                                int isVerified = Convert.ToInt32(reader["IsVerified"]); // Check verification status
+                                int isVerified = Convert.ToInt32(reader["IsVerified"]);
 
                                 if (!BCrypt.Net.BCrypt.Verify(password, storedPasswordHash))
                                 {
@@ -168,7 +137,6 @@ namespace HomeSphere
                                     {
                                         updateConn.Open();
                                         string updateQuery = "UPDATE Users SET VerificationCode = @OTP, VerificationCodeExpiryTime = @ExpiryTime WHERE Email = @Email";
-
                                         using (SqlCommand updateCmd = new SqlCommand(updateQuery, updateConn))
                                         {
                                             updateCmd.Parameters.AddWithValue("@OTP", verificationCode);
@@ -178,9 +146,9 @@ namespace HomeSphere
                                         }
                                     }
 
-                                    MessageBox.Show("Your account is not verified. An OTP has been sent to your email. Please verify before logging in.", "Verification Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    MessageBox.Show("Your account is not verified. An OTP has been sent to your email. Please verify before logging in.",
+                                        "Verification Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                     SendOTPEmail(email, verificationCode);
-                                    
 
                                     this.Hide();
                                     frmEmailVerification verifyForm = new frmEmailVerification(email);
@@ -188,8 +156,7 @@ namespace HomeSphere
                                     return;
                                 }
 
-
-                                // ✅ Check if device is already saved (bypass 2FA)
+                                // Check if the device is already saved (bypass 2FA)
                                 if (IsDeviceSaved(userId, deviceIdentifier))
                                 {
                                     MessageBox.Show("Device recognized. Bypassing 2FA and/or Login Alerts.");
@@ -200,22 +167,22 @@ namespace HomeSphere
                                     return;
                                 }
 
-                                // ✅ If device is NOT saved, enforce 2FA if enabled
+                                // If the device is not saved, enforce 2FA if enabled.
                                 if (mfaType.Contains("email"))
                                 {
                                     MessageBox.Show("Redirecting to OTP Page...");
                                     this.Hide();
-                                    frmVerifyOTP otpForm = new frmVerifyOTP(userId, email, rememberDevice); // ✅ Pass the missing argument
+                                    frmVerifyOTP otpForm = new frmVerifyOTP(userId, email, rememberDevice);
                                     otpForm.Show();
                                     return;
                                 }
 
-                                // ✅ Send login alert only if the device is NOT already saved
+                                // Send login alert for new devices.
                                 if (!IsDeviceSaved(userId, deviceIdentifier))
                                 {
                                     SendLoginNotification(email, deviceIdentifier);
 
-                                    // ✅ Only save the device if "Remember This Device" is checked
+                                    // Save the device if "Remember Device" is checked.
                                     if (rememberDevice)
                                     {
                                         SaveDevice(userId, deviceIdentifier);
@@ -247,7 +214,10 @@ namespace HomeSphere
         {
             try
             {
-                // Create email message
+                // Output encode OTP even though it is internally generated.
+                string encodedOtp = WebUtility.HtmlEncode(otp);
+
+                // Create email message.
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("smarthomesystemsapplication@gmail.com");
                 mail.To.Add(email);
@@ -298,7 +268,7 @@ namespace HomeSphere
                         <div class='header'>Smart Home System - OTP Verification</div>
                         <p>Hello,</p>
                         <p>Your One-Time Password (OTP) for login is:</p>
-                        <div class='otp-code'>{otp}</div>
+                        <div class='otp-code'>{encodedOtp}</div>
                         <p>This code is valid for <b>5 minutes</b>. Please do not share it with anyone.</p>
                         <p>If you did not request this OTP, please ignore this email.</p>
                         <div class='footer'>
@@ -309,8 +279,7 @@ namespace HomeSphere
                 </html>";
                 mail.IsBodyHtml = true;
 
-
-                // Configure SMTP client
+                // Configure and send using SMTP.
                 SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
@@ -318,7 +287,6 @@ namespace HomeSphere
                     EnableSsl = true
                 };
 
-                // Send email
                 smtpClient.Send(mail);
                 MessageBox.Show($"OTP sent to {email}. Please check your inbox.", "OTP Sent", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -366,6 +334,9 @@ namespace HomeSphere
         {
             try
             {
+                // Encode the device identifier for safe HTML output.
+                string encodedDeviceIdentifier = WebUtility.HtmlEncode(deviceIdentifier);
+
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("smarthomesystemsapplication@gmail.com");
                 mail.To.Add(email);
@@ -416,7 +387,7 @@ namespace HomeSphere
                 <div class='header'>New Device Login Alert</div>
                 <p>Hello,</p>
                 <p>A login attempt was detected from the following device:</p>
-                <div class='device-info'>{deviceIdentifier}</div>
+                <div class='device-info'>{encodedDeviceIdentifier}</div>
                 <p><b>Date & Time:</b> {DateTime.Now.ToString("f")}</p>
                 <p>If this was you, no further action is needed. If this was not you, please secure your account immediately.</p>
                 <div class='footer'>
@@ -427,7 +398,6 @@ namespace HomeSphere
         </html>";
                 mail.IsBodyHtml = true;
 
-                // Configure SMTP Client
                 SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
@@ -449,56 +419,49 @@ namespace HomeSphere
             return $"{Environment.MachineName}-{Program.SessionId}";
         }
 
-
-
-
         private void label1_Click(object sender, EventArgs e)
         {
-            // Typically no action needed
+            // Typically no action needed.
         }
 
         private void label2_Click(object sender, EventArgs e)
         {
-            // Typically no action needed
+            // Typically no action needed.
         }
 
         private void tbPassword_TextChanged(object sender, EventArgs e)
         {
-
+            // Optionally add logic here.
         }
 
         private void label3_Click(object sender, EventArgs e)
         {
-
+            // Typically no action needed.
         }
 
         private void frmLogin_Load(object sender, EventArgs e)
         {
-
+            // Optionally add logic here.
         }
 
         private void tbUsername_TextChanged(object sender, EventArgs e)
         {
-
+            // Optionally add logic here.
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
         {
             tbPassword.UseSystemPasswordChar = !tbPassword.UseSystemPasswordChar;
-
-            // Change the button text or image for visual feedback
-          
         }
 
         private void button1_Click(object sender, EventArgs e)
-
         {
-          
+            // Optionally add logic here.
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-
+            // Optionally add logic here.
         }
 
         private void SignUpUser_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -522,11 +485,11 @@ namespace HomeSphere
                 string[] scopes = { "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email" };
                 string credentialPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "client_secret.json");
 
-                // ✅ Step 1: Clear previous token (forces Google Sign-In prompt)
+                // Clear previous token (forces Google Sign-In prompt)
                 string tokenPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "GoogleOAuthToken");
                 if (Directory.Exists(tokenPath))
                 {
-                    Directory.Delete(tokenPath, true); // Deletes saved credentials
+                    Directory.Delete(tokenPath, true);
                 }
 
                 using (var stream = new FileStream(credentialPath, FileMode.Open, FileAccess.Read))
@@ -536,7 +499,7 @@ namespace HomeSphere
                         scopes,
                         "user",
                         CancellationToken.None,
-                        new FileDataStore(tokenPath, false) // ✅ Prevents saving credentials
+                        new FileDataStore(tokenPath, false)
                     );
 
                     var oauthService = new Oauth2Service(new BaseClientService.Initializer()
@@ -545,14 +508,13 @@ namespace HomeSphere
                         ApplicationName = "Smart Home System"
                     });
 
-                    // ✅ Get User Information
                     Userinfo userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
                     string googleEmail = userInfo.Email;
                     string googleName = userInfo.Name;
 
-                    MessageBox.Show($"Login Successful!\n\nWelcome {googleName}\nEmail: {googleEmail}", "Google Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"Login Successful!\n\nWelcome {googleName}\nEmail: {googleEmail}",
+                        "Google Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // ✅ Redirect Logic (Check If User Exists or Needs Setup)
                     using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
                     {
                         conn.Open();
@@ -566,7 +528,6 @@ namespace HomeSphere
                             {
                                 int userId = Convert.ToInt32(result);
 
-                                // ✅ Check MFAType for Google Login
                                 string mfaType = "None";
                                 using (SqlCommand cmd2 = new SqlCommand("SELECT ISNULL(MFAType, 'None') AS MFAType FROM Users WHERE ID = @UserID", conn))
                                 {
@@ -580,7 +541,6 @@ namespace HomeSphere
 
                                 MessageBox.Show($"MFAType for Google User: {mfaType}", "Debug Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                                // ✅ Check if the device is already saved (bypass 2FA & no alerts)
                                 string deviceIdentifier = GetDeviceIdentifier();
                                 bool rememberDevice = cbRememberDevice.Checked;
 
@@ -593,7 +553,6 @@ namespace HomeSphere
                                     return;
                                 }
 
-                                // ✅ If the device is new, enforce 2FA if enabled
                                 if (mfaType.Contains("email"))
                                 {
                                     MessageBox.Show("Redirecting to OTP Page...");
@@ -603,17 +562,14 @@ namespace HomeSphere
                                     return;
                                 }
 
-                                // ✅ Send login alert for new devices (even if "Remember Device" is NOT checked)
                                 SendLoginNotification(googleEmail, deviceIdentifier);
 
-                                // ✅ Only save device if "Remember Device" is checked
                                 if (rememberDevice)
                                 {
                                     SaveDevice(userId, deviceIdentifier);
                                 }
 
                                 CheckForActiveAlert(userId);
-                                // ✅ Redirect to home page
                                 this.Hide();
                                 frmUserHomePage homePage = new frmUserHomePage(userId);
                                 homePage.FormClosed += (s, args) => this.Show();
@@ -634,7 +590,6 @@ namespace HomeSphere
                 MessageBox.Show("Google Login Failed: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void lnkLoginAsAdmin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -659,8 +614,6 @@ namespace HomeSphere
                             while (reader.Read())
                             {
                                 string alertMessage = reader["Message"].ToString();
-
-                                // Show a separate message box for each alert
                                 MessageBox.Show(alertMessage, "Scheduled Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             }
                         }
@@ -673,6 +626,9 @@ namespace HomeSphere
             }
         }
 
+        private void label1_Click_1(object sender, EventArgs e)
+        {
 
+        }
     }
 }
