@@ -74,12 +74,12 @@ namespace HomeSphere
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            // Clear the text in the email and password fields
-            tbUsername.Text = string.Empty;
-            tbPassword.Text = string.Empty;
+            var result = MessageBox.Show("Are you sure you want to exit the application?", "Exit Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            // Optionally, set focus back to the first field
-            tbUsername.Focus();
+            if (result == DialogResult.Yes)
+            {
+                Application.Exit(); // Shut down the application
+            }
         }
 
         /// <summary>
