@@ -65,9 +65,22 @@ namespace HomeSphere
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            frmUserHomePage homePage = new frmUserHomePage(userId);
-            this.Hide();
-            homePage.Show();
+            this.Hide(); // Hide the current form
+
+            // ✅ Check if frmUserHomePage is already open
+            foreach (Form openForm in Application.OpenForms)
+            {
+                if (openForm is frmUserHomePage)
+                {
+                    openForm.Show();  // Bring existing home page to the front
+                    openForm.BringToFront();
+                    return; // ✅ Stop here to prevent duplicate windows
+                }
+            }
+
+            // ✅ If no existing frmUserHomePage, create a new one
+            frmUserHomePage newHomePage = new frmUserHomePage(userId);
+            newHomePage.Show();
         }
     }
 }

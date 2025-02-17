@@ -22,15 +22,15 @@ namespace HomeSphere
 
         public frmLogin1()
         {
-             // Ensures password is hidden by default
+            // Ensures password is hidden by default
 
             InitializeComponent();
-            
+
         }
 
-       
 
-      
+
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Are you sure you want to exit the application?", "Exit Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -498,11 +498,11 @@ namespace HomeSphere
                 string[] scopes = { "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email" };
                 string credentialPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "client_secret.json");
 
-                // Clear previous token (forces Google Sign-In prompt)
+                // ✅ Step 1: Clear previous token (forces Google Sign-In prompt)
                 string tokenPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "GoogleOAuthToken");
                 if (Directory.Exists(tokenPath))
                 {
-                    Directory.Delete(tokenPath, true);
+                    Directory.Delete(tokenPath, true); // Deletes saved credentials
                 }
 
                 using (var stream = new FileStream(credentialPath, FileMode.Open, FileAccess.Read))
@@ -512,7 +512,7 @@ namespace HomeSphere
                         scopes,
                         "user",
                         CancellationToken.None,
-                        new FileDataStore(tokenPath, false)
+                        new FileDataStore(tokenPath, false) // ✅ Prevents saving credentials
                     );
 
                     var oauthService = new Oauth2Service(new BaseClientService.Initializer()
@@ -521,88 +521,82 @@ namespace HomeSphere
                         ApplicationName = "Smart Home System"
                     });
 
+                    // ✅ Get User Information
                     Userinfo userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
                     string googleEmail = userInfo.Email;
                     string googleName = userInfo.Name;
 
-                    MessageBox.Show($"Login Successful!\n\nWelcome {googleName}\nEmail: {googleEmail}",
-                        "Google Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"Login Successful!\n\nWelcome {googleName}\nEmail: {googleEmail}", "Google Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                    // ✅ Check If User Exists & If Disabled
                     using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
                     {
                         conn.Open();
-                        string query = "SELECT ID, IsDisabled FROM Users WHERE Email = @Email";
-                        int userId = -1;
-                        bool isDisabled = false;
-
+                        string query = "SELECT ID, ISNULL(MFAType, 'None') AS MFAType, IsDisabled FROM Users WHERE Email = @Email";
                         using (SqlCommand cmd = new SqlCommand(query, conn))
                         {
                             cmd.Parameters.AddWithValue("@Email", googleEmail);
-
-                            // Use ExecuteReader() instead of ExecuteScalar() to get multiple columns.
                             using (SqlDataReader reader = cmd.ExecuteReader())
                             {
                                 if (reader.Read())
                                 {
-                                    userId = Convert.ToInt32(reader["ID"]);
-                                    isDisabled = Convert.ToBoolean(reader["IsDisabled"]);
+                                    int userId = Convert.ToInt32(reader["ID"]);
+                                    string mfaType = reader["MFAType"].ToString().Trim().ToLower();
+                                    bool isDisabled = Convert.ToBoolean(reader["IsDisabled"]); // ✅ Check if disabled
+
+                                    if (isDisabled)
+                                    {
+                                        MessageBox.Show("Your account has been disabled. Please contact support.", "Account Disabled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                        return; // ❌ Stop login process
+                                    }
+
+                                    // ✅ Check if the device is already saved (bypass 2FA & no alerts)
+                                    string deviceIdentifier = GetDeviceIdentifier();
+                                    bool rememberDevice = cbRememberDevice.Checked;
+
+                                    if (IsDeviceSaved(userId, deviceIdentifier))
+                                    {
+                                        MessageBox.Show("Device recognized. Bypassing 2FA and/or Login Alerts.");
+                                        this.Hide();
+                                        frmUserHomePage userHomePage = new frmUserHomePage(userId);
+                                        userHomePage.Show();
+                                        return;
+                                    }
+
+                                    // ✅ If the device is new, enforce 2FA if enabled
+                                    if (mfaType.Contains("email"))
+                                    {
+                                        MessageBox.Show("Redirecting to OTP Page...");
+                                        this.Hide();
+                                        frmVerifyOTP otpForm = new frmVerifyOTP(userId, googleEmail, rememberDevice);
+                                        otpForm.Show();
+                                        return;
+                                    }
+
+                                    // ✅ Send login alert for new devices (even if "Remember Device" is NOT checked)
+                                    SendLoginNotification(googleEmail, deviceIdentifier);
+
+                                    // ✅ Only save device if "Remember Device" is checked
+                                    if (rememberDevice)
+                                    {
+                                        SaveDevice(userId, deviceIdentifier);
+                                    }
+
+                                    CheckForActiveAlert(userId);
+                                    // ✅ Redirect to home page
+                                    this.Hide();
+                                    frmUserHomePage homePage = new frmUserHomePage(userId);
+                                    homePage.Show();
+                                }
+                                else
+                                {
+                                    // ✅ User does not exist → Redirect to account setup
+                                    this.Hide();
+                                    frmCompleteAccountSetup setupForm = new frmCompleteAccountSetup(googleEmail, googleName);
+                                    setupForm.Show();
                                 }
                             }
                         }
-
-                        // Check if the account is disabled
-                        if (isDisabled)
-                        {
-                            MessageBox.Show("Your account has been disabled. Please contact support.", "Account Disabled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
-
-                        string mfaType = "None";
-                        using (SqlCommand cmd2 = new SqlCommand("SELECT ISNULL(MFAType, 'None') AS MFAType FROM Users WHERE ID = @UserID", conn))
-                        {
-                            cmd2.Parameters.AddWithValue("@UserID", userId);
-                            object mfaResult = cmd2.ExecuteScalar();
-                            if (mfaResult != null)
-                            {
-                                mfaType = mfaResult.ToString().Trim().ToLower();
-                            }
-                        }
-
-                        MessageBox.Show($"MFAType for Google User: {mfaType}", "Debug Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        string deviceIdentifier = GetDeviceIdentifier();
-                        bool rememberDevice = cbRememberDevice.Checked;
-
-                        if (IsDeviceSaved(userId, deviceIdentifier))
-                        {
-                            MessageBox.Show("Device recognized. Bypassing 2FA and/or Login Alerts.");
-                            this.Hide();
-                            frmUserHomePage userHomePage = new frmUserHomePage(userId);
-                            userHomePage.Show();
-                            return;
-                        }
-
-                        if (mfaType.Contains("email"))
-                        {
-                            MessageBox.Show("Redirecting to OTP Page...");
-                            this.Hide();
-                            frmVerifyOTP otpForm = new frmVerifyOTP(userId, googleEmail, rememberDevice);
-                            otpForm.Show();
-                            return;
-                        }
-
-                        SendLoginNotification(googleEmail, deviceIdentifier);
-
-                        if (rememberDevice)
-                        {
-                            SaveDevice(userId, deviceIdentifier);
-                        }
-
-                        CheckForActiveAlert(userId);
-                        this.Hide();
-                        frmUserHomePage homePage = new frmUserHomePage(userId);
-                        homePage.FormClosed += (s, args) => this.Show();
-                        homePage.Show();
                     }
                 }
             }

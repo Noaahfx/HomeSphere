@@ -77,20 +77,22 @@ namespace HomeSphere
         {
             this.Hide(); // Hide the current form
 
-            // Check if frmUserHomePage is already open
-            foreach (Form form in Application.OpenForms)
+            // ✅ Check if frmUserHomePage is already open
+            foreach (Form openForm in Application.OpenForms)
             {
-                if (form is frmUserHomePage)
+                if (openForm is frmUserHomePage)
                 {
-                    form.Show(); // Show existing home page
-                    return; // Exit to prevent duplicates
+                    openForm.Show();  // Bring the existing window to the front
+                    openForm.BringToFront();
+                    return; // ✅ Stop here to prevent duplicate windows
                 }
             }
 
-            // If no existing frmUserHomePage, create a new one
-            frmUserHomePage homePage = new frmUserHomePage(userId);
-            homePage.Show();
+            // ✅ If no existing frmUserHomePage, create a new one
+            frmUserHomePage newHomePage = new frmUserHomePage(userId);
+            newHomePage.Show();
         }
+
 
 
         private void txtDeviceName_GotFocus(object sender, EventArgs e)

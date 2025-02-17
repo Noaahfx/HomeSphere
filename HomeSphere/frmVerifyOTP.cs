@@ -24,6 +24,34 @@ namespace HomeSphere
             GenerateAndSendOTP();
         }
 
+        private void CheckForActiveAlert(int userId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT Message FROM Alerts WHERE IsActive = 1 AND StartTime <= GETDATE() AND EndTime >= GETDATE() ORDER BY CreatedAt DESC";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string alertMessage = reader["Message"].ToString();
+                                MessageBox.Show(alertMessage, "Scheduled Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error checking for scheduled alerts: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
 
         private void btnVerifyOTP_Click(object sender, EventArgs e)
@@ -63,7 +91,7 @@ namespace HomeSphere
                                     }
                                 }
 
-
+                                CheckForActiveAlert(userId);
                                 // ✅ Redirect user after OTP verification
                                 this.Hide();
                                 frmUserHomePage homePage = new frmUserHomePage(userId);
