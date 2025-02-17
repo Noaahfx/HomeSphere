@@ -131,31 +131,44 @@ namespace HomeSphere
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    // Identify the latest month in "yyyy-MM"
+                    // Identify the latest month and year in "yyyy-MM"
                     string latestMonthQuery = @"
-                        SELECT TOP 1 FORMAT(MAX(Timestamp), 'yyyy-MM') AS LatestMonth
-                        FROM LEDSensorData";
+                SELECT TOP 1 FORMAT(MAX(Timestamp), 'yyyy-MM') AS LatestMonth,
+                               DATENAME(MONTH, MAX(Timestamp)) AS MonthName,
+                               DATEPART(YEAR, MAX(Timestamp)) AS LatestYear
+                FROM LEDSensorData";
 
                     SqlCommand latestMonthCommand = new SqlCommand(latestMonthQuery, connection);
                     connection.Open();
-                    object latestMonthObj = latestMonthCommand.ExecuteScalar();
-                    if (latestMonthObj == null || latestMonthObj == DBNull.Value)
+                    SqlDataReader reader = latestMonthCommand.ExecuteReader();
+
+                    string latestMonth = "";
+                    string latestMonthName = "";
+                    int latestYear = 0;
+
+                    if (reader.Read())
+                    {
+                        latestMonth = reader.GetString(0);  // "yyyy-MM"
+                        latestMonthName = reader.GetString(1); // "February"
+                        latestYear = reader.GetInt32(2);  // 2025
+                    }
+                    reader.Close();
+
+                    if (string.IsNullOrEmpty(latestMonth))
                     {
                         MessageBox.Show("No sensor data available.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
-                    string latestMonth = latestMonthObj.ToString();
-                    connection.Close();
 
-                    // Group by week-of-month for that latest month
+                    // Group data by dynamically calculated week-of-month
                     string query = $@"
-                        SELECT {WeekOfMonthExpression} AS WeekOfMonth,
-                               CONCAT('Week ', {WeekOfMonthExpression}) AS WeekLabel,
-                               AVG(Voltage * 0.5) AS AvgEnergyUsage
-                        FROM LEDSensorData
-                        WHERE FORMAT(Timestamp, 'yyyy-MM') = @LatestMonth
-                        GROUP BY {WeekOfMonthExpression}
-                        ORDER BY {WeekOfMonthExpression}";
+                SELECT DATEPART(WEEK, Timestamp) AS WeekNumber,
+                       CONCAT('Week ', DATEPART(WEEK, Timestamp), ' of {latestMonthName}') AS WeekLabel,
+                       AVG(Voltage * 0.5) AS AvgEnergyUsage
+                FROM LEDSensorData
+                WHERE FORMAT(Timestamp, 'yyyy-MM') = @LatestMonth
+                GROUP BY DATEPART(WEEK, Timestamp)
+                ORDER BY DATEPART(WEEK, Timestamp)";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
                     adapter.SelectCommand.Parameters.AddWithValue("@LatestMonth", latestMonth);
@@ -183,13 +196,12 @@ namespace HomeSphere
                     }
 
                     energyChart.Series.Add(series);
-                    energyChart.ChartAreas[0].AxisX.Title = "Week in Month";
+                    energyChart.ChartAreas[0].AxisX.Title = "Week in Latest Month";
                     energyChart.ChartAreas[0].AxisY.Title = "Average Energy Usage (W)";
                     energyChart.Titles.Clear();
 
-                    // Display the month name in the chart title
-                    DateTime monthDate = DateTime.ParseExact(latestMonth, "yyyy-MM", null);
-                    energyChart.Titles.Add($"Weekly Energy Usage for {monthDate:MMMM yyyy}");
+                    // Display the dynamic month name in the chart title
+                    energyChart.Titles.Add($"Weekly Energy Usage for {latestMonthName} {latestYear}");
                 }
             }
             catch (Exception ex)
