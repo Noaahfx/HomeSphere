@@ -54,7 +54,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="CommsUtil">
-      <HintPath>..\..\..\..\..\Users\Noah\Downloads\CommsUtil.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\Downloads\CommsUtil.dll</HintPath>
     </Reference>
     <Reference Include="Google.Apis, Version=1.69.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Apis.1.69.0\lib\net462\Google.Apis.dll</HintPath>
@@ -72,17 +72,9 @@
       <HintPath>..\packages\Google.Apis.Oauth2.v2.1.68.0.1869\lib\net462\Google.Apis.Oauth2.v2.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Users\Noah\Downloads\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="Stripe.net, Version=47.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Users\Noah\Downloads\Stripe.net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -135,7 +127,7 @@
     <Compile Include="DayEnergyPromptForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DayEnergyPromptForm.Designer.cs">
+    <Compile Include="DayEnergyPromptForm.designer.cs">
       <DependentUpon>DayEnergyPromptForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DayFilterForm.cs">
@@ -147,7 +139,7 @@
     <Compile Include="EnergyChartForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EnergyChartForm.Designer.cs">
+    <Compile Include="EnergyChartForm.designer.cs">
       <DependentUpon>EnergyChartForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Form1.cs">
@@ -264,6 +256,12 @@
     <Compile Include="Graph.Designer.cs">
       <DependentUpon>Graph.cs</DependentUpon>
     </Compile>
+    <Compile Include="GraphDetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GraphDetailForm.Designer.cs">
+      <DependentUpon>GraphDetailForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GraphJames.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -284,13 +282,13 @@
     <Compile Include="MonthEnergyPromptForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MonthEnergyPromptForm.Designer.cs">
+    <Compile Include="MonthEnergyPromptForm.designer.cs">
       <DependentUpon>MonthEnergyPromptForm.cs</DependentUpon>
     </Compile>
     <Compile Include="OverviewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OverviewForm.Designer.cs">
+    <Compile Include="OverviewForm.designer.cs">
       <DependentUpon>OverviewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -298,7 +296,7 @@
     <Compile Include="SoundChartForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SoundChartForm.Designer.cs">
+    <Compile Include="SoundChartForm.designer.cs">
       <DependentUpon>SoundChartForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UserSignUp.cs">
@@ -378,6 +376,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Graph.resx">
       <DependentUpon>Graph.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GraphDetailForm.resx">
+      <DependentUpon>GraphDetailForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GraphJames.resx">
       <DependentUpon>GraphJames.cs</DependentUpon>
