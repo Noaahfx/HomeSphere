@@ -110,7 +110,7 @@ namespace HomeSphere
                 using (SqlConnection conn = new SqlConnection(strConnectionString))
                 {
                     conn.Open();
-                    string query = "SELECT ID, PasswordHash, Email, ISNULL(MFAType, 'None') AS MFAType, IsVerified FROM Users WHERE Username = @Username";
+                    string query = "SELECT ID, PasswordHash, Email, ISNULL(MFAType, 'None') AS MFAType, IsVerified, IsDisabled FROM Users WHERE Username = @Username";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -125,6 +125,13 @@ namespace HomeSphere
                                 string storedPasswordHash = reader["PasswordHash"].ToString();
                                 string mfaType = reader["MFAType"].ToString().Trim().ToLower();
                                 int isVerified = Convert.ToInt32(reader["IsVerified"]);
+
+                                bool isDisabled = Convert.ToBoolean(reader["IsDisabled"]);
+                                if (isDisabled)
+                                {
+                                    MessageBox.Show("Your account has been disabled. Please contact support.", "Account Disabled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    return;
+                                }
 
                                 if (!BCrypt.Net.BCrypt.Verify(password, storedPasswordHash))
                                 {
@@ -524,70 +531,78 @@ namespace HomeSphere
                     using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
                     {
                         conn.Open();
-                        string query = "SELECT ID FROM Users WHERE Email = @Email";
+                        string query = "SELECT ID, IsDisabled FROM Users WHERE Email = @Email";
+                        int userId = -1;
+                        bool isDisabled = false;
+
                         using (SqlCommand cmd = new SqlCommand(query, conn))
                         {
                             cmd.Parameters.AddWithValue("@Email", googleEmail);
-                            var result = cmd.ExecuteScalar();
 
-                            if (result != null)
+                            // Use ExecuteReader() instead of ExecuteScalar() to get multiple columns.
+                            using (SqlDataReader reader = cmd.ExecuteReader())
                             {
-                                int userId = Convert.ToInt32(result);
-
-                                string mfaType = "None";
-                                using (SqlCommand cmd2 = new SqlCommand("SELECT ISNULL(MFAType, 'None') AS MFAType FROM Users WHERE ID = @UserID", conn))
+                                if (reader.Read())
                                 {
-                                    cmd2.Parameters.AddWithValue("@UserID", userId);
-                                    object mfaResult = cmd2.ExecuteScalar();
-                                    if (mfaResult != null)
-                                    {
-                                        mfaType = mfaResult.ToString().Trim().ToLower();
-                                    }
+                                    userId = Convert.ToInt32(reader["ID"]);
+                                    isDisabled = Convert.ToBoolean(reader["IsDisabled"]);
                                 }
-
-                                MessageBox.Show($"MFAType for Google User: {mfaType}", "Debug Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                                string deviceIdentifier = GetDeviceIdentifier();
-                                bool rememberDevice = cbRememberDevice.Checked;
-
-                                if (IsDeviceSaved(userId, deviceIdentifier))
-                                {
-                                    MessageBox.Show("Device recognized. Bypassing 2FA and/or Login Alerts.");
-                                    this.Hide();
-                                    frmUserHomePage userHomePage = new frmUserHomePage(userId);
-                                    userHomePage.Show();
-                                    return;
-                                }
-
-                                if (mfaType.Contains("email"))
-                                {
-                                    MessageBox.Show("Redirecting to OTP Page...");
-                                    this.Hide();
-                                    frmVerifyOTP otpForm = new frmVerifyOTP(userId, googleEmail, rememberDevice);
-                                    otpForm.Show();
-                                    return;
-                                }
-
-                                SendLoginNotification(googleEmail, deviceIdentifier);
-
-                                if (rememberDevice)
-                                {
-                                    SaveDevice(userId, deviceIdentifier);
-                                }
-
-                                CheckForActiveAlert(userId);
-                                this.Hide();
-                                frmUserHomePage homePage = new frmUserHomePage(userId);
-                                homePage.FormClosed += (s, args) => this.Show();
-                                homePage.Show();
-                            }
-                            else
-                            {
-                                this.Hide();
-                                frmCompleteAccountSetup setupForm = new frmCompleteAccountSetup(googleEmail, googleName);
-                                setupForm.Show();
                             }
                         }
+
+                        // Check if the account is disabled
+                        if (isDisabled)
+                        {
+                            MessageBox.Show("Your account has been disabled. Please contact support.", "Account Disabled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        string mfaType = "None";
+                        using (SqlCommand cmd2 = new SqlCommand("SELECT ISNULL(MFAType, 'None') AS MFAType FROM Users WHERE ID = @UserID", conn))
+                        {
+                            cmd2.Parameters.AddWithValue("@UserID", userId);
+                            object mfaResult = cmd2.ExecuteScalar();
+                            if (mfaResult != null)
+                            {
+                                mfaType = mfaResult.ToString().Trim().ToLower();
+                            }
+                        }
+
+                        MessageBox.Show($"MFAType for Google User: {mfaType}", "Debug Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        string deviceIdentifier = GetDeviceIdentifier();
+                        bool rememberDevice = cbRememberDevice.Checked;
+
+                        if (IsDeviceSaved(userId, deviceIdentifier))
+                        {
+                            MessageBox.Show("Device recognized. Bypassing 2FA and/or Login Alerts.");
+                            this.Hide();
+                            frmUserHomePage userHomePage = new frmUserHomePage(userId);
+                            userHomePage.Show();
+                            return;
+                        }
+
+                        if (mfaType.Contains("email"))
+                        {
+                            MessageBox.Show("Redirecting to OTP Page...");
+                            this.Hide();
+                            frmVerifyOTP otpForm = new frmVerifyOTP(userId, googleEmail, rememberDevice);
+                            otpForm.Show();
+                            return;
+                        }
+
+                        SendLoginNotification(googleEmail, deviceIdentifier);
+
+                        if (rememberDevice)
+                        {
+                            SaveDevice(userId, deviceIdentifier);
+                        }
+
+                        CheckForActiveAlert(userId);
+                        this.Hide();
+                        frmUserHomePage homePage = new frmUserHomePage(userId);
+                        homePage.FormClosed += (s, args) => this.Show();
+                        homePage.Show();
                     }
                 }
             }

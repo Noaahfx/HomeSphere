@@ -9,7 +9,7 @@ namespace HomeSphere
 {
     public partial class EnergyChartForm : Form
     {
-        private readonly string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        private readonly string strConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Databases\IOTPRJ_Data.mdf;Integrated Security=True;";
 
         public EnergyChartForm()
         {
@@ -40,7 +40,7 @@ namespace HomeSphere
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(strConnectionString))
                 {
                     // Base grouping query
                     string baseQuery = $@"
@@ -129,7 +129,7 @@ namespace HomeSphere
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(strConnectionString))
                 {
                     // Identify the latest month and year in "yyyy-MM"
                     string latestMonthQuery = @"
@@ -220,7 +220,7 @@ namespace HomeSphere
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(strConnectionString))
                 {
                     string query;
 

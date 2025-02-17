@@ -36,20 +36,19 @@ namespace HomeSphere
         {
             try
             {
-                // Use the same connection string as before:
-                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                Debug.WriteLine("Attempting to connect to the database for sound data...");
+                using (SqlConnection connection = new SqlConnection(strConnectionString))
                 {
                     // 1. Get the latest date in SoundSensorData (ignoring time).
                     string latestDateQuery = @"
-                SELECT TOP 1 CONVERT(date, Timestamp) AS LatestDate
-                FROM SoundSensorData
-                ORDER BY CONVERT(date, Timestamp) DESC";
+            SELECT TOP 1 CONVERT(date, Timestamp) AS LatestDate
+            FROM SoundSensorData
+            ORDER BY CONVERT(date, Timestamp) DESC";
 
                     connection.Open();
                     SqlCommand cmdLatestDate = new SqlCommand(latestDateQuery, connection);
                     object latestDateObj = cmdLatestDate.ExecuteScalar();
+
                     if (latestDateObj == null || latestDateObj == DBNull.Value)
                     {
                         MessageBox.Show("No sound data found.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -57,14 +56,15 @@ namespace HomeSphere
                     }
 
                     DateTime latestDate = (DateTime)latestDateObj;
+                    Debug.WriteLine($"Latest Sound Date: {latestDate}");
 
-                    // 2. Retrieve all sound readings for that latest date (sorted in ascending time):
+                    // 2. Retrieve all sound readings for that latest date (sorted in ascending time)
                     string query = @"
-                SELECT FORMAT(Timestamp, 'HH:mm:ss') AS TimeLabel,
-                       SoundLevel
-                FROM SoundSensorData
-                WHERE CONVERT(date, Timestamp) = @LatestDate
-                ORDER BY Timestamp ASC";
+            SELECT FORMAT(Timestamp, 'HH:mm:ss') AS TimeLabel,
+                   SoundLevel
+            FROM SoundSensorData
+            WHERE CONVERT(date, Timestamp) = @LatestDate
+            ORDER BY Timestamp ASC";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
                     adapter.SelectCommand.Parameters.AddWithValue("@LatestDate", latestDate);
@@ -79,11 +79,11 @@ namespace HomeSphere
                         return;
                     }
 
-                    // 3. Plot the results on the 'sound' chart control.
+                    // 3. Plot the results on the 'sound' chart
                     sound.Series.Clear();
                     Series series = new Series("Sound Level (Latest Day)")
                     {
-                        ChartType = SeriesChartType.Line,  // Shows a line over time
+                        ChartType = SeriesChartType.Line,
                         XValueType = ChartValueType.String
                     };
 
@@ -96,9 +96,13 @@ namespace HomeSphere
 
                     sound.Series.Add(series);
                     sound.ChartAreas[0].AxisX.Title = "Time (HH:mm:ss)";
-                    sound.ChartAreas[0].AxisY.Title = "Sound Level (units)";  // Change units as needed
+                    sound.ChartAreas[0].AxisY.Title = "Sound Level (units)";
                     sound.Titles.Clear();
                     sound.Titles.Add($"Sound Levels for {latestDate:dd MMM yyyy} (Latest)");
+
+                    // Force Refresh
+                    sound.Invalidate();
+                    sound.Update();
                 }
             }
             catch (Exception ex)
@@ -108,36 +112,18 @@ namespace HomeSphere
             }
         }
 
-
-        // Helper function to get the latest date
-        private string GetLatestDate()
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string query = "SELECT TOP 1 CONVERT(VARCHAR, Date, 101) AS LatestDate FROM [Table] ORDER BY Date DESC";
-                SqlCommand command = new SqlCommand(query, connection);
-
-                connection.Open();
-                return command.ExecuteScalar()?.ToString(); // Get the latest date as a string
-            }
-        }
-
-
         private void LoadEnergyChart()
         {
             try
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                Debug.WriteLine("Attempting to connect to the database for Energy data...");
+                using (SqlConnection connection = new SqlConnection(strConnectionString))
                 {
                     // Identify the latest month and year from LEDSensorData (using Timestamp)
                     string latestMonthQuery = @"
-                        SELECT DATEPART(MONTH, MAX(Timestamp)) AS LatestMonth, 
-                               DATEPART(YEAR, MAX(Timestamp)) AS LatestYear
-                        FROM LEDSensorData";
+                SELECT DATEPART(MONTH, MAX(Timestamp)) AS LatestMonth, 
+                       DATEPART(YEAR, MAX(Timestamp)) AS LatestYear
+                FROM LEDSensorData";
 
                     SqlCommand latestMonthCommand = new SqlCommand(latestMonthQuery, connection);
                     connection.Open();
@@ -152,16 +138,17 @@ namespace HomeSphere
                     }
                     reader.Close();
 
+                    Debug.WriteLine($"Latest Energy Month: {latestMonth}, Year: {latestYear}");
+
                     // Query to fetch average weekly energy usage for the latest month
-                    // Energy usage is calculated as Voltage * 0.5 (W)
                     string query = @"
-                        SELECT CONCAT('Week ', DATEPART(WEEK, Timestamp)) AS WeekLabel, 
-                               AVG(Voltage * 0.5) AS AvgEnergyUsage
-                        FROM LEDSensorData
-                        WHERE DATEPART(MONTH, Timestamp) = @LatestMonth 
-                          AND DATEPART(YEAR, Timestamp) = @LatestYear
-                        GROUP BY DATEPART(WEEK, Timestamp)
-                        ORDER BY DATEPART(WEEK, Timestamp)";
+                SELECT CONCAT('Week ', DATEPART(WEEK, Timestamp)) AS WeekLabel, 
+                       AVG(Voltage * 0.5) AS AvgEnergyUsage
+                FROM LEDSensorData
+                WHERE DATEPART(MONTH, Timestamp) = @LatestMonth 
+                  AND DATEPART(YEAR, Timestamp) = @LatestYear
+                GROUP BY DATEPART(WEEK, Timestamp)
+                ORDER BY DATEPART(WEEK, Timestamp)";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
                     adapter.SelectCommand.Parameters.AddWithValue("@LatestMonth", latestMonth);
@@ -180,7 +167,7 @@ namespace HomeSphere
                     energy.Series.Clear();
                     Series series = new Series("Average Energy Usage by Week (Latest Month)")
                     {
-                        ChartType = SeriesChartType.Line, // Display as a line chart
+                        ChartType = SeriesChartType.Line,
                         XValueType = ChartValueType.String
                     };
 
@@ -193,7 +180,11 @@ namespace HomeSphere
                     energy.ChartAreas[0].AxisX.Title = "Week in Latest Month";
                     energy.ChartAreas[0].AxisY.Title = "Average Energy Usage (W)";
                     energy.Titles.Clear();
-                    energy.Titles.Add($"Energy Usage Throughout {new DateTime(latestYear, latestMonth, 1).ToString("MMMM yyyy")} (Latest Data)");
+                    energy.Titles.Add($"Energy Usage Throughout {new DateTime(latestYear, latestMonth, 1):MMMM yyyy} (Latest Data)");
+
+                    // Force Refresh
+                    energy.Invalidate();
+                    energy.Update();
                 }
             }
             catch (Exception ex)
@@ -201,6 +192,7 @@ namespace HomeSphere
                 MessageBox.Show($"An error occurred while loading the energy chart: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void LoadTemperatureData()
         {
