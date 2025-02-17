@@ -19,13 +19,17 @@ namespace HomeSphere
 
             
             InitializeComponent();
-            InitializePlaceholders();
+            
 
         }
 
         private void UserSignUp_Load(object sender, EventArgs e)
         {
 
+            tbPassword.PasswordChar = '*';
+            tbPassword.UseSystemPasswordChar = true;
+            tbConfirmPassword.PasswordChar = '*';
+            tbConfirmPassword.UseSystemPasswordChar = true;
         }
         private void InitializePlaceholders()
         {
@@ -305,6 +309,30 @@ namespace HomeSphere
             else
             {
                 new frmLogin1().Show();
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (TogglePassword.Checked)
+            {
+                tbPassword.UseSystemPasswordChar = false; // Show the password
+            }
+            else
+            {
+                tbPassword.UseSystemPasswordChar = true; // Hide the password
+            }
+        }
+
+        private void TogglePassword_CheckedChanged(object sender, EventArgs e)
+        {
+            if (TogglePassword.Checked)
+            {
+                tbConfirmPassword.UseSystemPasswordChar = false; // Show the password
+            }
+            else
+            {
+                tbConfirmPassword.UseSystemPasswordChar = true; // Hide the password
             }
         }
     }

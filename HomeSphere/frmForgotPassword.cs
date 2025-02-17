@@ -117,5 +117,37 @@ namespace HomeSphere
                 new frmLogin1().Show();
             }
         }
+
+        private void TogglePassword_CheckedChanged(object sender, EventArgs e)
+        {
+            if (TogglePassword.Checked)
+            {
+                tbNewPassword.UseSystemPasswordChar = false; // Show the password
+            }
+            else
+            {
+                tbNewPassword.UseSystemPasswordChar = true; // Hide the password
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (TogglePassword.Checked)
+            {
+                tbConfirmPassword.UseSystemPasswordChar = false; // Show the password
+            }
+            else
+            {
+                tbConfirmPassword.UseSystemPasswordChar = true; // Hide the password
+            }
+        }
+
+        private void frmForgotPassword_Load(object sender, EventArgs e)
+        {
+            tbNewPassword.PasswordChar = '*';
+            tbNewPassword.UseSystemPasswordChar = true;
+            tbConfirmPassword.PasswordChar = '*';
+            tbConfirmPassword.UseSystemPasswordChar = true;
+        }
     }
 }

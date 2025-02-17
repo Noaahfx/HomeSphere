@@ -52,6 +52,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.TogglePassword = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.panel5.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -74,7 +76,7 @@
             this.btnCancel.Font = new System.Drawing.Font("Bahnschrift", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ForeColor = System.Drawing.Color.White;
             this.btnCancel.Location = new System.Drawing.Point(950, 37);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(150, 85);
             this.btnCancel.TabIndex = 44;
@@ -93,7 +95,7 @@
             this.btnResetPassword.Font = new System.Drawing.Font("Bahnschrift", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnResetPassword.ForeColor = System.Drawing.Color.White;
             this.btnResetPassword.Location = new System.Drawing.Point(536, 671);
-            this.btnResetPassword.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnResetPassword.Margin = new System.Windows.Forms.Padding(4);
             this.btnResetPassword.Name = "btnResetPassword";
             this.btnResetPassword.Size = new System.Drawing.Size(150, 85);
             this.btnResetPassword.TabIndex = 43;
@@ -106,7 +108,7 @@
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.panel5.Controls.Add(this.panel6);
             this.panel5.Location = new System.Drawing.Point(370, 638);
-            this.panel5.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel5.Margin = new System.Windows.Forms.Padding(6);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(472, 2);
             this.panel5.TabIndex = 40;
@@ -115,7 +117,7 @@
             // 
             this.panel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.panel6.Location = new System.Drawing.Point(0, -152);
-            this.panel6.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel6.Margin = new System.Windows.Forms.Padding(6);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(472, 2);
             this.panel6.TabIndex = 14;
@@ -126,7 +128,7 @@
             this.tbConfirmPassword.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbConfirmPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.tbConfirmPassword.Location = new System.Drawing.Point(420, 585);
-            this.tbConfirmPassword.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbConfirmPassword.Margin = new System.Windows.Forms.Padding(4);
             this.tbConfirmPassword.Multiline = true;
             this.tbConfirmPassword.Name = "tbConfirmPassword";
             this.tbConfirmPassword.Size = new System.Drawing.Size(414, 46);
@@ -138,7 +140,7 @@
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.panel2.Controls.Add(this.panel4);
             this.panel2.Location = new System.Drawing.Point(368, 388);
-            this.panel2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel2.Margin = new System.Windows.Forms.Padding(6);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(472, 2);
             this.panel2.TabIndex = 36;
@@ -147,7 +149,7 @@
             // 
             this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.panel4.Location = new System.Drawing.Point(0, -152);
-            this.panel4.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel4.Margin = new System.Windows.Forms.Padding(6);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(472, 2);
             this.panel4.TabIndex = 14;
@@ -157,7 +159,7 @@
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.panel3.Controls.Add(this.panel1);
             this.panel3.Location = new System.Drawing.Point(370, 554);
-            this.panel3.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel3.Margin = new System.Windows.Forms.Padding(6);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(472, 2);
             this.panel3.TabIndex = 34;
@@ -166,7 +168,7 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.panel1.Location = new System.Drawing.Point(0, -152);
-            this.panel1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel1.Margin = new System.Windows.Forms.Padding(6);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(472, 2);
             this.panel1.TabIndex = 14;
@@ -189,7 +191,7 @@
             this.tbNewPassword.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbNewPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.tbNewPassword.Location = new System.Drawing.Point(420, 502);
-            this.tbNewPassword.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbNewPassword.Margin = new System.Windows.Forms.Padding(4);
             this.tbNewPassword.Multiline = true;
             this.tbNewPassword.Name = "tbNewPassword";
             this.tbNewPassword.Size = new System.Drawing.Size(414, 46);
@@ -202,7 +204,7 @@
             this.tbUsername.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbUsername.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.tbUsername.Location = new System.Drawing.Point(420, 335);
-            this.tbUsername.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbUsername.Margin = new System.Windows.Forms.Padding(4);
             this.tbUsername.Multiline = true;
             this.tbUsername.Name = "tbUsername";
             this.tbUsername.Size = new System.Drawing.Size(414, 46);
@@ -212,7 +214,7 @@
             // 
             this.pictureBox3.Image = global::HomeSphere.Properties.Resources.padlock;
             this.pictureBox3.Location = new System.Drawing.Point(370, 587);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(6);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(48, 46);
             this.pictureBox3.TabIndex = 42;
@@ -222,7 +224,7 @@
             // 
             this.pictureBox4.Image = global::HomeSphere.Properties.Resources.padlock;
             this.pictureBox4.Location = new System.Drawing.Point(370, 502);
-            this.pictureBox4.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pictureBox4.Margin = new System.Windows.Forms.Padding(6);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(48, 46);
             this.pictureBox4.TabIndex = 35;
@@ -232,7 +234,7 @@
             // 
             this.pictureBox2.Image = global::HomeSphere.Properties.Resources.profile__1_;
             this.pictureBox2.Location = new System.Drawing.Point(368, 337);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(6);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(48, 46);
             this.pictureBox2.TabIndex = 33;
@@ -242,7 +244,7 @@
             // 
             this.pictureBox1.Image = global::HomeSphere.Properties.Resources.smart_home;
             this.pictureBox1.Location = new System.Drawing.Point(536, 88);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(6);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(128, 123);
             this.pictureBox1.TabIndex = 31;
@@ -252,7 +254,7 @@
             // 
             this.pictureBox5.Image = global::HomeSphere.Properties.Resources.padlock;
             this.pictureBox5.Location = new System.Drawing.Point(370, 423);
-            this.pictureBox5.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pictureBox5.Margin = new System.Windows.Forms.Padding(6);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(48, 46);
             this.pictureBox5.TabIndex = 47;
@@ -263,7 +265,7 @@
             this.panel7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.panel7.Controls.Add(this.panel8);
             this.panel7.Location = new System.Drawing.Point(370, 475);
-            this.panel7.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel7.Margin = new System.Windows.Forms.Padding(6);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(472, 2);
             this.panel7.TabIndex = 46;
@@ -272,7 +274,7 @@
             // 
             this.panel8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.panel8.Location = new System.Drawing.Point(0, -152);
-            this.panel8.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel8.Margin = new System.Windows.Forms.Padding(6);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(472, 2);
             this.panel8.TabIndex = 14;
@@ -283,7 +285,7 @@
             this.tbOldPassword.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbOldPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(117)))), ((int)(((byte)(214)))));
             this.tbOldPassword.Location = new System.Drawing.Point(420, 423);
-            this.tbOldPassword.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbOldPassword.Margin = new System.Windows.Forms.Padding(4);
             this.tbOldPassword.Multiline = true;
             this.tbOldPassword.Name = "tbOldPassword";
             this.tbOldPassword.Size = new System.Drawing.Size(414, 46);
@@ -326,11 +328,35 @@
             this.label5.TabIndex = 51;
             this.label5.Text = "Confirm New Password:";
             // 
+            // TogglePassword
+            // 
+            this.TogglePassword.AutoSize = true;
+            this.TogglePassword.Location = new System.Drawing.Point(873, 511);
+            this.TogglePassword.Name = "TogglePassword";
+            this.TogglePassword.Size = new System.Drawing.Size(188, 29);
+            this.TogglePassword.TabIndex = 52;
+            this.TogglePassword.Text = "Hide Password";
+            this.TogglePassword.UseVisualStyleBackColor = true;
+            this.TogglePassword.CheckedChanged += new System.EventHandler(this.TogglePassword_CheckedChanged);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(873, 602);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(188, 29);
+            this.checkBox1.TabIndex = 53;
+            this.checkBox1.Text = "Hide Password";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // frmForgotPassword
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1210, 967);
+            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.TogglePassword);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
@@ -351,9 +377,10 @@
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.tbNewPassword);
             this.Controls.Add(this.tbUsername);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "frmForgotPassword";
             this.Text = "frmForgotPassword";
+            this.Load += new System.EventHandler(this.frmForgotPassword_Load);
             this.panel5.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
@@ -393,5 +420,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox TogglePassword;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

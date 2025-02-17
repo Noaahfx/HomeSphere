@@ -22,8 +22,10 @@ namespace HomeSphere
 
         public frmLogin1()
         {
+             // Ensures password is hidden by default
+
             InitializeComponent();
-           
+            
         }
 
        
@@ -444,6 +446,8 @@ namespace HomeSphere
         private void frmLogin_Load(object sender, EventArgs e)
         {
             // Optionally add logic here.
+            tbPassword.PasswordChar = '*';
+            tbPassword.UseSystemPasswordChar = true;
         }
 
         private void tbUsername_TextChanged(object sender, EventArgs e)
@@ -631,6 +635,18 @@ namespace HomeSphere
         private void label1_Click_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void TogglePassword_CheckedChanged(object sender, EventArgs e)
+        {
+            if (TogglePassword.Checked)
+            {
+                tbPassword.UseSystemPasswordChar = false; // Show the password
+            }
+            else
+            {
+                tbPassword.UseSystemPasswordChar = true; // Hide the password
+            }
         }
     }
 }
