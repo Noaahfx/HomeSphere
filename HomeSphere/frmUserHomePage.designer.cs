@@ -95,6 +95,7 @@
             this.lnkUserDashboard.TabIndex = 3;
             this.lnkUserDashboard.TabStop = true;
             this.lnkUserDashboard.Text = "User Dashboard";
+            this.lnkUserDashboard.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkUserDashboard_LinkClicked);
             // 
             // toolStrip1
             // 

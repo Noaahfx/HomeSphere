@@ -87,5 +87,12 @@ namespace HomeSphere
             frmManageDevices manageDevicesForm = new frmManageDevices(userId);
             manageDevicesForm.Show();
         }
+
+        private void lnkUserDashboard_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            UserDashboard userdashboard = new UserDashboard(userId);
+            this.Hide();
+            userdashboard.Show();
+        }
     }
 }
