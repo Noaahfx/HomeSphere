@@ -87,9 +87,24 @@ namespace HomeSphere
         }
 
 
-        private string SanitizeInput(string input)
+        private string SanitizeInput(string input, bool isPassword = false)
         {
-            return input.Replace("<", "").Replace(">", "").Trim();
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            // Trim any leading/trailing whitespace
+            input = input.Trim();
+
+            if (!isPassword)
+            {
+                // For usernames/emails: allow letters, digits, underscore, dash, dot, and @.
+                return Regex.Replace(input, @"[^\w\-.@]", "");
+            }
+            else
+            {
+                // For passwords: remove characters that could be interpreted as HTML.
+                return input.Replace("<", string.Empty).Replace(">", string.Empty);
+            }
         }
 
         private bool IsValidEmail(string email)

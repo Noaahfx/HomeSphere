@@ -35,13 +35,13 @@
             this.tsddbUserMenu = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiViewCart = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiLogout = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiOrderHistory = new System.Windows.Forms.ToolStripMenuItem();
             this.ManageRecords = new System.Windows.Forms.ToolStripButton();
             this.Overview = new System.Windows.Forms.ToolStripButton();
             this.Products = new System.Windows.Forms.ToolStripButton();
             this.EventManagement = new System.Windows.Forms.ToolStripButton();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiOrderHistory = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -93,8 +93,8 @@
             this.tsddbUserMenu.Image = ((System.Drawing.Image)(resources.GetObject("tsddbUserMenu.Image")));
             this.tsddbUserMenu.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbUserMenu.Name = "tsddbUserMenu";
-            this.tsddbUserMenu.Size = new System.Drawing.Size(55, 24);
-            this.tsddbUserMenu.Text = "User:";
+            this.tsddbUserMenu.Size = new System.Drawing.Size(70, 24);
+            this.tsddbUserMenu.Text = "Admin:";
             this.tsddbUserMenu.ToolTipText = "tsddbUserMenu";
             this.tsddbUserMenu.Click += new System.EventHandler(this.tsddbUserMenu_Click);
             // 
@@ -114,6 +114,14 @@
             this.tsmiLogout.Text = "Logout";
             this.tsmiLogout.Click += new System.EventHandler(this.tsmiLogout_Click);
             // 
+            // tsmiOrderHistory
+            // 
+            this.tsmiOrderHistory.AccessibleName = "tsmiOrderHistory";
+            this.tsmiOrderHistory.Name = "tsmiOrderHistory";
+            this.tsmiOrderHistory.Size = new System.Drawing.Size(181, 26);
+            this.tsmiOrderHistory.Text = "Order History";
+            this.tsmiOrderHistory.Click += new System.EventHandler(this.tsmiOrderHistory_Click);
+            // 
             // ManageRecords
             // 
             this.ManageRecords.AccessibleName = "ManageRecords";
@@ -122,8 +130,8 @@
             this.ManageRecords.Image = ((System.Drawing.Image)(resources.GetObject("ManageRecords.Image")));
             this.ManageRecords.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ManageRecords.Name = "ManageRecords";
-            this.ManageRecords.Size = new System.Drawing.Size(120, 24);
-            this.ManageRecords.Text = "ManageRecords";
+            this.ManageRecords.Size = new System.Drawing.Size(93, 24);
+            this.ManageRecords.Text = "Sensor Data";
             this.ManageRecords.Click += new System.EventHandler(this.ManageRecords_Click);
             // 
             // Overview
@@ -173,14 +181,6 @@
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(32, 19);
             this.toolStripMenuItem2.Text = "toolStripMenuItem2";
-            // 
-            // tsmiOrderHistory
-            // 
-            this.tsmiOrderHistory.AccessibleName = "tsmiOrderHistory";
-            this.tsmiOrderHistory.Name = "tsmiOrderHistory";
-            this.tsmiOrderHistory.Size = new System.Drawing.Size(181, 26);
-            this.tsmiOrderHistory.Text = "Order History";
-            this.tsmiOrderHistory.Click += new System.EventHandler(this.tsmiOrderHistory_Click);
             // 
             // frmProductPage
             // 

@@ -101,8 +101,8 @@
             this.ManageRecords.Image = ((System.Drawing.Image)(resources.GetObject("ManageRecords.Image")));
             this.ManageRecords.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ManageRecords.Name = "ManageRecords";
-            this.ManageRecords.Size = new System.Drawing.Size(120, 24);
-            this.ManageRecords.Text = "ManageRecords";
+            this.ManageRecords.Size = new System.Drawing.Size(93, 24);
+            this.ManageRecords.Text = "Sensor Data";
             this.ManageRecords.Click += new System.EventHandler(this.ManageRecords_Click);
             // 
             // Overview
